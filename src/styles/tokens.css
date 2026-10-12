@@ -1,24 +1,31 @@
 :root {
   /* Brand palette */
-  --navy:       #0B1E3F;   /* primary text, card surface, dark accents */
-  --navy-ink:   #060C1A;   /* matches shader dark base for .dark-section */
-  --cream:      #F4F4ED;   /* matches shader light base, page bg */
+  --navy:       #0B1935;   /* primary text, card surface, dark accents */
+  --navy-ink:   #041C18;   /* matches shader dark base for .dark-section */
+  --cream:      #F1FCF7;   /* matches shader light base, page bg */
   --white:      #FFFFFF;
-  --orange:     #FF7A1A;   /* CTA, accent bar, active dot */
-  --orange-hover: #FFA155; /* CTA hover state */
-  --orange-ink: #B4490A;   /* accessible orange TEXT on light bg - 4.88:1 on cream, 5.39:1 on white (WCAG AA) */
-  --muted:      #5A6479;
-  --divider:    rgba(11, 30, 63, 0.12);
+  /* Legacy accent names are retained for existing component contracts. */
+  --orange:     #008050;   /* emerald CTA, accent bar, active dot */
+  --orange-hover: #006E40;
+  --orange-ink: #007A45;   /* green text on light surfaces */
+  --cyan:       #5FCFA1;
+  --purple:     #00A865;
+  --magenta:    #008C50;
+  --on-accent:  #FFFFFF;
+  --headline-gradient: linear-gradient(100deg, #070D14 0%, #070D14 65%, #008C50 100%);
+  --button-gradient: linear-gradient(110deg, #006E40, #008050);
+  --muted:      #506887;
+  --divider:    rgba(0, 140, 80, 0.12);
   --success:    #2E9E6B;   /* form status ok - clears 4.5:1 on navy-ink */
   --error:      #D9544F;   /* form status error - clears 4.5:1 on navy-ink */
 
   /* Brands section - neutral logo plate so client marks read as framed logos,
      not site UI (esp. an orange logo vs the --orange accent) */
-  --brands-chip-bg:     #FBFBF7;                  /* cool near-white, lifts off cream */
-  --brands-chip-border: rgba(11, 30, 63, 0.10);   /* hairline frame on the logo medallion */
+  --brands-chip-bg:     #FAFFFC;                  /* cool near-white, lifts off cream */
+  --brands-chip-border: rgba(0, 140, 80, 0.10);   /* hairline frame on the logo medallion */
 
   /* Type */
-  --font-display: 'Poppins', system-ui, -apple-system, sans-serif;
+  --font-display: 'Manrope', system-ui, -apple-system, sans-serif;
   --fs-display: clamp(64px, 9vw, 128px);
   --fs-h2: clamp(32px, 4vw, 56px);
   --fs-h3: clamp(22px, 2vw, 28px);
@@ -71,19 +78,19 @@
 
   /* Surfaces. These are the tokens that had to exist for the theme to flip
      without rewriting the section stylesheets. */
-  --paper:      #FBFBF7;   /* raised card on cream */
-  --line:       rgba(11, 30, 63, 0.14);
-  --line-strong:rgba(11, 30, 63, 0.28);
-  --tint:       rgba(11, 30, 63, 0.05);
-  --tint-strong:rgba(11, 30, 63, 0.09);
-  --glass:      rgba(251, 251, 247, 0.72);
+  --paper:      #FAFFFC;   /* raised card on cream */
+  --line:       rgba(0, 140, 80, 0.14);
+  --line-strong:rgba(0, 140, 80, 0.28);
+  --tint:       rgba(0, 140, 80, 0.05);
+  --tint-strong:rgba(0, 140, 80, 0.09);
+  --glass:      rgba(250, 255, 252, 0.82);
   /* A plate that stays light in BOTH themes. Brand marks are external
      identifiers and need a constant backdrop to read against. */
-  --plate:      #F4F4ED;
+  --plate:      #F1FCF7;
   /* The opaque fill for sections that were written as white-on-navy back when
      the shader inverted on scroll. It no longer does, so they carry their own
      ground. Same navy in both themes: their type is light either way. */
-  --panel-dark: #060C1A;
+  --panel-dark: #041C18;
 
   /* Verified badge - Facebook blue, not the site accent. It is a platform
      signal, not brand furniture, so it does not follow --orange. */
@@ -91,33 +98,33 @@
 
   /* Ink for anything sitting on --plate. Both are constant across themes:
      a brand mark on a light plate must not invert with the page. */
-  --plate-ink:  #0B1E3F;
+  --plate-ink:  #0B1935;
 }
 
 @media (min-width: 1100px) {
-  :root { --rail-w: 312px; }
+  :root { --rail-w: 330px; }
 }
 
 /* ---------- Dark theme ----------
    Redefined at the root, not per component: every existing rule keeps reading
    --cream (page), --navy (ink), --white (card surface) and flips with it.
-   Orange stays the single accent in both modes. */
+   Emerald accents and deep green surfaces follow the reference palette. */
 [data-theme='dark'] {
-  --cream:        #070B14;
-  --paper:        #0B1120;
-  --white:        #0E1626;
-  --navy:         #EDF0F6;
-  --navy-ink:     #04070F;
-  --muted:        rgba(237, 240, 246, 0.60);
-  --divider:      rgba(255, 255, 255, 0.10);
-  --line:         rgba(255, 255, 255, 0.09);
-  --line-strong:  rgba(255, 255, 255, 0.20);
-  --tint:         rgba(255, 255, 255, 0.05);
-  --tint-strong:  rgba(255, 255, 255, 0.09);
-  --glass:        rgba(14, 22, 38, 0.72);
-  --orange-ink:   #FF9A4D;
-  --panel-dark:   #0B1120;
-  --brands-chip-bg:     #F4F4ED;
+  --cream:        #031610;
+  --paper:        #07271E;
+  --white:        #0C3327;
+  --navy:         #F1FCF7;
+  --navy-ink:     #02110C;
+  --muted:        #B5D9CC;
+  --divider:      rgba(57, 178, 125, 0.22);
+  --line:         rgba(57, 178, 125, 0.30);
+  --line-strong:  rgba(90, 206, 158, 0.55);
+  --tint:         rgba(38, 180, 119, 0.10);
+  --tint-strong:  rgba(38, 180, 119, 0.18);
+  --glass:        rgba(7, 39, 30, 0.88);
+  --orange-ink:   #69DBA8;
+  --panel-dark:   #07271E;
+  --brands-chip-bg:     #F1FCF7;
   --brands-chip-border: rgba(255, 255, 255, 0.14);
   --shadow-soft:  0 20px 60px -20px rgba(0, 0, 0, 0.75);
   --shadow-card:  0 40px 120px -30px rgba(0, 0, 0, 0.85);

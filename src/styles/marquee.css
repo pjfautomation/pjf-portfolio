@@ -1,0 +1,69 @@
+/* Brand pills on a soft glass strip, shared by desktop and phone layouts. */
+.home .tools-marquee {
+  margin: 0;
+  min-width: 0;
+  border: 1px solid var(--glass-border);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.22);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.60);
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+.home .tools-marquee__track {
+  display: flex;
+  width: max-content;
+  gap: 0;
+  padding: 0;
+  animation: marquee 85s linear infinite;
+}
+.tools-marquee__group {
+  display: flex;
+  align-items: center;
+  flex: none;
+  gap: 12px;
+  padding: 10px 12px 10px 0;
+}
+.home .tools-marquee__item {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  width: auto;
+  min-height: 42px;
+  padding: 8px 16px;
+  border: 1px solid rgba(40, 79, 91, 0.12);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 2px 3px rgba(11, 25, 53, 0.08), inset 0 1px 0 #FFFFFF;
+  color: #0B1935;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+}
+.home .tools-marquee__item::after { display: none; }
+.home .tools-marquee__img { width: 26px; height: 26px; object-fit: contain; }
+.home .tools-marquee__label {
+  max-width: none;
+  overflow: visible;
+  text-overflow: clip;
+  color: #0B1935;
+}
+.tools-marquee:focus-visible { outline: 2px solid var(--orange-ink); outline-offset: 3px; }
+.tools-marquee:is(:hover, :focus-within) .tools-marquee__track { animation-play-state: paused; }
+@media (max-width: 1099px) {
+  .home .tools-marquee { border-radius: 22px; }
+  .tools-marquee__group { gap: 10px; padding-block: 10px; padding-right: 10px; }
+  .home .tools-marquee__item { min-height: 40px; padding: 7px 14px; font-size: 13px; }
+  .home .tools-marquee__img { width: 24px; height: 24px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .home .tools-marquee { overflow-x: auto; }
+  .home .tools-marquee__track { animation: none; will-change: auto; }
+  .tools-marquee__group + .tools-marquee__group { display: none; }
+}
+:root[data-a11y-motion='true'] .home .tools-marquee { overflow-x: auto; }
+:root[data-a11y-motion='true'] .tools-marquee__group + .tools-marquee__group { display: none; }
+@media (forced-colors: active) {
+  .home .tools-marquee__item { background: Canvas; color: CanvasText; border-color: CanvasText; }
+  .home .tools-marquee__label { color: CanvasText; }
+}

@@ -93,7 +93,7 @@ const TABS: FlagshipTab[] = [
     pageTitle: 'Home',
     nav: 'announcement',
     caption:
-      'PLACEHOLDER - tell me what to put here: one or two sentences on the first screen people land on in your product and what it tells them at a glance.',
+      'A clear home view for the process, active work and next actions that need attention.',
     Icon: House,
   },
   {
@@ -103,7 +103,7 @@ const TABS: FlagshipTab[] = [
     pageTitle: 'Board',
     nav: 'desk',
     caption:
-      'PLACEHOLDER - tell me what to put here: one or two sentences on your product\'s main workspace (a board, editor or dashboard) and what people do there every day.',
+      'A shared workspace for organizing work, assigning next steps and keeping the pipeline moving.',
     Icon: Kanban,
   },
   {
@@ -113,7 +113,7 @@ const TABS: FlagshipTab[] = [
     pageTitle: 'Listings',
     nav: 'work',
     caption:
-      'PLACEHOLDER - tell me what to put here: one or two sentences on a list or feed your product pulls together, where the data comes from and what it saves the user.',
+      'A focused list for the records, leads or opportunities the team is working through.',
     Icon: Briefcase,
   },
   {
@@ -123,7 +123,7 @@ const TABS: FlagshipTab[] = [
     pageTitle: 'Features',
     nav: 'tools',
     caption:
-      'PLACEHOLDER - tell me what to put here: one or two sentences on the set of features or tools inside your product, how many there are and which plan they are on.',
+      'A practical set of tools for connecting systems, documenting work and improving operations.',
     Icon: Toolbox,
   },
   {
@@ -133,7 +133,7 @@ const TABS: FlagshipTab[] = [
     pageTitle: 'Search',
     nav: 'desk',
     caption:
-      'PLACEHOLDER - tell me what to put here: one or two sentences on a search or finder feature, what goes in, what comes out and why the results are useful.',
+      'A search view that helps surface the right record, task or resource when it is needed.',
     Icon: MapPinLine,
   },
 ]
@@ -412,7 +412,7 @@ function AnnouncementMock() {
       <PageHead
         kicker="Monday, January 5"
         title="Good morning, User."
-        sub="PLACEHOLDER status line."
+        sub="Your next actions, organized in one place."
       />
 
       <div className="flagship__card" style={{ ['--i' as string]: 3 }}>
@@ -423,7 +423,7 @@ function AnnouncementMock() {
         <div className="flagship__card-body">
           <CheckCircle weight="fill" size="1.15em" className="flagship__ok" />
           <span>
-            PLACEHOLDER - the main status message your dashboard shows.
+            Review the active pipeline, follow-ups and workflow health.
           </span>
         </div>
         <div className="flagship__card-foot">
@@ -475,8 +475,8 @@ function DeskMock() {
     <>
       <PageHead
         kicker="Monday, January 5"
-        title="PLACEHOLDER board heading."
-        sub="PLACEHOLDER - one line on what this board holds."
+          title="Workflow board"
+        sub="A clear view of work moving through each stage."
       />
       <div className="flagship__board">
         {BOARD.map((col, i) => (
@@ -518,8 +518,8 @@ function ToolsMock() {
     <>
       <PageHead
         kicker="Features"
-        title="PLACEHOLDER features heading."
-        sub="PLACEHOLDER - one line on what the features have in common."
+        title="Connected tools"
+        sub="The building blocks behind the system."
       />
       <div className="flagship__filters" style={{ ['--i' as string]: 3 }}>
         {TOOL_FILTERS.map((f, i) => (
@@ -556,8 +556,8 @@ function JobsMock() {
     <>
       <PageHead
         kicker="Listings"
-        title="PLACEHOLDER listings heading."
-        sub="PLACEHOLDER - one line on where these listings come from."
+        title="Active records"
+        sub="Leads, tasks and opportunities in one working view."
       />
       <div className="flagship__filters" style={{ ['--i' as string]: 3 }}>
         {['All sources', 'Source A', 'Source B', 'Source C'].map((f, i) => (
@@ -787,15 +787,13 @@ export default function Flagship({ eyebrow = '12 / Flagship build' }: FlagshipPr
       <header className="flagship__header">
         <span className="flagship__eyebrow">{eyebrow}</span>
         <h3 className="flagship__title" id="flagship-heading">
-          Product Name
+          GoHighLevel Operations Workspace
         </h3>
         <p className="flagship__desc">
-          PLACEHOLDER - tell me what to put here: two to four sentences on your flagship
-          product - who it is for, the main things it does, and one detail on how you
-          built or run it (stack, hosting, how many people use it).
+          A service preview for CRM setup, lead follow-up and connected automation. It shows how GoHighLevel can sit at the center of a documented operating system.
         </p>
         <a className="flagship__cta" href="#">
-          Open product
+          Explore the preview
           <ArrowSquareOut weight="bold" size={16} aria-hidden="true" />
         </a>
       </header>

@@ -6,7 +6,6 @@ import {
   HomeIcon,
   FolderIcon,
   StackIcon,
-  CupIcon,
   StarIcon,
   UserIcon,
   MessageIcon,
@@ -29,8 +28,7 @@ export const RAIL_LINKS = [
   { label: 'Home', to: '/', Icon: HomeIcon },
   { label: 'Projects', to: '/projects', Icon: FolderIcon },
   { label: 'Services', to: '/services', Icon: StackIcon },
-  { label: 'Showcase', to: '/showcase', Icon: CupIcon },
-  { label: 'Testimonials', to: '/testimonials', Icon: StarIcon },
+  { label: 'Work in Action', to: '/work-in-action', Icon: StarIcon },
   { label: 'About', to: '/about', Icon: UserIcon },
   { label: 'FAQs / Contact', to: '/contact', Icon: MessageIcon },
 ] as const
@@ -45,18 +43,13 @@ export default function Rail() {
   return (
     <aside className="rail" aria-label="Profile and site navigation">
       <div className="rail__inner">
-        <span className="rail__avatar">
-          <img
-            src={profile.avatarSrc}
-            alt={profile.name}
-            width={120}
-            height={120}
-          />
+        <span className="rail__avatar rail__portrait tw:relative tw:isolate">
+          <img className="tw:block tw:h-full tw:w-full" src={profile.avatarSrc} alt={profile.name} width={172} height={172} decoding="async" />
         </span>
 
         <h2 className="rail__name">
           {profile.name}
-          <SealCheck size={19} weight="fill" aria-label={profile.verifiedLabel} />
+          {profile.verifiedLabel && <SealCheck size={19} weight="fill" aria-label={profile.verifiedLabel} />}
         </h2>
         <p className="rail__handle">
           {profile.handle}

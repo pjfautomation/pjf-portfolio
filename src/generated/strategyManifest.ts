@@ -1,0 +1,2 @@
+// Generated from the read-only source files in public/strategy-documents.
+export const STRATEGY_RENDERED_FILES = new Set<string>(["Amazon_Seller_Operations_and_Inventory_Strategy.html","Business_Operations_Automation_Strategy.html","GHL_Agency_Growth_and_Operations_Strategy.html","GHL_Coaching_Business_Strategy.html","GHL_Service_Business_Strategy.html","Shopify_VA_Operations_and_Retention_Strategy.html","Social_Media_Lead_Generation_and_Follow_Up_Strategy.html"])

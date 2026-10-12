@@ -1,0 +1,464 @@
+/* Content-sized home cards and a height-aware profile rail. Keep blur on
+   structural surfaces; smaller glass layers use translucent fills only. */
+.home {
+  --home-muted: #354c61;
+  --home-card: var(--glass-card);
+  --home-nested: var(--glass-nested);
+  --home-tool: rgba(255, 255, 255, 0.88);
+}
+[data-theme='dark'] .home {
+  --home-muted: #b5d9cc;
+  --home-card: var(--glass-card);
+  --home-nested: var(--glass-nested);
+  --home-tool: rgba(245, 255, 250, 0.88);
+}
+
+/* Give the headline the width left by the CTA; never let nowrap dictate
+   the parent's minimum size. The intro clone shares these type metrics. */
+.home__title { flex: 1 1 0; min-width: 0; }
+.home__title, .boot__title {
+  font-size: clamp(32px, 2.8vw, 50px);
+  line-height: 1.12;
+  letter-spacing: -0.035em;
+  white-space: normal;
+}
+.home__line { white-space: normal; }
+.home__headline { gap: 28px; align-items: flex-start; }
+.home__cta { margin-top: 4px; white-space: nowrap; }
+.home__lede {
+  max-width: 78ch;
+  font-size: clamp(15px, 1.1vw, 18px);
+  line-height: 1.6;
+  margin-top: 16px;
+}
+.home .home__lede, .home .bento__desc, .home .bento__review-role { color: var(--home-muted); }
+.home__audience,
+[data-theme='dark'] .home__audience {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  list-style: none;
+  margin-top: 16px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+.home__audience-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 13px;
+  border: 1px solid color-mix(in srgb, var(--orange-ink) 20%, var(--glass-border));
+  border-radius: 12px;
+  background: var(--home-nested);
+  box-shadow: inset 0 1px 0 var(--glass-edge), 0 4px 12px -10px rgba(15, 68, 45, 0.28);
+  color: var(--navy);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.045em;
+  text-transform: uppercase;
+  transition: border-color var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out);
+}
+.home__audience-pill:hover { border-color: var(--glass-hover); box-shadow: inset 0 1px 0 var(--glass-edge), 0 5px 14px -10px rgba(15, 68, 45, 0.3); }
+.home__audience-pill::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--orange);
+}
+
+/* The whole drivers bar is one light glass layer. Brand pills sit above it
+   with clearer edges and no extra blur over the scrolling track. */
+.home .home__glass--tools { background: var(--glass-wrap); }
+.home .tools-marquee { background: rgba(255, 255, 255, 0.06); box-shadow: inset 0 1px 0 var(--glass-edge); }
+[data-theme='dark'] .home .tools-marquee { background: rgba(235, 255, 246, 0.03); }
+.home .tools-marquee__item {
+  background: linear-gradient(140deg, rgba(255, 255, 255, 0.18), transparent), var(--home-tool);
+  border-color: rgba(255, 255, 255, 0.68);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 5px 14px -11px rgba(20, 61, 47, 0.35);
+  min-height: 44px;
+}
+.home .tools-marquee__img { width: 26px; height: 26px; flex: none; object-fit: contain; }
+
+@media (min-width: 1100px) {
+  .home {
+    height: auto;
+    min-height: 100%;
+    grid-template-rows: auto auto minmax(764px, 1fr);
+    padding: 30px clamp(24px, 2.5vw, 48px) 28px;
+    gap: 24px;
+  }
+  .home__glass--showcase { height: auto; }
+  .home__showcase > .bento { grid-template-rows: repeat(2, minmax(352px, 1fr)); }
+  .home .bento__card {
+    min-height: 352px;
+    padding: 20px;
+    background: linear-gradient(145deg, var(--glass-highlight), transparent 55%), var(--home-card);
+  }
+  .home .bento__title { font-size: 19px; }
+  .home .bento__desc { font-size: 13px; line-height: 1.5; }
+  .home .bento__head { gap: 10px; }
+  .home .bento__media { margin-top: 18px; height: 180px; min-height: 152px; max-height: 220px; }
+  .home .bento__card--projects { display: flex; flex-direction: column; }
+  .home .bento__card--projects .bento__media { margin-top: 18px; }
+  .home .bento__reel {
+    mask-image: linear-gradient(to right, #000 88%, transparent);
+    -webkit-mask-image: linear-gradient(to right, #000 88%, transparent);
+  }
+  .home .bento__reel-track { flex-direction: row; animation-name: bento-drift-left; width: max-content; }
+  .home .bento__shot { width: clamp(220px, 19vw, 340px); }
+  .home .bento__shot img { height: auto; aspect-ratio: 16 / 10; object-fit: cover; }
+  .home .bento__fan { min-height: 152px; }
+  .home .bento__photo { width: 104px; flex: none; }
+  .home .bento__badge { gap: 18px; min-height: 180px; padding-block: 10px; }
+  .home .bento__badge-ring { width: 128px; height: 128px; flex: none; aspect-ratio: 1; background: var(--home-nested); }
+  .home .bento__badge-ring img { width: 76%; height: 76%; object-fit: contain; }
+  .home .bento__badge-ring > svg { width: 68%; height: 68%; color: var(--orange-ink); }
+  .home .bento__badge-tag { min-height: 32px; height: auto; flex: none; padding: 7px 13px; font-size: 12px; }
+  .home .bento__offers { container-type: normal; gap: 6px; overflow: visible; height: auto; min-height: 204px; max-height: none; flex: none; }
+  .home .bento__offer {
+    flex: none;
+    min-height: 36px;
+    gap: 9px;
+    padding: 6px 8px;
+    border: 1px solid var(--glass-border);
+    border-radius: 10px;
+    background: var(--home-nested);
+  }
+  .home .bento__offer-tile { width: 24px; height: 24px; border-radius: 7px; }
+  [data-theme='dark'] .home .bento__offer-tile { color: var(--orange-ink); }
+  .home .bento__offer-tile svg { width: 14px; height: 14px; }
+  .home .bento__offer-title { font-size: 12px; line-height: 1.35; white-space: normal; overflow: visible; }
+  .home .bento__offer-num { font-size: 10px; }
+  .home .bento__offer-note { display: none; }
+  .home .bento__review { background: var(--home-nested); padding: 13px; }
+  .home .bento__review-top { font-size: 13px; line-height: 1.4; }
+  .home .bento__review-role { font-size: 12px; }
+}
+
+/* Six readable columns of content become three at typical laptop widths. */
+@media (min-width: 1100px) and (max-width: 1599px) {
+  .home__showcase > .bento { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .home .bento__card--projects, .home .bento__card--quotes { grid-column: auto; }
+  .home .bento__card--quotes { display: flex; flex-direction: column; }
+  .home .bento__card--quotes .bento__media { margin-top: 18px; }
+}
+
+/* Spend the viewport on the cards, rather than large gaps between bands.
+   Minimum rows remain a content safety net: short windows and enlarged text
+   can scroll normally instead of clipping or scaling down the whole page. */
+@media (min-width: 1100px) {
+  .home {
+    height: 100%;
+    min-height: min-content;
+    grid-template-rows: minmax(min-content, max-content) minmax(74px, max-content) minmax(548px, 1fr);
+    padding: clamp(12px, 1.6vh, 20px) clamp(20px, 2vw, 36px);
+    gap: clamp(14px, 1.8vh, 22px);
+  }
+  .home__head { position: relative; padding: 18px; }
+  .home__head::before { inset: 0; }
+  .home__headline { display: flex; align-items: flex-start; gap: 24px; }
+  .home__title { font-size: clamp(30px, 2.35vw, 44px); text-wrap: balance; }
+  .home__cta { position: static; margin: 2px 0 0; height: 42px; }
+  .home__lede { max-width: 102ch; margin-top: 14px; font-size: 15px; line-height: 1.6; }
+  .home__audience { margin-top: 14px; padding-right: 0; gap: 10px; }
+  .home__audience-pill { padding: 8px 14px; }
+  .home .home__glass--tools { padding: 10px 18px; }
+  .home__tools-head { gap: 6px; padding-block: 4px; }
+  .home__tools-eyebrow { font-size: 10px; letter-spacing: 0.1em; line-height: 1.3; }
+  .home__tools-label { font-size: 18px; line-height: 1.3; }
+  .home .tools-marquee,
+  [data-theme='dark'] .home .tools-marquee { border-color: transparent; background: transparent; box-shadow: none; }
+  .home .tools-marquee__group { padding-block: 6px; gap: 14px; }
+  .home .tools-marquee__item { min-height: 40px; padding-block: 6px; }
+  .home__glass--showcase { height: 100%; padding: 8px; }
+  .home__showcase > .bento { gap: 12px; grid-template-rows: repeat(2, minmax(260px, 1fr)); }
+  .home .bento__card { min-height: 260px; padding: clamp(18px, 1.8vh, 24px); }
+  .home .bento__head { gap: 6px; }
+  .home .bento__media,
+  .home .bento__card--projects .bento__media,
+  .home .bento__card--quotes .bento__media {
+    margin-top: 12px;
+    height: auto;
+    min-height: 0;
+    max-height: none;
+    flex: 1 1 0;
+  }
+  .home .bento__fan { min-height: 126px; }
+  .home .bento__photo { width: clamp(80px, 10vh, 104px); }
+  .home .bento__badge { min-height: 132px; gap: 12px; padding-block: 6px; }
+  .home .bento__badge-ring { width: clamp(84px, 10vh, 128px); height: auto; }
+  .home .bento__badge-tag { min-height: 28px; padding-block: 5px; }
+  .home .bento__offers { flex: none; min-height: 0; gap: 4px; margin-top: 10px; }
+  .home .bento__offer { min-height: 28px; padding: 3px 7px; }
+  .home .bento__offer-tile { width: 20px; height: 20px; }
+  .home .bento__shot { width: clamp(210px, 17vw, 320px); }
+}
+
+@media (min-width: 1100px) and (max-height: 899px) {
+  .home { padding-block: 12px; gap: 14px; }
+  .home__head { padding: 18px; }
+  .home__lede, .home__audience { margin-top: 12px; }
+  .home .bento__card--services .bento__head { gap: 4px; }
+  .home .bento__card--services .bento__icon { width: 30px; height: 30px; }
+  .home .bento__card--services .bento__desc { font-size: 12.5px; line-height: 1.4; }
+  .home .bento__offers { margin-top: 8px; }
+  .home .bento__offer { min-height: 26px; padding-block: 2px; }
+  .home .bento__offer-tile { width: 18px; height: 18px; }
+}
+
+/* Narrow desktop cards need an extra description line. Keep their content
+   floor instead of forcing a fit on especially short or zoomed windows. */
+@media (min-width: 1100px) and (max-width: 1199px) {
+  .home { grid-template-rows: minmax(min-content, max-content) minmax(74px, max-content) minmax(584px, 1fr); }
+  .home__showcase > .bento { grid-template-rows: repeat(2, minmax(278px, 1fr)); }
+  .home .bento__card { min-height: 278px; }
+}
+
+@media (min-width: 1100px) and (min-height: 900px) {
+  .home { grid-template-rows: minmax(min-content, max-content) minmax(74px, max-content) minmax(608px, 1fr); }
+  .home__showcase > .bento { grid-template-rows: repeat(2, minmax(290px, 1fr)); }
+  .home .bento__card { min-height: 290px; }
+  .home .bento__offer { min-height: 28px; padding-block: 3px; }
+  .home .bento__offers { gap: 6px; }
+}
+
+/* Laptop-height dashboard: spend less height on decorative media, and let
+   service rows wrap into two columns. Never scale text or clip the page. */
+@media (min-width: 1200px) and (min-height: 680px) and (max-height: 950px) {
+  .home {
+    min-height: 100%;
+    grid-template-rows: auto auto minmax(460px, 1fr);
+    padding-block: 10px;
+    gap: 10px;
+  }
+  .home__head { padding: 12px 16px; }
+  .home__headline { display: block; }
+  .home__title { font-size: clamp(28px, 2.15vw, 38px); }
+  .home__cta { position: absolute; right: 16px; bottom: 12px; margin: 0; height: 38px; }
+  .home__lede { font-size: 14px; line-height: 1.5; margin-top: 10px; max-width: 112ch; }
+  .home__audience { padding-right: 164px; margin-top: 10px; }
+  .home__audience-pill { padding-block: 6px; }
+  .home .home__glass--tools { padding-block: 8px; }
+  .home__tools-head { gap: 5px; padding-block: 0; }
+  .home__showcase > .bento { grid-template-rows: repeat(2, minmax(216px, 1fr)); }
+  .home .bento__card { min-height: 216px; padding: 14px 16px; }
+  .home .bento__head { gap: 6px; }
+  .home .bento__media { margin-top: 10px; }
+  .home .bento__fan { min-height: 96px; }
+  .home .bento__photo { width: 72px; }
+  .home .bento__badge { flex-direction: row; min-height: 96px; gap: 16px; }
+  .home .bento__badge-ring { width: 76px; }
+  .home .bento__badge-tag { font-size: 11px; padding-inline: 9px; }
+  .home .bento__offers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+  .home .bento__offer { min-height: 30px; padding: 4px 6px; gap: 6px; }
+  .home .bento__offer:last-child { grid-column: 1 / -1; }
+  .home .bento__offer-title { font-size: 11px; }
+  .home .bento__offer-num { display: none; }
+}
+
+@media (min-width: 1200px) and (max-width: 1350px) and (min-height: 680px) and (max-height: 950px) {
+  .home .bento__card--services .bento__desc { font-size: 12px; line-height: 1.4; }
+  .home .bento__offers { gap: 4px; margin-top: 6px; }
+}
+
+/* Balanced preview cards: fixed type hierarchy with media-sized containers,
+   rather than oversized thumbnails cropped by a short laptop row. */
+@media (min-width: 1100px) {
+  .home .bento__title { font-size: 17px; font-weight: 700; letter-spacing: -0.025em; }
+  .home .bento__icon { width: 30px; height: 30px; border-radius: 10px; }
+  .home .bento__desc { font-size: 12px; line-height: 1.5; }
+  .home .bento__head { gap: 6px; }
+  .home .bento__label { gap: 9px; }
+  .home .bento__reel { container-type: size; }
+  .home .bento__shot {
+    height: 100cqh;
+    width: min(260px, calc((100cqh - 22px) * 1.6));
+    padding-top: 18px;
+    background: var(--home-nested);
+  }
+  .home .bento__shot img { height: 100%; width: 100%; aspect-ratio: auto; object-fit: contain; object-position: top center; }
+  .home .bento__badge { flex-direction: column; gap: 10px; min-height: 100px; padding-block: 4px; }
+  .home .bento__badge-ring { width: 66px; height: 66px; }
+  .home .bento__badge-tag { min-height: 26px; padding: 5px 11px; font-size: 11px; }
+  .home .bento__offers { display: flex; flex-direction: column; gap: 0; margin-top: 8px; }
+  .home .bento__offer {
+    min-height: 24px;
+    padding: 3px 0;
+    gap: 8px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+  .home .bento__offer + .bento__offer { border-top: 1px solid var(--line); }
+  .home .bento__offer-tile { width: 18px; height: 18px; border-radius: 5px; }
+  .home .bento__offer-title { font-size: 12px; line-height: 1.3; }
+  .home .bento__offer-num { display: block; font-size: 9px; }
+  .home .bento__fan { min-height: 96px; }
+  .home .bento__photo { width: clamp(64px, 9vh, 88px); }
+  .home .bento__chip { font-size: 11px; height: 30px; padding-inline: 10px; }
+  .home .bento__chips { gap: 8px; }
+  .home .bento__reviews {
+    mask-image: linear-gradient(to bottom, #000 75%, transparent);
+    -webkit-mask-image: linear-gradient(to bottom, #000 75%, transparent);
+  }
+  .home .bento__review { padding: 10px 12px; gap: 4px; }
+  .home .bento__review-top { font-size: 12px; }
+  .home .bento__review-role { font-size: 11px; }
+}
+
+@media (min-width: 1200px) and (min-height: 680px) and (max-height: 950px) {
+  .home__title { font-size: clamp(27px, 2vw, 36px); letter-spacing: -0.035em; }
+  .home__lede { font-size: 13px; line-height: 1.55; max-width: 108ch; }
+  .home__audience-pill { font-size: 10px; padding: 6px 12px; }
+  .home .tools-marquee__item { font-size: 12px; min-height: 36px; padding: 6px 13px; }
+  .home .tools-marquee__img { width: 23px; height: 23px; }
+  .home__tools-label { font-size: 16px; }
+  .home__tools-eyebrow { font-size: 9px; letter-spacing: 0.09em; }
+  .home .bento__offer { min-height: 23px; padding-block: 2px; }
+  .home .bento__offers { margin-top: 6px; }
+}
+
+/* Reference composition: two equal rows on a four-column grid. Projects
+   and Testimonials each span two columns, with copy beside their previews. */
+@media (min-width: 1400px) {
+  .home { padding-inline: clamp(32px, 3.3vw, 64px); }
+  .home__showcase > .bento {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .home .bento__card--projects,
+  .home .bento__card--quotes {
+    grid-column: span 2;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 18px;
+    align-items: stretch;
+  }
+  .home .bento__card--projects .bento__media,
+  .home .bento__card--quotes .bento__media {
+    grid-column: 2;
+    grid-row: 1;
+    margin-top: 0;
+    height: 100%;
+  }
+  .home .bento__reel {
+    container-type: normal;
+    mask-image: linear-gradient(to bottom, #000 85%, transparent);
+    -webkit-mask-image: linear-gradient(to bottom, #000 85%, transparent);
+  }
+  .home .bento__reel-track { flex-direction: column; width: 100%; animation-name: bento-drift-up; }
+  .home .bento__shot { width: 100%; height: auto; padding-top: 18px; }
+  .home .bento__shot img { height: auto; aspect-ratio: 16 / 9; object-fit: cover; }
+  .home .bento__card--quotes .bento__review { padding: 10px 12px; }
+  .home .bento__photo { width: clamp(72px, 9vh, 96px); }
+  .home .bento__card--services .bento__desc { font-size: 11.5px; line-height: 1.4; }
+}
+
+/* Large monitors have room for a stronger type scale and larger previews.
+   CSS handles screen changes directly, without React resize listeners or
+   transforming the page; the approved laptop rules stay below this range. */
+@media (min-width: 1700px) and (min-height: 900px) {
+  .home {
+    grid-template-rows: auto auto minmax(576px, 1fr);
+    padding-block: 14px;
+    gap: 14px;
+  }
+  .home__head { padding: 20px 22px; }
+  .home__title { font-size: clamp(42px, 2.45vw, 58px); }
+  .home__lede { font-size: clamp(16px, 0.88vw, 19px); line-height: 1.5; margin-top: 12px; max-width: 104ch; }
+  .home__audience { margin-top: 14px; }
+  .home__audience-pill { font-size: 11px; padding: 8px 14px; }
+  .home__cta { height: 44px; padding-inline: 22px; font-size: 14px; right: 22px; bottom: 20px; }
+  .home .home__glass--tools { padding: 10px 20px; }
+  .home__tools-head { gap: 6px; }
+  .home__tools-eyebrow { font-size: 11px; }
+  .home__tools-label { font-size: 20px; }
+  .home .tools-marquee__item { min-height: 42px; padding: 8px 16px; font-size: 14px; }
+  .home .tools-marquee__img { width: 28px; height: 28px; }
+  .home__glass--showcase { padding: 10px; }
+  .home__showcase > .bento { gap: 18px; grid-template-rows: repeat(2, minmax(268px, 1fr)); }
+  .home .bento__card { min-height: 268px; padding: 20px; }
+  .home .bento__label { gap: 12px; }
+  .home .bento__title { font-size: clamp(21px, 1.1vw, 26px); }
+  .home .bento__icon { width: 38px; height: 38px; border-radius: 12px; }
+  .home .bento__icon > svg { width: 23px; height: 23px; }
+  .home .bento__head { gap: 8px; }
+  .home .bento__desc,
+  .home .bento__card--services .bento__desc { font-size: clamp(13px, 0.72vw, 16px); line-height: 1.45; }
+  .home .bento__media { margin-top: 14px; }
+  .home .bento__card--projects, .home .bento__card--quotes { gap: 24px; }
+  .home .bento__card--projects .bento__media,
+  .home .bento__card--quotes .bento__media { margin-top: 0; }
+  .home .bento__fan { container-type: size; }
+  .home .bento__photo { width: min(160px, calc((100cqh - 8px) * 0.58)); }
+  .home .bento__badge { gap: 16px; }
+  .home .bento__badge-ring { width: clamp(98px, 8.5vh, 144px); height: auto; }
+  .home .bento__badge-tag { font-size: 13px; min-height: 32px; padding: 7px 14px; }
+  .home .bento__chip { font-size: 13px; height: 36px; padding-inline: 13px; }
+  .home .bento__chips { gap: 12px; }
+  .home .bento__offers { flex: 1 1 auto; min-height: 136px; max-height: 260px; margin-top: 10px; }
+  .home .bento__offer { flex: 1 1 0; min-height: 26px; padding-block: 3px; gap: 10px; }
+  .home .bento__offer-tile { width: 22px; height: 22px; border-radius: 6px; }
+  .home .bento__offer-title { font-size: clamp(13px, 0.75vw, 16px); }
+  .home .bento__offer-num { font-size: 11px; }
+  .home .bento__card--quotes .bento__review { padding: 14px 16px; gap: 6px; }
+  .home .bento__review-top { font-size: 14px; }
+  .home .bento__review-role, .home .bento__review-work { font-size: 13px; }
+}
+
+/* Sidebar rows keep useful target sizes while vertical gaps and portrait
+   scale with height. Very short or zoomed windows retain scroll access. */
+@media (min-width: 1100px) {
+  .rail { padding: clamp(18px, 3vh, 30px) 26px 18px; }
+  .rail__avatar { width: clamp(84px, 15vh, 152px); flex: none; }
+  .rail__name { margin-top: 12px; font-size: 21px; }
+  .rail__handle { margin-top: 4px; }
+  .rail__actions { margin-top: 14px; }
+  .rail__nav { margin-top: 18px; padding-top: 16px; }
+  .rail__nav ul { gap: 3px; }
+  .rail__link { height: clamp(36px, 5vh, 46px); }
+  .rail__copy { padding-top: 18px; margin-top: auto; font-size: 11.5px; line-height: 1.5; }
+}
+@media (min-width: 1100px) and (max-height: 650px) {
+  .rail { padding-block: 16px; }
+  .rail__avatar { width: 64px; }
+  .rail__name { margin-top: 8px; font-size: 20px; }
+  .rail__actions { margin-top: 8px; }
+  .rail__social, .rail__theme { width: 36px; height: 36px; }
+  .rail__nav { margin-top: 12px; padding-top: 10px; }
+  .rail__nav ul { gap: 2px; }
+  .rail__link { height: 34px; font-size: 15px; }
+  .rail__copy { padding-top: 12px; font-size: 11px; }
+}
+@media (max-width: 1099px) {
+  .home__title, .boot__title { font-size: clamp(30px, 4.5vw, 44px); }
+  .home__lede { font-size: 15px; }
+  .home__audience-pill { padding: 8px 11px; font-size: 10px; }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .home { --home-card: var(--paper); --home-nested: var(--paper); --home-tool: #fbfefc; }
+  .home .home__glass--tools { background: var(--paper); }
+}
+:root:is([data-perf='mid'], [data-perf='low'], [data-a11y-contrast='true']) .home {
+  --home-card: var(--glass-card); --home-nested: var(--glass-nested); --home-tool: #f6fcf8;
+}
+:root[data-a11y-contrast='true'] .home__audience-pill { border-color: var(--line-strong); }
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .home { --home-card: var(--paper); --home-nested: var(--paper); --home-tool: #fbfefc; }
+}
+@media (prefers-contrast: more) {
+  .home { --home-card: var(--paper); --home-nested: var(--paper); --home-tool: #fbfefc; }
+}
+@media (forced-colors: active) {
+  .home { --home-card: Canvas; --home-nested: Canvas; --home-tool: Canvas; }
+  .home__audience-pill { background: Canvas; border-color: CanvasText; }
+  .home__audience-pill::before { background: CanvasText; }
+  .home .tools-marquee__item { background: Canvas; border-color: CanvasText; }
+}

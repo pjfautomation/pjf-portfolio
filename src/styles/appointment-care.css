@@ -1,0 +1,37 @@
+.appointment-calendar { padding: 12px; }
+.appointment-calendar__top { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 13px; }
+.appointment-calendar__top > span { font-size: 10px; background: var(--wf-soft); color: var(--wf-accent); padding: 5px 9px; border-radius: 6px; }
+.appointment-calendar__top > span[data-cancelled='true'] { background: #fff0ef; color: #a4302a; }
+.appointment-calendar__week { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin: 12px 0; }
+.appointment-calendar__week > div { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 8px; border: 1px solid var(--wf-line); border-radius: 8px; }
+.appointment-calendar__week span { font-size: 10px; color: var(--wf-muted); }
+.appointment-calendar__week b { font-size: 14px; }
+.appointment-calendar__week [data-selected='true'] { border-color: var(--wf-accent); background: var(--wf-soft); }
+.appointment-calendar__event { display: flex; gap: 14px; padding: 14px; background: var(--wf-soft); border-left: 3px solid var(--wf-accent); border-radius: 6px; font-size: 12px; }
+.appointment-calendar__event p { margin: 7px 0; color: var(--wf-muted); font-size: 11px; }
+.appointment-calendar__event small { font-size: 10px; color: var(--wf-muted); }
+.appointment-calendar__event[data-cancelled='true'] { border-color: #bb4c43; }
+.appointment-calendar__time { font-size: 10px; line-height: 2.2; color: var(--wf-muted); }
+.appointment-facts { display: grid; grid-template-columns: 1fr; gap: 8px; margin: 12px 0 0; }
+.appointment-facts > div { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.appointment-facts dt { font-size: 10px; color: var(--wf-muted); }
+.appointment-facts dd { margin: 0; font-size: 11px; text-align: right; overflow-wrap: anywhere; }
+.appointment-clock { font-size: 10px; color: var(--wf-accent); margin-top: 10px; padding-top: 9px; border-top: 1px solid var(--wf-line); }
+.appointment-email-details { display: flex; flex-direction: column; gap: 5px; padding: 8px; border: 1px solid var(--wf-line); border-radius: 7px; margin-bottom: 8px; background: var(--wf-soft); }
+.journey-live .appointment-output .journey-email h4 { margin-bottom: 8px; }
+.journey-live .appointment-output .journey-email__address { padding-bottom: 6px; }
+.journey-live .appointment-output .journey-email__body { padding-top: 8px; }
+.journey-live .appointment-output .journey-email__body p { margin-bottom: 6px; }
+.appointment-email-details span { font-size: 10px; color: var(--wf-muted); }
+.appointment-sms__recipient { display: flex; flex-direction: column; gap: 5px; margin-bottom: 12px; font-size: 12px; }
+.appointment-sms__recipient span { font-size: 10px; color: var(--wf-muted); }
+.appointment-exit { padding: 20px 16px; }
+.appointment-exit > span { display: grid; place-items: center; width: 35px; height: 35px; background: var(--wf-soft); color: var(--wf-accent); border-radius: 50%; margin-bottom: 12px; }
+.appointment-exit h4 { font-size: 16px; margin-bottom: 10px; }
+.appointment-exit > p { font-size: 12px; line-height: 1.7; color: var(--wf-muted); }
+.hl-action-icon[data-kind='stop'] { color: #a4302a; background: #fff0ef; }
+[data-theme='dark'] .hl-action-icon[data-kind='stop'] { color: #ffb4af; background: #482925; }
+[data-theme='dark'] .appointment-calendar__top > span[data-cancelled='true'] { color: #ffb4af; background: #482925; }
+.workflow-detail .journey-canvas--highlevel .journey-node[data-system-event='true'] { border-style: dashed; }
+.workflow-detail .journey-canvas--highlevel .journey-node[data-status='Interrupted'] { border-color: #b27c24; }
+.hl-minimap svg > rect[data-status='Interrupted'] { fill: #b27c24; }

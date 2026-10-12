@@ -5,8 +5,8 @@
  * with it instead of being rewritten.
  *
  * The initial value is written by an inline script in index.html so the first
- * paint is already the right palette. Default is LIGHT: this site's identity
- * is the cream contour page, dark is the opt-in.
+ * paint is already the right palette. Default is LIGHT to match the mint
+ * reference palette; an explicit dark preference still persists.
  *
  * HeroCanvasV2 listens for the `themechange` event and eases its uDarkMix
  * uniform from it, so the shader crosses over on its own clock.
@@ -15,7 +15,7 @@ export type Theme = 'light' | 'dark'
 
 import { motionReduced } from './a11y'
 
-const KEY = 'theme'
+const KEY = 'theme-mint-v1'
 
 export function getTheme(): Theme {
   return document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light'

@@ -1,0 +1,23 @@
+import { APPOINTMENT, type AppointmentScenario } from '@/data/appointment-care'
+
+export default function AppointmentOutputs({ statuses, scenario, visibleId }: {
+  statuses: Record<string, string>; scenario: AppointmentScenario; visibleId: string
+}) {
+  if (statuses[visibleId] !== 'Completed') return null
+  const cancelled = scenario === 'cancelled' && statuses.wait24 === 'Interrupted'
+  const titles: Record<string, string> = { booked: 'HighLevel calendar booking', confirmation: 'Booking confirmation email', reminder24: '24-hour reminder email', reminder1: '1-hour reminder SMS', stop: 'Reminder workflow exit' }
+  return <article className="journey-output appointment-output" data-output={visibleId}>
+    <header className="journey-output__head"><div><img src="/icons/gohighlevel.png" alt="" width={18} height={18} /><h3>{titles[visibleId]}</h3></div><span data-status="Completed">Sample output</span></header>
+    {visibleId === 'booked' ? <div className="appointment-calendar">
+      <div className="appointment-calendar__top"><b>October 2026</b><span data-cancelled={cancelled}>{cancelled ? 'Cancelled' : 'Confirmed'}</span></div>
+      <div className="appointment-calendar__week" aria-label="Sample week">{[['Mon', '19'], ['Tue', '20'], ['Wed', '21'], ['Thu', '22'], ['Fri', '23']].map(([day, date]) => <div key={day} data-selected={date === '22'}><span>{day}</span><b>{date}</b></div>)}</div>
+      <div className="appointment-calendar__event" data-cancelled={cancelled}><span className="appointment-calendar__time">10:00<br />10:30</span><div><b>{APPOINTMENT.service}</b><p>{APPOINTMENT.name} · {APPOINTMENT.duration}</p><small>{APPOINTMENT.location} · GMT+8</small></div></div>
+      <dl className="appointment-facts"><div><dt>Contact</dt><dd>{APPOINTMENT.email}</dd></div><div><dt>Booking notice</dt><dd>{scenario === 'last-minute' ? '2 hours before the call' : '3 days before the call'}</dd></div><div><dt>Appointment status</dt><dd>{cancelled ? 'Cancelled before reminders' : 'Confirmed · upcoming'}</dd></div></dl>
+      <p className="appointment-clock">Simulated time: {cancelled ? '20 Oct · 2:00 PM' : statuses.wait1 === 'Completed' ? '22 Oct · 9:00 AM' : statuses.wait24 === 'Completed' && scenario !== 'last-minute' ? '21 Oct · 10:00 AM' : scenario === 'last-minute' ? '22 Oct · 8:00 AM' : '19 Oct · 10:00 AM'} (GMT+8)</p>
+    </div> : visibleId === 'stop' ? <div className="appointment-exit"><span aria-hidden="true">✓</span><h4>Reminder workflow stopped.</h4><p>Maya’s appointment was cancelled during the first wait. HighLevel automatically removed her from the appointment workflow, preventing all further reminders.</p><dl className="appointment-facts"><div><dt>Contact</dt><dd>{APPOINTMENT.name}</dd></div><div><dt>Reminder sends</dt><dd>0</dd></div><div><dt>Enrollment</dt><dd>Automatically exited</dd></div></dl></div> : visibleId === 'reminder1' ? <div className="journey-chat"><div className="appointment-sms__recipient"><b>{APPOINTMENT.name}</b><span>{APPOINTMENT.phone} · SMS preview</span></div><div className="journey-message"><p>Hi Maya! Your CRM discovery call with Philip starts in 1 hour, at 10:00 AM (GMT+8).</p><p>Join here: <span className="journey-demo-link">example.com/meeting/discovery</span></p><p>See you soon!</p><small>Simulated SMS delivery · not sent</small></div></div> : <div className="journey-email">
+      <h4>{visibleId === 'confirmation' ? 'Your discovery call is booked' : 'Your discovery call is tomorrow'}</h4><div className="journey-email__address"><b>Philip · Appointment care</b><span>To: {APPOINTMENT.email}</span></div>
+      <div className="journey-email__body"><p>Hi Maya,</p><p>{visibleId === 'confirmation' ? 'Thanks for booking your CRM discovery call. Here are your appointment details:' : 'A quick reminder about our discovery call tomorrow:'}</p><div className="appointment-email-details"><b>{APPOINTMENT.date}</b><span>{APPOINTMENT.time} · {APPOINTMENT.timezone}</span><span>{APPOINTMENT.duration} · Online meeting</span></div><p>Join the call: <span className="journey-demo-link">example.com/meeting/discovery</span></p><p>Need to cancel? <span className="journey-demo-link">example.com/appointment/cancel</span></p><p>See you then,<br />Philip</p><small>Simulated email delivery · not sent</small></div>
+    </div>}
+    <p className="journey-output__caption">{visibleId === 'booked' ? 'A fictional booking in the HighLevel calendar. Cancellation updates this record during the replay.' : visibleId === 'stop' ? 'The earlier confirmation stays in history; upcoming reminder actions remain skipped.' : 'Illustrative message using fictional contact details. All links are examples.'}</p>
+  </article>
+}

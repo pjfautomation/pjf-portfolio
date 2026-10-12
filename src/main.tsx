@@ -1,6 +1,6 @@
 import { StrictMode, lazy, Suspense } from 'react'
 import { createRoot } from 'react-dom/client'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import App from './App'
 import Home from '@/components/Home'
 import NotFound from '@/components/NotFound'
@@ -10,8 +10,8 @@ import { restorePrefs } from '@/lib/a11y'
 // Every route but Home is its own chunk: the first visit only pays for Home.
 const ProjectsView = lazy(() => import('@/views/ProjectsView'))
 const ServicesView = lazy(() => import('@/views/ServicesView'))
-const ShowcaseView = lazy(() => import('@/views/ShowcaseView'))
-const TestimonialsGrid = lazy(() => import('@/components/TestimonialsGrid'))
+const WorkflowLibrary = lazy(() => import('@/components/WorkflowLibrary'))
+const WorkflowDetail = lazy(() => import('@/components/WorkflowDetail'))
 const AboutGrid = lazy(() => import('@/components/AboutGrid'))
 const ContactGrid = lazy(() => import('@/components/ContactGrid'))
 const Privacy = lazy(() => import('@/components/Privacy'))
@@ -45,6 +45,14 @@ import './styles/a11y.css'
 import './styles/apple.css'
 // Mobile motion + component pass on top of it (phone shell only).
 import './styles/mobile-pass.css'
+// Mint palette, glass surfaces and the existing pill marquee.
+import './styles/projects-studio.css'
+import './styles/rail-portrait.css'
+import './styles/home-restored.css'
+import './styles/responsive.css'
+import './styles/workflows.css'
+import './styles/highlevel-workflow.css'
+import './styles/appointment-care.css'
 // Last: the perf tiers only ever turn things OFF, so they must win.
 import './styles/perf.css'
 
@@ -66,8 +74,10 @@ createRoot(container).render(
           <Route path="/" element={<Home />} />
           <Route path="/projects" element={<ProjectsView />} />
           <Route path="/services" element={<ServicesView />} />
-          <Route path="/showcase" element={<ShowcaseView />} />
-          <Route path="/testimonials" element={<TestimonialsGrid />} />
+
+          <Route path="/work-in-action" element={<WorkflowLibrary />} />
+          <Route path="/work-in-action/:workflowId" element={<WorkflowDetail />} />
+          <Route path="/testimonials" element={<Navigate to="/work-in-action" replace />} />
           <Route path="/about" element={<AboutGrid />} />
           <Route path="/contact" element={<ContactGrid />} />
         </Route>

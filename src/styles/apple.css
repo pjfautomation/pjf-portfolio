@@ -35,13 +35,10 @@
 }
 
 /* ---------- 2. Type ----------
-   "Default to the platform's system font before a custom face; it already
-   ships optical sizing, tracking tables, and legibility tuning." SF Pro on
-   Apple hardware, Segoe UI Variable on Windows, Poppins stays as the
-   fallback so the brand face is never more than one step away. */
+   Manrope is the portfolio face; platform fonts cover loading fallbacks. */
 :root {
-  --font-display: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text',
-    system-ui, 'Segoe UI Variable Display', 'Segoe UI', 'Poppins', sans-serif;
+  --font-display: 'Manrope', system-ui, -apple-system, sans-serif;
+  --font-body: var(--font-display);
   --ls-display: -0.028em;
   --ls-eyebrow: 0.08em;
   --lh-tight: 1.02;

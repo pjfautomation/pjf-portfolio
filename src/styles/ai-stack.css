@@ -181,10 +181,10 @@
 .ai-stack__node.is-dim { opacity: 0.32; }
 
 .ai-stack__node.is-lit {
-  border-color: rgba(255, 122, 26, 0.45);
+  border-color: rgba(0, 140, 80, 0.45);
   box-shadow:
     0 18px 44px -24px rgba(11, 30, 63, 0.32),
-    0 0 0 1px rgba(255, 122, 26, 0.22);
+    0 0 0 1px rgba(0, 140, 80, 0.22);
 }
 
 .ai-stack__node--root.is-lit { border-color: transparent; }
@@ -216,7 +216,7 @@
   width: 26px;
   height: 26px;
   border-radius: var(--radius-circle);
-  background: rgba(255, 122, 26, 0.16);
+  background: rgba(0, 140, 80, 0.16);
   color: var(--orange);
 }
 
@@ -232,7 +232,7 @@
 /* The lit subtree is the one place a mark takes the accent, which is what
    makes the highlight land on the glyph as well as the border. */
 .ai-stack__node.is-lit .ai-stack__mark {
-  background: rgba(255, 122, 26, 0.18);
+  background: rgba(0, 140, 80, 0.18);
   color: var(--orange-ink);
 }
 
@@ -327,7 +327,7 @@
 
 .ai-stack__status--live {
   color: var(--orange-ink);
-  background: rgba(255, 122, 26, 0.14);
+  background: rgba(0, 140, 80, 0.14);
 }
 
 .ai-stack__status--internal {
@@ -343,7 +343,7 @@
 
 .ai-stack__node--root .ai-stack__status--live {
   color: var(--orange-hover);
-  background: rgba(255, 122, 26, 0.2);
+  background: rgba(0, 140, 80, 0.2);
 }
 
 .ai-stack__node--root .ai-stack__status--internal,
@@ -412,7 +412,7 @@
    screen reader hears and the state the caret shows cannot drift apart. */
 .ai-stack__toggle[aria-expanded='true'] .ai-stack__caret {
   transform: rotate(180deg);
-  background: rgba(255, 122, 26, 0.14);
+  background: rgba(0, 140, 80, 0.14);
   color: var(--orange-ink);
 }
 
@@ -533,3 +533,159 @@
      arrives there rather than travelling. */
   .ai-stack__caret { transition: none; }
 }
+
+.aig__example-note { margin: 18px 0 24px; color: var(--muted); font-size: 13px; line-height: 1.6; }
+.aig__status[data-status='Example'] { color: var(--muted); background: var(--glass-wrap); }
+
+/* Business-first system library; retain the existing window and glass material. */
+.aig { gap: 26px; }
+.aig .aig__head { padding: 24px; gap: 24px; }
+.aig__intro { font-size: 13px; line-height: 1.6; color: #B5D9CC; max-width: 680px; }
+.aig .aig__example-note { margin: 0; font-size: 12px; }
+.aig .aig__group-head { display: flex; flex-direction: column; gap: 6px; align-items: start; }
+.aig .aig__group-what { max-width: 850px; line-height: 1.5; }
+.aig .aig__cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.aig .aig__card { width: auto; min-width: 0; padding: 18px; gap: 10px; }
+.aig .aig__status { align-self: start; margin-left: 0; color: var(--orange-ink); background: var(--glass-wrap); }
+.aig .aig__name { font-size: 17px; line-height: 1.3; margin-top: 0; }
+.aig .aig__what { line-height: 1.6; color: var(--muted); }
+.aig .aig__stack { margin-top: auto; padding-top: 12px; border-top: 1px solid var(--glass-border); font-size: 11.5px; }
+@media (max-width: 1000px) { .aig .aig__cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 600px) { .aig .aig__cards { grid-template-columns: minmax(0, 1fr); } }
+
+/* Final premium overrides keep the systems surface consistent after the
+   legacy responsive rules above. */
+.aig .aig__group-head { flex-direction: column; align-items: flex-start; gap: 8px; }
+.aig .aig__cards { width: 100%; max-width: 1060px; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+.aig .aig__card { min-height: 248px; }
+@media (max-width: 900px) { .aig .aig__cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 600px) { .aig .aig__cards { grid-template-columns: minmax(0, 1fr); } }
+
+/* Premium systems library: a calmer editorial frame with generous cards,
+   category wayfinding, and motion that makes the grid feel alive. */
+.aig {
+  width: min(100%, 1160px);
+  margin-inline: auto;
+  padding: 26px clamp(22px, 4vw, 58px) 72px;
+  gap: 44px;
+}
+.aig .aig__head { position: relative; overflow: hidden; padding: clamp(24px, 3vw, 38px); border: 1px solid rgba(111, 211, 164, .2); border-radius: 26px; background: radial-gradient(circle at 92% 8%, rgba(64, 198, 137, .22), transparent 32%), linear-gradient(135deg, #061f1a 0%, #062a22 55%, #07392b 100%); box-shadow: 0 24px 54px rgba(3, 30, 22, .18), inset 0 1px 0 rgba(255, 255, 255, .08); }
+.aig .aig__head::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(110deg, transparent 24%, rgba(255,255,255,.06) 48%, transparent 70%); transform: translateX(-100%); animation: aig-head-sheen 1100ms var(--ease-out) 500ms both; }
+.aig__head-text { position: relative; z-index: 1; min-width: 0; }
+.aig__head-kicker { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.aig__head-live { display: inline-flex; align-items: center; gap: 7px; color: rgba(228, 255, 239, .68); font-size: 11px; font-weight: 700; letter-spacing: .04em; }
+.aig__head-live i { width: 7px; height: 7px; border-radius: 50%; background: #69dba8; box-shadow: 0 0 0 4px rgba(105, 219, 168, .12); }
+.aig__intro { max-width: 650px; }
+.aig__head-stats { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+.aig__head-stats span { display: inline-flex; align-items: center; gap: 7px; padding: 8px 11px; border: 1px solid rgba(202, 255, 226, .13); border-radius: 999px; background: rgba(255, 255, 255, .06); color: rgba(228, 255, 239, .72); font-size: 10px; font-weight: 650; }
+.aig__head-stats b { color: #e7fff0; font-variant-numeric: tabular-nums; }
+.aig .aig__harness { position: relative; z-index: 1; }
+.aig .aig__group { gap: 18px; }
+.aig .aig__group-head { flex-direction: column; align-items: flex-start; gap: 8px; }
+.aig__group-title-wrap { display: flex; align-items: center; gap: 10px; }
+.aig__group-index { color: var(--green, #16824b); font-size: 10px; font-weight: 800; letter-spacing: .12em; }
+.aig__group-icon { display: grid; place-items: center; width: 30px; height: 30px; border: 1px solid rgba(16, 125, 76, .2); border-radius: 10px; background: rgba(255,255,255,.76); color: var(--green, #16824b); box-shadow: 0 7px 16px rgba(19, 72, 50, .06); }
+.aig .aig__group-title { font-size: clamp(18px, 2vw, 23px); letter-spacing: -.035em; }
+.aig .aig__group-what { margin: 0 0 0 40px; color: var(--muted); font-size: 12px; }
+.aig .aig__cards { width: 100%; max-width: 1060px; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+.aig .aig__card { position: relative; isolation: isolate; min-height: 248px; overflow: hidden; padding: 20px; border: 1px solid rgba(16, 125, 76, .28); border-radius: 20px; background: linear-gradient(145deg, rgba(255,255,255,.98), rgba(245, 252, 248, .94)); box-shadow: 0 14px 36px rgba(19, 72, 50, .07), inset 0 1px 0 rgba(255,255,255,.9); transition: transform 240ms var(--ease-out), border-color 240ms var(--ease-out), box-shadow 240ms var(--ease-out); animation: aig-card-enter 560ms var(--ease-out) both; }
+.aig .aig__card::after { content: ''; position: absolute; inset: 0; z-index: -1; background: radial-gradient(circle at 100% 0%, rgba(129, 221, 173, .2), transparent 34%); pointer-events: none; }
+.aig .aig__card:nth-child(2) { animation-delay: 70ms; }
+.aig .aig__card:nth-child(3) { animation-delay: 140ms; }
+.aig .aig__card:nth-child(4) { animation-delay: 210ms; }
+.aig .aig__card:hover { transform: translateY(-7px); border-color: rgba(16, 125, 76, .58); box-shadow: 0 26px 52px rgba(19, 72, 50, .14), inset 0 1px 0 rgba(255,255,255,.95); }
+.aig .aig__marks { min-height: 38px; gap: 7px; }
+.aig .aig__mark { width: 38px; height: 38px; border: 1px solid rgba(16,125,76,.12); border-radius: 12px; background: #fff; box-shadow: 0 8px 16px rgba(19,72,50,.08); }
+.aig .aig__mark img { width: 26px; height: 26px; }
+.aig .aig__name { margin-top: 2px; font-size: 16px; line-height: 1.28; letter-spacing: -.025em; }
+.aig .aig__what { color: #36536c; font-size: 12.5px; line-height: 1.58; }
+.aig .aig__stack { color: var(--muted); font-size: 11px; }
+.aig .aig__tools { gap: 7px; margin-top: auto; padding-top: 8px; }
+.aig .aig__tools li { padding: 4px 7px; border: 1px solid rgba(16,125,76,.08); border-radius: 999px; background: rgba(22,130,75,.06); font-size: 10px; }
+@keyframes aig-head-sheen { to { transform: translateX(100%); } }
+@keyframes aig-card-enter { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@media (max-width: 900px) { .aig .aig__cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 600px) { .aig { padding-inline: 16px; gap: 34px; } .aig__head-kicker { align-items: flex-start; flex-direction: column; gap: 10px; } .aig .aig__cards { grid-template-columns: minmax(0, 1fr); } .aig .aig__group-what { margin-left: 40px; } }
+@media (prefers-reduced-motion: reduce) { .aig .aig__head::after, .aig .aig__card { animation: none; } .aig .aig__card { transition: none; } .aig .aig__card:hover { transform: none; } }
+
+/* Reference structure: compact cards grouped on the left of the window. */
+.aig .aig__group-head { flex-direction: row; align-items: baseline; gap: 12px; }
+.aig .aig__cards { grid-template-columns: repeat(3, minmax(0, 260px)); justify-content: start; gap: 12px; }
+.aig .aig__card { padding: 16px; border: 1px solid var(--glass-border); border-radius: 16px; gap: 9px; box-shadow: none; }
+.aig .aig__marks { min-height: 34px; flex-wrap: wrap; }
+.aig .aig__marks .aig__status { margin-left: auto; font-size: 9px; }
+.aig .aig__mark { width: 34px; height: 34px; flex: none; }
+.aig .aig__name { font-size: 14px; line-height: 1.4; align-items: start; }
+.aig .aig__name svg { margin-top: 2px; }
+.aig .aig__what { font-size: 12px; line-height: 1.55; }
+.aig .aig__stack { border: 0; padding-top: 0; margin-top: 0; font-size: 11px; }
+.aig .aig__tools { margin-top: auto; padding-top: 4px; }
+.aig .aig__tools li { font-size: 10px; }
+@media (max-width: 900px) { .aig .aig__cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 600px) { .aig .aig__cards { grid-template-columns: minmax(0, 1fr); } }
+
+/* Match the reference's quiet outlines, compact copy and status capsules. */
+.aig .aig__card {
+  background: var(--paper);
+  border: 1px solid var(--line-strong);
+  border-radius: 15px;
+  min-height: 218px;
+  padding: 14px;
+  gap: 8px;
+}
+.aig .aig__cards { grid-template-columns: repeat(3, minmax(0, 246px)); }
+.aig .aig__marks .aig__status {
+  height: 19px;
+  padding: 0 7px;
+  border-radius: 999px;
+  background: rgba(34,161,92,.12);
+  color: #1B8A4C;
+  font-size: 8px;
+  letter-spacing: .06em;
+  white-space: nowrap;
+}
+[data-theme='dark'] .aig .aig__marks .aig__status { color: #69DBA8; }
+.aig .aig__status::before { width: 4px; height: 4px; }
+.aig .aig__name { font-size: 13px; }
+.aig .aig__what { font-size: 12px; line-height: 1.5; }
+.aig .aig__stack { font-size: 10.5px; }
+.aig .aig__tools li { font-size: 9px; padding: 3px 6px; }
+.aig .aig__head { padding: 22px 24px; }
+.aig .aig__group { gap: 12px; }
+.aig { gap: 28px; }
+@media (max-width:900px) { .aig .aig__cards { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+@media (max-width:600px) { .aig .aig__cards { grid-template-columns: minmax(0,1fr); } }
+
+/* Reference text hierarchy: crisp body copy, quieter stack, smaller tags. */
+.aig .aig__what { color: var(--navy); font-size: 12px; line-height: 1.6; font-weight: 400; }
+.aig .aig__stack { color: var(--muted); font-size: 11px; line-height: 1.5; }
+.aig .aig__tools li { color: var(--navy); font-size: 10px; font-weight: 500; background: rgba(100,116,139,.08); }
+.aig .aig__marks { flex-wrap: nowrap; gap: 6px; }
+.aig .aig__mark { width: 30px; height: 30px; }
+
+/* Reference proportions: give the system cards more breathing room and a
+   defined outline so they stay legible against the pale modal surface. */
+.aig .aig__cards { grid-template-columns: repeat(3, minmax(0, 280px)); }
+.aig .aig__card {
+  min-height: 235px;
+  padding: 18px;
+  gap: 11px;
+  border-color: rgba(16, 125, 76, .48);
+  box-shadow: inset 0 0 0 1px rgba(16, 125, 76, .10);
+}
+.aig .aig__mark { width: 36px; height: 36px; }
+.aig .aig__mark img { width: 25px; height: 25px; }
+.aig .aig__name { font-size: 15px; line-height: 1.35; gap: 7px; }
+.aig .aig__name svg { width: 17px; height: 17px; }
+.aig .aig__what { line-height: 1.65; }
+.aig .aig__tools { gap: 7px; }
+@media (max-width: 900px) { .aig .aig__cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 600px) { .aig .aig__cards { grid-template-columns: minmax(0, 1fr); } }
+
+/* Final premium overrides keep the systems surface consistent after the
+   legacy responsive rules above. */
+.aig .aig__group-head { flex-direction: column; align-items: flex-start; gap: 8px; }
+.aig .aig__cards { width: 100%; max-width: 1060px; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+.aig .aig__card { min-height: 248px; }
+@media (max-width: 900px) { .aig .aig__cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 600px) { .aig .aig__cards { grid-template-columns: minmax(0, 1fr); } }

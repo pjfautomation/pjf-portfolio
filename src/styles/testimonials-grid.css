@@ -96,7 +96,7 @@
   color: #0B1120;
   background: var(--orange);
   box-shadow:
-    0 0 0 8px rgba(255, 122, 26, 0.22),
+    0 0 0 8px rgba(0, 140, 80, 0.22),
     0 18px 40px -14px rgba(0, 0, 0, 0.7);
   transform: translate(-50%, -50%);
   transition: transform 260ms var(--ease-spring), box-shadow 260ms var(--ease-out);
@@ -105,7 +105,7 @@
 .tgrid__cover:hover .tgrid__cover-play {
   transform: translate(-50%, -50%) scale(1.06);
   box-shadow:
-    0 0 0 12px rgba(255, 122, 26, 0.18),
+    0 0 0 12px rgba(0, 140, 80, 0.18),
     0 22px 44px -14px rgba(0, 0, 0, 0.75);
 }
 .tgrid__cover:focus-visible { outline: 2px solid var(--orange); outline-offset: -4px; }
@@ -340,8 +340,8 @@
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--orange-ink);
-  background: rgba(255, 122, 26, 0.10);
-  box-shadow: inset 0 0 0 1px rgba(255, 122, 26, 0.22);
+  background: rgba(0, 140, 80, 0.10);
+  box-shadow: inset 0 0 0 1px rgba(0, 140, 80, 0.22);
   white-space: nowrap;
 }
 /* No reserved line count here on purpose. The three lines are within ~10

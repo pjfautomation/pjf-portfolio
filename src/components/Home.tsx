@@ -1,9 +1,10 @@
 import { Link } from 'react-router-dom'
 import { ArrowUpRight } from '@/components/slab'
+import { Buildings, UsersThree, Briefcase, Storefront } from '@phosphor-icons/react'
 import { profile } from '@/data/profile'
 import ToolsMarquee from './ToolsMarquee'
 import HomeBento from './HomeBento'
-import { HomeProfile, HomeStats, HomeExplore } from './HomeMobile'
+import { HomeProfile } from './HomeMobile'
 import { useScrollReveal } from '@/hooks/useScrollReveal'
 import { useIsPhone } from '@/hooks/useMediaQuery'
 
@@ -30,54 +31,51 @@ import { useIsPhone } from '@/hooks/useMediaQuery'
 export default function Home() {
   useScrollReveal()
   const phone = useIsPhone()
-  const { displayName, hero } = profile
+  const { displayName } = profile
 
   return (
     <section className="home" aria-labelledby="home-title">
       {phone && <HomeProfile />}
 
       <div className="home__head">
+        <ul className="home__audience" aria-label="Businesses I support">
+          {[
+            { label: 'Agencies', Icon: Buildings },
+            { label: 'Coaches', Icon: UsersThree },
+            { label: 'Service businesses', Icon: Briefcase },
+            { label: 'Ecommerce', Icon: Storefront },
+          ].map(({ label, Icon }, index) => (
+            <li key={label} className={`home__audience-pill home__audience-pill--${index}`}>
+              <Icon size={15} weight="duotone" aria-hidden="true" />
+              {label}
+            </li>
+          ))}
+        </ul>
         <div className="home__headline">
           <h1 className="home__title" id="home-title">
             <span className="home__line">
-              {displayName.line1} {displayName.line2}
+              <span>{displayName.line1}</span>{' '}
+              <span className="home__line--accent">{displayName.line2}</span>
             </span>
           </h1>
 
-          {!phone && (
             <Link className="home__cta" to="/contact">
               Get in touch
               <ArrowUpRight size={16} weight="bold" aria-hidden="true" />
             </Link>
-          )}
         </div>
 
-        <p className="home__lede">{hero.body}</p>
-        {phone && <HomeStats />}
+        <p className="home__lede">
+          Systems that connect your leads, tools, and team.{' '}
+          I help businesses scale without adding more work.
+        </p>
       </div>
 
-      {/* Two plates, not one. The tools band and the bento are different
-          objects - a strip you read across and a grid you pick from - and one
-          shared sheet made the strip look like the bento's header. */}
-      <div className="home__glass home__glass--tools">
-        <div className="home__tools">
-          <div className="home__tools-head">
-            <span className="home__tools-eyebrow">Daily drivers</span>
-            <h2 className="home__tools-label">Tools I work with</h2>
-          </div>
-          <ToolsMarquee />
-        </div>
-      </div>
+      <div className="home__hero-tools home__tools-strip"><ToolsMarquee /></div>
 
-      {phone ? (
-        <HomeExplore />
-      ) : (
-        <div className="home__glass home__glass--showcase">
-          <div className="home__showcase">
-            <HomeBento />
-          </div>
-        </div>
-      )}
+      <div className="home__glass home__glass--showcase">
+        <div className="home__showcase"><HomeBento /></div>
+      </div>
     </section>
   )
 }

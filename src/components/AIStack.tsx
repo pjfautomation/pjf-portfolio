@@ -248,7 +248,7 @@ export default function AIStack({ root = aiStack }: { root?: StackNode }) {
     }
   }, [measure, schedule])
 
-  // Poppins swapping in reflows every card, and the swap lands after the
+  // The custom font swapping in reflows every card, and the swap lands after the
   // first paint. Without this the wires point at the fallback-font layout.
   useEffect(() => {
     if (!document.fonts) return

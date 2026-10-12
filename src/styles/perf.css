@@ -22,6 +22,19 @@
   -webkit-backdrop-filter: none !important;
 }
 
+/* Keep the same material hierarchy and readable ink when blur is disabled.
+   The botanical layer remains visible around the panels at every tier. */
+:root:is([data-perf='mid'], [data-perf='low']) {
+  --glass-surface: rgba(248, 255, 251, 0.92);
+  --glass-card: rgba(248, 255, 251, 0.86);
+  --glass-wrap: rgba(241, 252, 247, 0.76);
+}
+:root[data-theme='dark']:is([data-perf='mid'], [data-perf='low']) {
+  --glass-surface: rgba(7, 39, 30, 0.95);
+  --glass-card: rgba(7, 39, 30, 0.90);
+  --glass-wrap: rgba(4, 28, 21, 0.82);
+}
+
 /* Belt and braces: App.tsx stops rendering the canvas at `low`, but a tier
    restored before mount should never paint it even for a frame. */
 :root[data-perf='low'] .hero-canvas {

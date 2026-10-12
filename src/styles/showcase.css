@@ -38,7 +38,7 @@
   text-transform: uppercase;
   color: var(--muted);
 }
-.ktools__vote-dot { width: 4px; height: 4px; border-radius: 50%; background: rgba(255, 122, 26, 0.5); }
+.ktools__vote-dot { width: 4px; height: 4px; border-radius: 50%; background: rgba(0, 140, 80, 0.5); }
 .ktools__vote-ask { color: var(--orange-ink); }
 .ktools__vote-frame {
   width: 320px;
@@ -216,5 +216,5 @@
 }
 [data-theme='dark'] .ktools .flagship__feedback-pause:hover {
   background: rgba(255, 255, 255, 0.09);
-  border-color: rgba(255, 122, 26, 0.45);
+  border-color: rgba(0, 140, 80, 0.45);
 }

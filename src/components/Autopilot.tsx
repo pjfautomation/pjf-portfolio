@@ -262,7 +262,7 @@ export default function Autopilot({ compact = false, maxScale = 1 }: AutopilotPr
           t.style.fill = 'var(--ap-loop)'
           t.setAttribute('font-size', '10.5')
           t.setAttribute('font-weight', '600')
-          t.setAttribute('font-family', 'Poppins, sans-serif')
+          t.setAttribute('font-family', 'Manrope, sans-serif')
           t.textContent = link.label
           cablesSvg.appendChild(t)
         }
@@ -351,8 +351,7 @@ export default function Autopilot({ compact = false, maxScale = 1 }: AutopilotPr
           Your workflow, end to end.
         </h2>
         <p className="autopilot__intro">
-          PLACEHOLDER - tell me what to put here: two or three sentences walking
-          through this example automation, from the trigger to each outcome.
+          A simple example of a lead moving from capture to tagging, CRM follow-up and a timely next step.
         </p>
       </header>
       )}

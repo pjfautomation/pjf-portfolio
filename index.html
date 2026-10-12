@@ -6,15 +6,14 @@
          shell pads with is 0. -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 
-    <!-- PLACEHOLDER - SEO. Replace the title, description, URLs and share image. -->
-    <title>Your Name - Your Title</title>
-    <meta name="description" content="PLACEHOLDER - one sentence on what you do and who you do it for." />
-    <meta name="author" content="Your Name" />
+    <title>Philip Jeid Fabito - GoHighLevel and Automation Specialist</title>
+    <meta name="description" content="GoHighLevel CRM systems, no-code workflow automation, e-commerce operations and social content support by Philip Jeid Fabito." />
+    <meta name="author" content="Philip Jeid Fabito" />
     <meta name="robots" content="index, follow, max-image-preview:large" />
     <!-- The browser bar takes the page colour (--cream per theme); the inline
          theme script below and lib/theme.ts keep it in step with the toggle.
          Literal hex here only because this runs before any stylesheet loads. -->
-    <meta name="theme-color" content="#F4F4ED" />
+    <meta name="theme-color" content="#F1FCF7" />
     <!-- <link rel="canonical" href="https://yoursite.com/" /> -->
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -28,26 +27,28 @@
 
     <!-- Open Graph / social share. og:image must be an absolute URL once you deploy. -->
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Your Name" />
-    <meta property="og:title" content="Your Name - Your Title" />
-    <meta property="og:description" content="PLACEHOLDER - one sentence on what you do and who you do it for." />
+    <meta property="og:site_name" content="Philip Jeid Fabito" />
+    <meta property="og:title" content="Philip Jeid Fabito | GoHighLevel & Automation Specialist" />
+    <meta property="og:description" content="GoHighLevel, workflow automation and eCommerce solutions by Philip Jeid Fabito." />
     <!-- <meta property="og:url" content="https://yoursite.com/" /> -->
     <!-- <meta property="og:image" content="https://yoursite.com/share.png" /> -->
     <meta name="twitter:card" content="summary_large_image" />
 
     <!-- Theme before first paint: no flash of the wrong palette. Default is
-         light; dark is the visitor's opt-in, persisted in localStorage. -->
+         light mint; a visitor's explicit choice is persisted in localStorage. -->
     <script>
       (function () {
         try {
           document.documentElement.dataset.theme =
-            localStorage.getItem('theme') === 'dark' ? 'dark' : 'light';
+            localStorage.getItem('theme-mint-v1') === 'dark' ? 'dark' : 'light';
         } catch (e) {
           document.documentElement.dataset.theme = 'light';
         }
         if (document.documentElement.dataset.theme === 'dark') {
           var bar = document.querySelector('meta[name="theme-color"]');
-          if (bar) bar.setAttribute('content', '#070B14');
+          if (bar) bar.setAttribute('content', '#031610');
+        } else {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#F1FCF7');
         }
       })();
     </script>

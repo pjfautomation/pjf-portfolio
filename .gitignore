@@ -1,4 +1,5 @@
 node_modules
+.npm-cache
 dist
 dist-ssr
 *.local
@@ -17,3 +18,9 @@ pnpm-debug.log*
 # needs it - so it is the one env file that is tracked.
 !.env.production
 !.env.example
+
+# Local screenshots and one-off editing helpers; retain reusable replay checks.
+artifacts/*
+!artifacts/verify-replay-workspace.cjs
+!artifacts/verify-appointment-care.cjs
+!artifacts/verify-client-welcome.cjs

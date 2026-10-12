@@ -39,7 +39,7 @@ const CLIPS: Clip[] = [
     src: '',
     poster: '/placeholders/testimonial-1.jpg',
     duration: '0:00',
-    kicker: 'Client testimonial',
+    kicker: 'Workflow demo',
     width: 720,
     height: 1080,
   },
@@ -49,7 +49,7 @@ const CLIPS: Clip[] = [
     src: '',
     poster: '/placeholders/testimonial-2.jpg',
     duration: '0:00',
-    kicker: 'Client testimonial',
+    kicker: 'Workflow demo',
     width: 720,
     height: 1080,
   },
@@ -71,31 +71,31 @@ type Client = {
 const CLIENTS: Client[] = [
   {
     index: '01',
-    name: 'Client Name 1',
-    role: 'PLACEHOLDER ROLE',
+    name: 'GoHighLevel systems',
+    role: 'Service example',
     daily:
-      'PLACEHOLDER - tell me what to put here: one or two sentences on what you run or build for this client day to day.',
-    work: ['Tag', 'Tag', 'Tag'],
+      'CRM setup, pipeline organization and follow-up workflows shaped around the business process.',
+    work: ['GHL', 'CRM', 'Follow-up'],
     logoSrc: '/placeholders/logo.svg',
     Icon: Gauge,
   },
   {
     index: '02',
-    name: 'Client Name 2',
-    role: 'PLACEHOLDER ROLE',
+    name: 'Automation workflows',
+    role: 'Service example',
     daily:
-      'PLACEHOLDER - tell me what to put here: one or two sentences on what you run or build for this client day to day.',
-    work: ['Tag', 'Tag', 'Tag'],
+      'Connected no-code tools that reduce repetitive handoffs and make daily operations easier to manage.',
+    work: ['n8n', 'Make', 'Zapier'],
     logoSrc: '/placeholders/logo.svg',
     Icon: Robot,
   },
   {
     index: '03',
-    name: 'Client Name 3',
-    role: 'PLACEHOLDER ROLE',
+    name: 'E-commerce operations',
+    role: 'Service example',
     daily:
-      'PLACEHOLDER - tell me what to put here: one or two sentences on what you run or build for this client day to day.',
-    work: ['Tag', 'Tag', 'Tag'],
+      'Shopify and Amazon support across product data, customer operations and practical store upkeep.',
+    work: ['Shopify', 'Amazon', 'Support'],
     logoSrc: '/placeholders/logo.svg',
     Icon: Code,
   },
@@ -118,12 +118,12 @@ export default function TestimonialsGrid() {
   return (
     <section className="pgrid tgrid" aria-labelledby="testimonials-title">
       <header className="pgrid__head">
-        <span className="pgrid__eyebrow">Testimonials</span>
+        <span className="pgrid__eyebrow">Work in Action</span>
         <h1 className="pgrid__title" id="testimonials-title">
-          Your testimonials headline.
+          Systems and workflows in practice.
         </h1>
         <p className="pgrid__lede">
-          PLACEHOLDER - tell me what to put here: one line that introduces the videos and the client list.
+          Explore CRM, automation and e-commerce service examples. Video walkthroughs will be added as they become available.
         </p>
       </header>
 
@@ -144,7 +144,7 @@ export default function TestimonialsGrid() {
                 controls
                 autoPlay
                 playsInline
-                aria-label={`Video testimonial ${clip.index} from a client`}
+                aria-label={`Workflow demonstration ${clip.index} in practice`}
               />
             ) : (
               <button
@@ -154,8 +154,8 @@ export default function TestimonialsGrid() {
                 disabled={!hasVideo}
                 aria-label={
                   hasVideo
-                    ? `Play client testimonial ${clip.index}, ${clip.duration}`
-                    : `Client testimonial ${clip.index}, no video added yet`
+                    ? `Play workflow demonstration ${clip.index}, ${clip.duration}`
+                    : `Workflow demonstration ${clip.index}, no video added yet`
                 }
               >
                 <img
@@ -178,7 +178,7 @@ export default function TestimonialsGrid() {
                   <span className="tgrid__cover-sub">
                     {hasVideo
                       ? `${clip.duration} · Tap to play`
-                      : 'PLACEHOLDER - add your video to public/testimonials/'}
+                      : 'Workflow demonstration coming soon'}
                   </span>
                 </span>
               </button>
@@ -187,7 +187,7 @@ export default function TestimonialsGrid() {
 
           {/* The picker is one segmented control, not two loose chips: two
               cells on a shared plate, the active one lit. */}
-          <div className="tgrid__picker" role="group" aria-label="Choose a testimonial">
+          <div className="tgrid__picker" role="group" aria-label="Choose a demonstration">
             {CLIPS.map((c, i) => (
               <button
                 key={c.id}
@@ -200,7 +200,7 @@ export default function TestimonialsGrid() {
                   <img src={c.poster} alt="" loading="lazy" decoding="async" />
                 </span>
                 <span className="tgrid__pick-copy">
-                  <span className="tgrid__pick-kicker">Testimonial {c.index}</span>
+                  <span className="tgrid__pick-kicker">Demonstration {c.index}</span>
                   <span className="tgrid__pick-meta">{c.duration}</span>
                 </span>
               </button>
@@ -211,8 +211,8 @@ export default function TestimonialsGrid() {
         {/* Right: the client ledger, one row per client. */}
         <div className="tgrid__ledger">
           <div className="tgrid__ledger-head">
-            <h2 className="tgrid__ledger-title">Your client list headline here.</h2>
-            <p className="tgrid__ledger-sub">Short supporting line.</p>
+            <h2 className="tgrid__ledger-title">What I can support</h2>
+            <p className="tgrid__ledger-sub">Examples of the work behind each service.</p>
           </div>
 
           {/* One plate, three rows split by hairlines. Three boxed cards each

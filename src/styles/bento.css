@@ -79,7 +79,7 @@
   border-radius: 11px;
   background: var(--orange);
   color: var(--white);
-  box-shadow: 0 8px 18px -10px rgba(255, 122, 26, 0.9);
+  box-shadow: 0 8px 18px -10px rgba(0, 140, 80, 0.9);
   transition: transform var(--dur-med) var(--ease-spring);
 }
 .bento__card:hover .bento__icon { transform: translateY(-2px) rotate(-4deg); }
@@ -207,7 +207,7 @@
   display: flex;
   gap: 8px;
   width: max-content;
-  animation: bento-drift-left 26s linear infinite;
+  animation: bento-drift-left 52s linear infinite;
   animation-play-state: paused;
 }
 .bento__chip-row[data-dir='right'] .bento__chip-track { animation-direction: reverse; }
@@ -242,7 +242,37 @@
   to   { transform: translateX(-50%); }
 }
 
-/* Credentials: the GHL badge on a ring. */
+/* About: a personal portrait with quiet paper layers and a tool signature. */
+.bento__identity { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; }
+.bento__identity-portrait { position: relative; flex: 1; width: 100%; min-height: 40px; max-height: 175px; display: grid; place-items: center; }
+.bento__identity-sheet { position: relative; display: block; height: calc(100% - 12px); aspect-ratio: .85; max-width: 140px; min-height: 32px; border: 4px solid var(--paper); border-radius: 16px; background: var(--tint); box-shadow: 0 14px 24px -16px #052f2570; transform: rotate(5deg); }
+.bento__identity-sheet::before, .bento__identity-sheet::after { content: ''; position: absolute; inset: 0; border-radius: inherit; border: 1px solid var(--line-strong); background: var(--paper); z-index: -1; transform: translate(-12px, 1px) rotate(-10deg); }
+.bento__identity-sheet::after { transform: translate(-22px, 4px) rotate(-17deg); z-index: -2; }
+.bento__identity-sheet img { display: block; width: 100%; height: 100%; object-fit: contain; object-position: center bottom; border-radius: 11px; }
+.bento__identity-sheet { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%) rotate(5deg); }
+.bento__identity-portrait::before { content: ''; position: absolute; width: min(65%, 145px); height: 85%; border-radius: 50%; background: radial-gradient(ellipse, var(--tint), transparent 72%); }
+.bento__identity-illustration { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: center; transform-origin: center bottom; }
+.bento__card--about:is(:hover, :focus-visible) .bento__identity-illustration { animation: bento-greeting 650ms var(--ease-out) 1; }
+@keyframes bento-greeting { 0%, 100% { transform: rotate(0); } 35% { transform: rotate(-3deg) translateY(-2px); } 70% { transform: rotate(2deg); } }
+@media (prefers-reduced-motion: reduce) { .bento__card--about:is(:hover, :focus-visible) .bento__identity-illustration { animation: none; } }
+.bento__identity-tools { display: flex; flex-wrap: wrap; justify-content: center; gap: 5px 9px; flex: none; color: var(--muted); font-size: 10px; line-height: 1.4; }
+.bento__identity-tools span { display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
+.bento__identity-tools img { object-fit: contain; }
+@media (max-width: 1099px) { .bento__identity { min-height: 180px; } .bento__identity-portrait { height: 125px; flex: auto; } }
+
+/* Credentials: real certificate sheets, a concise tool index, and one action. */
+.bento__credentials { display: flex; flex-direction: column; align-items: center; gap: 8px; justify-content: center; container-type: size; }
+.bento__certificate-stack { position: relative; width: 100%; flex: 1; min-height: 42px; max-height: 150px; }
+.bento__certificate-stack img { position: absolute; left: 50%; top: 50%; width: min(72%, 190px, 115cqh); height: auto; aspect-ratio: 1.414; object-fit: contain; background: #fff; border: 4px solid #fff; border-radius: 8px; box-shadow: 0 10px 20px -12px #052f2555; transform: translate(calc(-50% + (var(--certificate-index) - 1) * 13px), -50%) rotate(calc((var(--certificate-index) - 1) * 9deg)); transition: transform 240ms var(--ease-out); }
+.bento__certificate-stack img:last-child { transform: translate(-50%, -46%); }
+.bento__certificate-stack img { max-height: calc(100% - 12px); width: auto; max-width: 78%; }
+.bento__card:hover .bento__certificate-stack img:last-child { transform: translate(-50%, -52%); }
+.bento__credential-tools { color: var(--muted); font-size: 10px; line-height: 1.4; text-align: center; flex: none; }
+.bento__credential-cta { display: inline-flex; align-items: center; gap: 8px; color: var(--orange-ink); font-size: 12px; font-weight: 700; line-height: 1.4; flex: none; }
+@media (max-width: 1099px) { .bento__credentials { min-height: 180px; container-type: normal; } .bento__certificate-stack img { width: min(72%, 170px); } }
+@media (prefers-reduced-motion: reduce) { .bento__certificate-stack img { transition: none; } .bento__card:hover .bento__certificate-stack img:last-child { transform: translate(-50%, -46%); } }
+
+/* Legacy badge styles retained for other uses. */
 .bento__badge {
   display: flex;
   flex-direction: column;

@@ -40,7 +40,7 @@
     position: absolute;
     inset: 18% 4% 0;
     border-radius: 50%;
-    background: radial-gradient(ellipse at 50% 70%, rgba(255, 122, 26, 0.32), transparent 66%);
+    background: radial-gradient(ellipse at 50% 70%, rgba(0, 140, 80, 0.32), transparent 66%);
     filter: blur(22px);
     pointer-events: none;
   }
@@ -263,4 +263,88 @@
   /* The rail IS the navigation up here, so the floating pill steps aside and
      the page keeps exactly one navigation surface. */
   .nav { display: none; }
+}
+
+@media (min-width: 1100px) and (min-height: 680px) {
+  .rail__avatar { overflow: hidden; border-radius: 50%; }
+  .rail__socials { gap: 12px; }
+  .rail__social,
+  .rail__theme { width: 50px; height: 50px; }
+  .rail__social { border: 1px solid rgba(25,135,84,.18); box-shadow: inset 0 0 0 2px rgba(255,255,255,.68), 0 9px 22px -15px rgba(6,12,26,.5); }
+  .rail__social:hover { border-color: rgba(25,135,84,.45); box-shadow: inset 0 0 0 2px rgba(25,135,84,.18), 0 14px 28px -18px rgba(6,12,26,.6); }
+  .rail__social-icon { width: 22px; height: 22px; }
+  .rail__actions { gap: 12px; margin-top: 20px; }
+  .rail__link { height: clamp(50px, 6.5vh, 60px); gap: 16px; padding-inline: 17px; font-size: 18px; }
+  .rail__nav ul { gap: 5px; }
+}
+
+@media (min-width: 1100px) and (max-height: 679px) {
+  .rail__social, .rail__theme { width: 46px; height: 46px; }
+  .rail__social-icon { width: 21px; height: 21px; }
+  .rail__link { height: 48px; font-size: 17px; }
+}
+
+/* Glass navigation buttons: clear inactive states, a calm green active state,
+   and a small lift on hover/focus without changing the rail's rhythm. */
+@media (min-width: 1100px) {
+  .rail__monogram {
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    border-radius: 50%;
+    border: 1px solid rgba(25, 135, 84, 0.25);
+    background:
+      radial-gradient(circle at 32% 25%, rgba(255,255,255,.96), transparent 34%),
+      linear-gradient(145deg, rgba(222,247,232,.96), rgba(202,235,215,.64));
+    box-shadow:
+      inset 0 0 0 7px rgba(255,255,255,.48),
+      inset 0 -18px 30px rgba(25,135,84,.11),
+      0 16px 30px -18px rgba(15,81,50,.58);
+    position: relative;
+  }
+  .rail__monogram-letter {
+    position: relative;
+    z-index: 1;
+    color: #176b42;
+    font-size: clamp(58px, 8vh, 82px);
+    font-weight: 800;
+    letter-spacing: -0.08em;
+    line-height: 1;
+    transform: translateX(-2px);
+  }
+  .rail__monogram-orbit {
+    position: absolute;
+    width: 68%;
+    height: 68%;
+    border: 1px solid rgba(25,135,84,.28);
+    border-radius: 50%;
+    transform: rotate(-28deg) translate(12%, -8%);
+  }
+  .rail__link {
+    border: 1px solid rgba(25, 135, 84, 0.10);
+    background: rgba(239, 249, 243, 0.46);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.42);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: color var(--dur-fast) var(--ease-out),
+                background var(--dur-fast) var(--ease-out),
+                border-color var(--dur-fast) var(--ease-out),
+                transform var(--dur-med) var(--ease-spring),
+                box-shadow var(--dur-fast) var(--ease-out);
+  }
+  .rail__link:hover,
+  .rail__link:focus-visible {
+    color: var(--navy);
+    border-color: rgba(25, 135, 84, 0.24);
+    background: rgba(222, 245, 230, 0.9);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.65), 0 8px 18px -16px rgba(15, 81, 50, .55);
+    transform: translateX(3px);
+  }
+  .rail__link.active {
+    color: #fff;
+    border-color: rgba(25, 135, 84, 0.72);
+    background: linear-gradient(135deg, #2a8c57, #177744);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 10px 20px -15px rgba(15, 81, 50, .75);
+  }
+  .rail__link.active svg { color: #fff; }
 }

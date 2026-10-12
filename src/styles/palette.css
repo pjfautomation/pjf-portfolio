@@ -1,0 +1,45 @@
+/* Mint reference palette: color only, preserving layout, type and motion. */
+.home__title {
+  background: var(--headline-gradient);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+[data-theme='dark'] .home__title {
+  background-image: linear-gradient(100deg, #F1FCF7 0%, #F1FCF7 65%, #69DBA8 100%);
+}
+.home__cta {
+  background: var(--button-gradient);
+  color: var(--on-accent);
+}
+.home__cta svg { color: inherit; }
+.home__cta:hover { background: linear-gradient(110deg, #007A45, #008C50); }
+.bento__icon {
+  background: linear-gradient(135deg, #008C50, #00A865);
+  color: var(--on-accent);
+}
+.bento__badge-tag { background: var(--button-gradient); color: var(--on-accent); }
+.bento__badge-tag svg { color: inherit; }
+.bento__card:hover .bento__offer-tile { color: var(--on-accent); }
+.tabbar__fab { color: var(--on-accent); }
+.home__lede { color: #4D8182; }
+.home__glass {
+  background: linear-gradient(120deg, rgba(255, 255, 255, 0.97), rgba(241, 252, 247, 0.96));
+}
+.bento__card { background: linear-gradient(135deg, #FFFFFF, #F4FCF8); }
+.rail::before { background: linear-gradient(160deg, #DEF9EC, #F4FCF8); }
+.rail__avatar::before { background: radial-gradient(ellipse at 50% 70%, rgba(0, 140, 80, 0.18), transparent 66%); }
+.rail__link.active { background: linear-gradient(110deg, #E0F8EC, #CAF3DF); color: var(--navy); }
+.rail__link.active svg { color: var(--orange); }
+body { background: radial-gradient(ellipse at 90% 0%, #D6F9E7, transparent 60%), var(--cream); }
+[data-theme='dark'] .home__lede { color: var(--muted); }
+[data-theme='dark'] .home__glass { background: linear-gradient(120deg, #092C22, #041C15); }
+[data-theme='dark'] .bento__card { background: linear-gradient(135deg, #092C22, #041C15); }
+[data-theme='dark'] .rail::before { background: linear-gradient(160deg, #0B3025, #041C15); }
+[data-theme='dark'] .rail__link.active { background: #0E4A33; }
+[data-theme='dark'] .rail__link.active svg { color: var(--orange-ink); }
+[data-theme='dark'] body { background: radial-gradient(ellipse at 90% 0%, #0C3525, transparent 55%), var(--cream); }
+@media (forced-colors: active) {
+  .home__title,
+  .boot__title { background: none; color: CanvasText; }
+}

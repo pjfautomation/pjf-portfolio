@@ -1,0 +1,261 @@
+/* Soft botanical glass: materials live here; layout and content stay in
+   their existing sheets. Only outer panels blur to avoid re-blurring each
+   nested card over the live shader. perf.css still owns device fallbacks. */
+:root {
+  --radius-card: 26px;
+  --muted: #465D78;
+  --glass-surface: rgba(255, 255, 255, 0.64);
+  --glass-card: rgba(255, 255, 255, 0.60);
+  --glass-wrap: rgba(245, 255, 250, 0.22);
+  --glass-border: rgba(27, 104, 77, 0.16);
+  --glass-edge: rgba(255, 255, 255, 0.78);
+  --glass-hover: rgba(0, 122, 69, 0.40);
+  --glass-shadow: 0 8px 28px -14px rgba(16, 60, 43, 0.18);
+  --glass-blur: 20px;
+}
+[data-theme='dark'] {
+  --muted: #B5D9CC;
+  --glass-surface: rgba(7, 39, 30, 0.72);
+  --glass-card: rgba(7, 39, 30, 0.64);
+  --glass-wrap: rgba(4, 28, 21, 0.28);
+  --glass-border: rgba(143, 219, 182, 0.20);
+  --glass-edge: rgba(218, 255, 235, 0.13);
+  --glass-hover: rgba(105, 219, 168, 0.60);
+  --glass-shadow: 0 8px 28px -14px rgba(0, 16, 10, 0.40);
+}
+
+/* Explicit stack: botanical image and live contours at 0, all page content
+   at 1 or above. No animation, shader clock, or cursor behavior is changed. */
+.portfolio-background {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--cream);
+}
+.portfolio-background::before,
+.portfolio-background::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+.portfolio-background::before {
+  background: url('/backgrounds/botanical-mint.webp') center / cover no-repeat;
+}
+.portfolio-background::after {
+  background: linear-gradient(110deg, rgba(245, 255, 250, 0.44), rgba(238, 252, 244, 0.24));
+}
+.portfolio-background .hero-canvas {
+  position: absolute;
+  z-index: 1;
+  background: transparent;
+  opacity: 0.50;
+}
+.portfolio-background .hero-canvas canvas { display: block; }
+.portfolio-background__canvas-fallback {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: #F1FCF7;
+  opacity: 0.50;
+}
+[data-theme='dark'] .portfolio-background__canvas-fallback {
+  background: #031610;
+  opacity: 0.68;
+}
+/* Match the shader's settled wash before its deferred bundle arrives. */
+.portfolio-background:has(.hero-canvas canvas) .portfolio-background__canvas-fallback {
+  display: none;
+}
+html.is-intro .a11y {
+  visibility: hidden;
+  pointer-events: none;
+}
+[data-theme='dark'] .portfolio-background::after { background: rgba(2, 20, 13, 0.90); }
+[data-theme='dark'] .portfolio-background .hero-canvas { opacity: 0.68; }
+.shell { position: relative; z-index: 1; }
+
+/* One blur per material group, with translucent child cards. */
+.home__glass,
+[data-theme='dark'] .home__glass {
+  background: var(--glass-wrap);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  box-shadow: inset 0 0 0 1px var(--glass-border), inset 0 1px 0 var(--glass-edge), var(--glass-shadow);
+}
+.home__glass--tools,
+[data-theme='dark'] .home__glass--tools { background: var(--glass-surface); }
+.home .tools-marquee { background: transparent; border-color: var(--glass-border); }
+
+:is(.bento__card, .cgrid__panel, .agrid__bar, .tgrid__clients, .tgrid__picker, .sgrid__method, .ppanel__tabs, .aig__card),
+[data-theme='dark'] :is(.bento__card, .cgrid__panel, .agrid__bar, .tgrid__clients, .tgrid__picker, .sgrid__method, .ppanel__tabs, .aig__card) {
+  background: var(--glass-card);
+  border-color: var(--glass-border);
+  box-shadow: inset 0 1px 0 var(--glass-edge), var(--glass-shadow);
+}
+.bento__card { border-radius: var(--radius-card); }
+.bento__card:hover {
+  transform: translateY(-3px);
+  border-color: var(--glass-hover);
+  box-shadow: inset 0 1px 0 var(--glass-edge), 0 12px 30px -16px rgba(16, 60, 43, 0.26);
+}
+:is(.bento__review, .bento__chip, .bento__doc, .sgrid__flow-tool) {
+  background: color-mix(in srgb, var(--glass-card) 75%, transparent);
+  box-shadow: inset 0 0 0 1px var(--glass-border);
+}
+.home__lede { color: var(--muted); }
+.bento__offer-num { color: var(--muted); }
+.home__cta:hover { background: var(--orange-hover); }
+
+/* Contact's FAQ plate joins the light material instead of carrying a
+   separate opaque dark rectangle. Its existing local ink tokens follow it. */
+.cgrid__aside {
+  --ink: var(--navy);
+  --ink-muted: var(--muted);
+  --ink-line: var(--glass-border);
+  background: var(--glass-card);
+  box-shadow: inset 0 0 0 1px var(--glass-border), inset 0 1px 0 var(--glass-edge), var(--glass-shadow);
+}
+.cgrid__eyebrow,
+.cgrid__step-index { color: var(--orange-ink); }
+.cgrid__mail,
+.cgrid__social { color: var(--navy); background: var(--tint); border-color: var(--glass-border); }
+.cgrid__mail:hover,
+.cgrid__social:hover { background: var(--tint-strong); }
+:root:not([data-theme='dark']) .cgrid__social img { filter: none; }
+.cgrid__field :is(input, textarea, select) { background: var(--glass-card); }
+.cgrid__submit,
+[data-theme='dark'] .cgrid__submit {
+  background: var(--button-gradient);
+  color: var(--on-accent);
+}
+.cgrid__submit:hover,
+[data-theme='dark'] .cgrid__submit:hover { background: var(--orange-hover); }
+.cgrid__submit-plane,
+[data-theme='dark'] .cgrid__submit svg:first-child { color: var(--on-accent); }
+.ktools .flagship__cta,
+[data-theme='dark'] .ktools .flagship__cta { background: var(--button-gradient); color: var(--on-accent); }
+.ktools .flagship__cta:hover,
+[data-theme='dark'] .ktools .flagship__cta:hover { background: var(--orange-hover); }
+
+/* A glass hero with no added box metrics: its material sits behind the
+   existing heading, keeping the intro's measured landing rectangle intact. */
+@media (min-width: 1100px) {
+  .home__head,
+  .pgrid__head { position: relative; isolation: isolate; }
+  .home__head::before,
+  .pgrid__head::before {
+    content: '';
+    position: absolute;
+    inset: -12px -18px;
+    z-index: -1;
+    pointer-events: none;
+    border-radius: var(--radius-card);
+    background: var(--glass-surface);
+    border: 1px solid var(--glass-border);
+    box-shadow: inset 0 1px 0 var(--glass-edge), var(--glass-shadow);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    transition: opacity 620ms var(--ease-out);
+  }
+  html.is-intro .home__head::before { opacity: 0; }
+  .rail::before,
+  [data-theme='dark'] .rail::before {
+    top: 10px;
+    left: 10px;
+    width: calc(var(--rail-w) - 20px);
+    height: calc(100dvh - 20px);
+    border-radius: 28px;
+    background: var(--glass-surface);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    box-shadow: inset 0 1px 0 var(--glass-edge), var(--glass-shadow);
+  }
+}
+.rail__link.active,
+[data-theme='dark'] .rail__link.active {
+  background: var(--button-gradient);
+  color: var(--on-accent);
+  box-shadow: 0 4px 12px -6px rgba(0, 95, 57, 0.28);
+}
+.rail__link.active svg,
+[data-theme='dark'] .rail__link.active svg { color: inherit; }
+
+/* Keep the existing single-line desktop hero inside the narrow panel.
+   The boot headline uses the same metrics for its measured handoff. */
+@media (min-width: 1100px) and (max-width: 1279px) {
+  .home__headline { gap: 22px; }
+  .home__title,
+  .boot__title { font-size: clamp(30px, 3.2vw, 41px); }
+}
+
+/* The compact shell keeps its sizing, tab positioning and horizontal
+   shelves; only its materials change. Logo plates stay light. */
+@media (max-width: 1099px) {
+  :is(.hstats, .tabbar, .qmenu__panel),
+  [data-theme='dark'] :is(.hstats, .tabbar, .qmenu__panel) {
+    background: var(--glass-surface);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-color: var(--glass-border);
+    box-shadow: inset 0 1px 0 var(--glass-edge), var(--glass-shadow);
+  }
+  .htile__glyph,
+  .htile--accent .htile__glyph,
+  [data-theme='dark'] .htile--accent .htile__glyph {
+    background: var(--glass-surface);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    color: var(--orange-ink);
+    box-shadow: inset 0 0 0 1px var(--glass-border), var(--glass-shadow);
+  }
+  .htile__body,
+  .hproof__copy { position: relative; isolation: isolate; }
+  .htile__body::before,
+  .hproof__copy::before {
+    content: '';
+    position: absolute;
+    inset: 5px -2px -6px;
+    z-index: -1;
+    pointer-events: none;
+    border-radius: 12px;
+    background: var(--glass-surface);
+  }
+}
+
+/* Explicit fallbacks protect contrast when transparency or blur is absent. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  :root { --glass-surface: #F6FCF8; --glass-card: #F6FCF8; --glass-wrap: #EFF9F3; }
+  [data-theme='dark'] { --glass-surface: #092C22; --glass-card: #092C22; --glass-wrap: #041C15; }
+}
+@media (prefers-reduced-transparency: reduce) {
+  :root { --glass-surface: #F6FCF8; --glass-card: #F6FCF8; --glass-wrap: #EFF9F3; --glass-blur: 0px; }
+  [data-theme='dark'] { --glass-surface: #092C22; --glass-card: #092C22; --glass-wrap: #041C15; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bento__card:hover { transform: none; }
+}
+@media (prefers-contrast: more) {
+  :root { --glass-surface: #F6FCF8; --glass-card: #F6FCF8; --glass-wrap: #EFF9F3; --glass-border: rgba(27, 104, 77, 0.45); }
+  [data-theme='dark'] { --glass-surface: #092C22; --glass-card: #092C22; --glass-wrap: #041C15; }
+}
+:root[data-a11y-contrast='true'] {
+  --glass-surface: #F6FCF8;
+  --glass-card: #F6FCF8;
+  --glass-wrap: #EFF9F3;
+  --glass-border: rgba(27, 104, 77, 0.45);
+  --orange-ink: #006E3E;
+}
+:root[data-a11y-contrast='true'][data-theme='dark'] {
+  --glass-surface: #092C22;
+  --glass-card: #092C22;
+  --glass-wrap: #041C15;
+  --orange-ink: #69DBA8;
+}
+@media (forced-colors: active) {
+  .portfolio-background { display: none; }
+  :root { --glass-surface: Canvas; --glass-card: Canvas; --glass-wrap: Canvas; --glass-border: CanvasText; }
+}

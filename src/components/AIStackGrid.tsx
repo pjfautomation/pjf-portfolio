@@ -1,4 +1,5 @@
 import { aiStack, type StackNode } from '@/data/ai-stack'
+import { Funnel, CalendarCheck, ArrowClockwise, Kanban, ArrowsSplit, UserPlus, ArrowsLeftRight, BellRinging, Robot, BookOpen, Article, Storefront, Tag, ShoppingBag, VideoCamera, CalendarDots, FlowArrow, ListChecks, Megaphone, Gear, Database, MagnifyingGlass, Headset, Scissors } from '@phosphor-icons/react'
 
 /**
  * The AI systems as a logo-first grid, for the Projects pop-up.
@@ -13,45 +14,40 @@ import { aiStack, type StackNode } from '@/data/ai-stack'
 
 type Tool = { name: string; src: string }
 
-const T = {
-  claude: { name: 'Claude', src: '/icons/ai/claude-color.svg' },
-  claudeCode: { name: 'Claude Code', src: '/icons/claude-code-logo.png' },
-  openai: { name: 'OpenAI Whisper', src: '/icons/openai.svg' },
-  elevenlabs: { name: 'ElevenLabs', src: '/icons/ai/elevenlabs.svg' },
-  node: { name: 'Node.js', src: '/icons/ai/nodedotjs.svg' },
-  telegram: { name: 'Telegram', src: '/icons/ai/telegram.svg' },
-  slack: { name: 'Slack', src: '/icons/slack.svg' },
-  postgres: { name: 'Postgres + pgvector', src: '/icons/ai/postgresql.svg' },
-  sqlite: { name: 'SQLite FTS5', src: '/icons/ai/sqlite.svg' },
-  nous: { name: 'Nous Hermes', src: '/icons/ai/hermes.svg' },
-  docker: { name: 'Docker', src: '/icons/ai/docker.svg' },
-  ghl: { name: 'GoHighLevel', src: '/icons/gohighlevel.png' },
-} satisfies Record<string, Tool>
-
-/** What each system runs on. Keyed by the node id in ai-stack.ts. These are
- *  example marks - swap them for what each of your systems is built on. */
-const TOOLS: Record<string, Tool[]> = {
-  'project-a': [T.claude],
-  'project-b': [T.claude, T.claudeCode],
-  'project-c': [T.node, T.elevenlabs, T.openai, T.telegram],
-  'project-d': [T.claude, T.claudeCode],
-  'project-e': [T.claude, T.postgres, T.slack],
-  'project-f': [T.claude, T.sqlite],
-  'project-g': [T.claude, T.ghl],
-  'project-h': [T.claude, T.elevenlabs],
-  'project-i': [T.claude],
-  'project-j': [T.nous, T.telegram, T.docker],
-  'project-k': [T.nous, T.telegram],
+const TOOL_MARKS: Record<string, string> = {
+  GoHighLevel: '/icons/gohighlevel.png',
+  n8n: '/icons/thesvg/n8n.svg',
+  Make: '/icons/thesvg/make.svg',
+  Zapier: '/icons/thesvg/zapier.svg',
+  Shopify: '/icons/thesvg/shopify.svg',
+  'Google Sheets': '/icons/thesvg/google-sheets.svg',
+  Gmail: '/icons/thesvg/gmail.svg',
+  Meta: '/icons/thesvg/meta.svg',
+  AI: '/icons/thesvg/claude.svg',
+  'Claude AI': '/icons/thesvg/claude.svg',
+  Codex: '/icons/ai/codex.svg',
+  Canva: '/icons/thesvg/canva.svg',
+  Notion: '/icons/thesvg/notion.svg',
+  Amazon: '/icons/thesvg/amazon.svg',
+  Facebook: '/icons/thesvg/facebook.svg',
+  Instagram: '/icons/thesvg/instagram.svg',
+  TikTok: '/icons/thesvg/tiktok.svg',
 }
-
-/** The harnesses everything above is built with. */
-const HARNESS: Tool[] = [
-  { name: 'Claude Code', src: '/icons/claude-code-logo.png' },
-  { name: 'Codex', src: '/icons/ai/codex.svg' },
-  { name: 'Cursor', src: '/icons/ai/cursor.svg' },
-  { name: 'Hermes', src: '/icons/ai/hermes.svg' },
-]
-
+const CAPABILITY_ICONS = {
+  Forms: ListChecks, Workflows: FlowArrow, Calendars: CalendarDots,
+  Campaigns: Megaphone, Pipelines: Kanban, Automation: Gear,
+  RAG: Database, 'Knowledge Base': BookOpen, 'Content Workflow': Article,
+  Gorgias: Headset, SEO: MagnifyingGlass, 'Seller Central': Storefront,
+  CapCut: Scissors, 'Google Drive': Database, Slack: BellRinging,
+}
+const CAPABILITY_COLORS: Record<string, string> = {
+  Forms: '#2563EB', Workflows: '#8B5CF6', Calendars: '#0891B2',
+  Campaigns: '#F97316', Pipelines: '#D97706', Automation: '#6366F1',
+  RAG: '#7C3AED', 'Knowledge Base': '#0284C7', 'Content Workflow': '#DB2777',
+  Gorgias: '#F97316', SEO: '#10B981', 'Seller Central': '#FF9900',
+  CapCut: '#111827', 'Google Drive': '#4285F4', Slack: '#611F69',
+}
+const HARNESS: Tool[] = ['GoHighLevel', 'n8n', 'Make', 'Zapier', 'Shopify'].map(name => ({name, src: TOOL_MARKS[name]}))
 type Group = { title: string; what: string; systems: StackNode[] }
 
 /** Flatten the tree into groups: a branch with children is a group, a leaf
@@ -65,47 +61,68 @@ function groups(root: StackNode): Group[] {
 }
 
 function Card({ n }: { n: StackNode }) {
-  const tools = TOOLS[n.id] ?? []
+  const icons = [
+    [/Lead Capture/, Funnel], [/Appointment/, CalendarCheck], [/Reactivation/, ArrowClockwise],
+    [/CRM Pipeline/, Kanban], [/Routing/, ArrowsSplit], [/Onboarding/, UserPlus],
+    [/Data Sync/, ArrowsLeftRight], [/Notification/, BellRinging], [/Qualification/, Robot],
+    [/Knowledge/, BookOpen], [/AI Content/, Article], [/Shopify Store/, Storefront],
+    [/Listing Optimization/, Tag], [/Amazon/, ShoppingBag], [/Repurposing Pipeline/, VideoCamera],
+    [/Social Content/, CalendarDots],
+  ] as const
+  const TitleIcon = icons.find(([pattern]) => pattern.test(n.name))?.[1] ?? Robot
+  const tags = (n.stack ?? '').split(' · ')
+  const tools = tags.flatMap(name => name === 'Social Platforms' ? ['Facebook', 'Instagram', 'TikTok'] : [name === 'AI' ? 'Claude AI' : name])
+  const marks = tools.filter(name => TOOL_MARKS[name] || name in CAPABILITY_ICONS).slice(0, 3)
   return (
     <li className="aig__card">
-      <div className="aig__marks" aria-label={`Built with ${tools.map((t) => t.name).join(', ')}`}>
-        {tools.map((t) => (
-          <span key={t.name} className="aig__mark" title={t.name}>
-            <img src={t.src} alt="" width={22} height={22} loading="lazy" decoding="async" />
+      <div className="aig__marks">
+        {marks.length ? marks.map(name => (
+          <span className="aig__mark" key={name} title={name}>
+            {TOOL_MARKS[name] ? <img src={TOOL_MARKS[name]} alt={name} width={22} height={22} loading="lazy" /> : (() => {
+              const Mark = CAPABILITY_ICONS[name as keyof typeof CAPABILITY_ICONS]
+              return <Mark size={22} aria-label={name} color={CAPABILITY_COLORS[name]} />
+            })()}
           </span>
-        ))}
-        {n.status && (
-          <span className="aig__status" data-status={n.status}>
-            {n.status}
-          </span>
-        )}
+        )) : <span className="aig__mark"><TitleIcon size={22} aria-hidden="true" /></span>}
+        <span className="aig__status" data-status={n.status}>{n.status}</span>
       </div>
-      <h4 className="aig__name">
-        <n.Icon size={16} weight="duotone" aria-hidden="true" />
-        {n.name}
-      </h4>
+      <h4 className="aig__name"><TitleIcon size={16} aria-hidden="true" />{n.name}</h4>
       <p className="aig__what">{n.what}</p>
       {n.stack && <p className="aig__stack">{n.stack}</p>}
-      {tools.length > 0 && (
-        <ul className="aig__tools" role="list">
-          {tools.map((t) => (
-            <li key={t.name}>{t.name}</li>
-          ))}
-        </ul>
-      )}
+      <ul className="aig__tools" aria-label="Tools and capabilities">{tags.map(tag => <li key={tag}>{tag}</li>)}</ul>
     </li>
   )
 }
 
+function GroupIcon({ title }: { title: string }) {
+  const Icon = title.includes('GoHighLevel') ? Funnel
+    : title.includes('Automation') ? FlowArrow
+      : title.includes('AI') ? Robot
+        : title.includes('E-commerce') ? Storefront
+          : Article
+  return <Icon size={17} weight="duotone" aria-hidden="true" />
+}
+
 export default function AIStackGrid() {
+  const grouped = groups(aiStack)
+  const systemCount = grouped.reduce((total, group) => total + group.systems.length, 0)
   return (
     <div className="aig">
       <header className="aig__head">
         <div className="aig__head-text">
-          <span className="aig__eyebrow">Placeholder category</span>
+          <div className="aig__head-kicker">
+            <span className="aig__eyebrow">Systems I build</span>
+            <span className="aig__head-live"><i aria-hidden="true" /> {systemCount} operating plays</span>
+          </div>
           <h3 className="aig__title">{aiStack.what}</h3>
+          <p className="aig__intro">CRM, automation, AI and store operations—connected around your business.</p>
+          <div className="aig__head-stats" aria-label="System categories">
+            <span><b>{grouped.length}</b> operating layers</span>
+            <span><b>03</b> client-facing systems</span>
+            <span><b>05</b> connected tools</span>
+          </div>
         </div>
-        <div className="aig__harness" aria-label="Built with">
+        <div className="aig__harness" aria-label="Available tools">
           <span className="aig__harness-label">Built with</span>
           {HARNESS.map((t) => (
             <span key={t.name} className="aig__harness-item">
@@ -116,10 +133,14 @@ export default function AIStackGrid() {
         </div>
       </header>
 
-      {groups(aiStack).map((g) => (
+      {grouped.map((g, index) => (
         <section key={g.title} className="aig__group" aria-label={g.title}>
           <div className="aig__group-head">
-            <h3 className="aig__group-title">{g.title}</h3>
+            <div className="aig__group-title-wrap">
+              <span className="aig__group-index">0{index + 1}</span>
+              <span className="aig__group-icon"><GroupIcon title={g.title} /></span>
+              <h3 className="aig__group-title">{g.title}</h3>
+            </div>
             <p className="aig__group-what">{g.what}</p>
           </div>
           <ul className="aig__cards" role="list">

@@ -69,7 +69,7 @@ const frag = `
   const float NOISE_DETAIL      = 3.0;   // number of contour bands per noise cell - LOWER = fewer parallel lines (less busy / fewer blobs)
   const float DISTORT_SCALE     = 0.55;  // size of the slow underlying blobs
   const float DISTORT_INTENSITY = 0.50;  // how much the slow blobs warp the contours
-  const float HAIRLINE_PIXELS   = 1.5;   // contour line width in screen pixels (fwidth-driven)
+  const float HAIRLINE_PIXELS   = 2.2;   // contour line width in screen pixels (fwidth-driven)
   const float CURSOR_SCALE      = 1.5;   // falloff sharpness around the cursor
   const float CURSOR_INTENSITY  = 0.05;  // how much the cursor drags contour UVs
 
@@ -112,11 +112,14 @@ const frag = `
     float w       = fwidth(bands) * HAIRLINE_PIXELS * 0.5;
     float line    = 1.0 - smoothstep(0.0, w, dist);
 
-    // Theme colors (kept identical to v1 so the rest of the page does not shift).
-    vec3 bgLight   = vec3(0.957, 0.957, 0.929); // #F4F4ED cream
-    vec3 lineLight = vec3(0.46,  0.46,  0.46);  // soft neutral gray contour on cream
-    vec3 bgDark    = vec3(0.024, 0.047, 0.102); // #060C1A navy ink
-    vec3 lineDark  = vec3(1.0,   1.0,   1.0);   // solid white on navy (black would be invisible)
+    // Reference palette; the contour geometry and animation are unchanged.
+    vec3 bgLight   = vec3(0.945, 0.988, 0.969); // #F1FCF7 mint
+    vec3 lineLight = vec3(0.36, 0.72, 0.55); // soft green contours on mint
+    vec3 bgDark    = vec3(0.012, 0.086, 0.063); // #031610 deep green
+    vec3 lineDark  = mix(vec3(0.0, 0.55, 0.31), vec3(0.40, 0.86, 0.65), vUv.x);
+    // A quiet emerald wash follows the already animated noise field.
+    float glow = smoothstep(0.15, 0.95, noiseDistort) * smoothstep(0.25, 1.0, vUv.x);
+    bgDark += vec3(0.008, 0.055, 0.025) * glow;
 
     vec3 bg      = mix(bgLight, bgDark, uDarkMix);
     vec3 lineCol = mix(lineLight, lineDark, uDarkMix);
@@ -124,11 +127,9 @@ const frag = `
     // Tiny cursor-velocity highlight so flicks leave a faint glow.
     lineCol += cursor * 0.04;
 
-    // Line opacity: soft, tonal beige hairlines - lower alpha so
-    // the contours read as a warm beige tint rather than stark black. The lower
-    // contrast also hides most of the half-res upscale aliasing. Dark sections
-    // use white lines on navy, kept legible at a similar low alpha.
-    float lineAlpha = line * mix(0.55, 0.45, uDarkMix);
+    // Stronger contour contrast makes the existing motion readable through
+    // the botanical layer and glass surfaces, without changing its timing.
+    float lineAlpha = line * 0.80;
     vec3 color = mix(bg, lineCol, lineAlpha);
 
     gl_FragColor = vec4(color, 1.0);
@@ -178,12 +179,12 @@ export default function HeroCanvasV2() {
     // the visitor actually flips the switch.
     const darkMix = { value: getTheme() === 'dark' ? 1 : 0 }
     let targetDark = darkMix.value
-    renderer.setClearColor(darkMix.value ? 0x070b14 : 0xf4f4ed, 1)
+    renderer.setClearColor(darkMix.value ? 0x031610 : 0xf1fcf7, 1)
 
     const onThemeChange = () => {
       const dark = getTheme() === 'dark'
       targetDark = dark ? 1 : 0
-      renderer.setClearColor(dark ? 0x070b14 : 0xf4f4ed, 1)
+      renderer.setClearColor(dark ? 0x031610 : 0xf1fcf7, 1)
     }
     window.addEventListener('themechange', onThemeChange)
 
@@ -285,6 +286,8 @@ export default function HeroCanvasV2() {
       mat.uniforms.uMousePace.value = pace
       renderer.render(scene, cam)
     }
+    // Paint the settled background immediately, before the throttled loop.
+    renderer.render(scene, cam)
     loop()
 
     return () => {

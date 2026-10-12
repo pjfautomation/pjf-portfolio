@@ -1,10 +1,10 @@
-/* Fontsource Poppins - self-hosted, latin subset only (drops devanagari and
-   latin-ext to keep the bundle small). Weights 400 / 500 / 600 / 700 match
-   the four that actually render on this site. */
-@import '@fontsource/poppins/latin-400.css';
-@import '@fontsource/poppins/latin-500.css';
-@import '@fontsource/poppins/latin-600.css';
-@import '@fontsource/poppins/latin-700.css';
+/* Self-hosted Manrope, latin subset. Explicit weights keep text crisp
+   without synthetic bolding, including the heavier display headings. */
+@import '@fontsource/manrope/latin-400.css';
+@import '@fontsource/manrope/latin-500.css';
+@import '@fontsource/manrope/latin-600.css';
+@import '@fontsource/manrope/latin-700.css';
+@import '@fontsource/manrope/latin-800.css';
 
 /* Reset */
 *, *::before, *::after {
@@ -183,7 +183,7 @@ main > * {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(circle at 50% 55%, rgba(255, 122, 26, 0.08), transparent 55%),
+    radial-gradient(circle at 50% 55%, rgba(0, 140, 80, 0.08), transparent 55%),
     var(--navy-ink);
 }
 

@@ -1,6 +1,8 @@
-import type { CSSProperties } from 'react'
+import { useEffect, useRef, useState, type CSSProperties } from 'react'
+import { createPortal } from 'react-dom'
 import { ArrowUpRight, MapPin } from '@/components/slab'
 import { profile } from '@/data/profile'
+import HeroEcosystem from './HeroEcosystem'
 
 /**
  * AboutGrid - the About view as a fixed viewport.
@@ -16,18 +18,22 @@ import { profile } from '@/data/profile'
 
 const N8N = { src: '/icons/ai/n8n.svg', name: 'n8n' }
 const ZAPIER = { src: '/icons/ai/zapier.svg', name: 'Zapier' }
-const DOCKER = { src: '/icons/ai/docker.svg', name: 'Docker' }
-const CLAUDE = { src: '/icons/ai/claude-color.svg', name: 'Claude' }
+const MAKE = { src: '/icons/thesvg/make.svg', name: 'Make' }
+const SHOPIFY = { src: '/icons/thesvg/shopify.svg', name: 'Shopify' }
+const CLAUDE = { src: '/icons/thesvg/claude.svg', name: 'Claude' }
 const CODEX = { src: '/icons/ai/codex.svg', name: 'Codex' }
-const GLM = { src: '/icons/ai/zhipu.svg', name: 'GLM' }
-const QWEN = { src: '/icons/ai/qwen.svg', name: 'Qwen' }
-const HERMES = { src: '/icons/ai/hermes.svg', name: 'Hermes' }
-const NAMECHEAP = { src: '/icons/ai/namecheap.svg', name: 'Namecheap' }
-const CLOUDFLARE = { src: '/icons/ai/cloudflare.svg', name: 'Cloudflare' }
-const GITHUB = { src: '/icons/ai/github.svg', name: 'GitHub' }
-const GWS = { src: '/icons/googleworkspace.svg', name: 'Google Workspace' }
-const SLACK = { src: '/icons/ai/slack-color.svg', name: 'Slack' }
-const FIREFLIES = { src: '/icons/ai/fireflies.png', name: 'Fireflies' }
+const CHATGPT = { src: '/icons/thesvg/openai-chatgpt.svg', name: 'ChatGPT' }
+const GHL = { src: '/icons/gohighlevel.png', name: 'GoHighLevel' }
+const CLAUDE_CODE = { src: '/icons/claude-code-logo.png', name: 'Claude Code' }
+const AMAZON = { src: '/icons/thesvg/amazon.svg', name: 'Amazon' }
+
+const CERTIFICATIONS = [
+  { src: '/certifications/highlevel-crm.png', title: 'HighLevel CRM certificate', label: 'HighLevel CRM' },
+  { src: '/certifications/n8n.png', title: 'AI Automation with n8n certificate', label: 'n8n' },
+  { src: '/certifications/make.png', title: 'Make certificate', label: 'Make' },
+  { src: '/certifications/zapier.png', title: 'Zapier certificate', label: 'Zapier' },
+  { src: '/certifications/prompt-engineering.png', title: 'Prompt Engineering certificate', label: 'Prompt Engineering' },
+] as const
 
 type Capability = {
   index: string
@@ -38,27 +44,44 @@ type Capability = {
 const CAPABILITIES: Capability[] = [
   {
     index: '01',
-    title: 'Your role 1',
-    marks: [N8N, ZAPIER, DOCKER],
+    title: 'GoHighLevel CRM and lead journeys',
+    marks: [GHL],
   },
   {
     index: '02',
-    title: 'Your role 2',
-    marks: [CLAUDE, CODEX, GLM, QWEN, HERMES],
+    title: 'Automation with n8n, Make.com and Zapier',
+    marks: [N8N, MAKE, ZAPIER],
   },
   {
     index: '03',
-    title: 'Your role 3',
-    marks: [CLAUDE, CODEX, NAMECHEAP, CLOUDFLARE, GITHUB],
+    title: 'AI-assisted builds and operations',
+    marks: [CLAUDE_CODE, CODEX, CHATGPT, CLAUDE],
   },
   {
     index: '04',
-    title: 'Your role 4',
-    marks: [GWS, SLACK, FIREFLIES],
+    title: 'Shopify and Amazon VA support',
+    marks: [SHOPIFY, AMAZON],
   },
 ]
 
 export default function AboutGrid() {
+  const [selected, setSelected] = useState<number | null>(null)
+  const dialogRef = useRef<HTMLDialogElement>(null)
+  const triggerRef = useRef<HTMLButtonElement | null>(null)
+  const certificate = selected === null ? null : CERTIFICATIONS[selected]
+
+  useEffect(() => {
+    if (selected !== null && !dialogRef.current?.open) dialogRef.current?.showModal()
+  }, [selected])
+
+  const closeViewer = () => {
+    dialogRef.current?.close()
+    setSelected(null)
+    triggerRef.current?.focus()
+  }
+  const move = (direction: number) => {
+    setSelected((current) => current === null ? null : (current + direction + CERTIFICATIONS.length) % CERTIFICATIONS.length)
+  }
   return (
     <section className="pgrid agrid" aria-labelledby="about-title">
       <header className="pgrid__head">
@@ -67,24 +90,20 @@ export default function AboutGrid() {
           {`Hi, I’m ${profile.firstName}.`}
         </h1>
         <p className="pgrid__lede">
-          PLACEHOLDER - tell me what to put here: one line on what you do.
+          I help coaches, agencies, service businesses and e-commerce teams connect their systems and simplify daily operations.
         </p>
       </header>
 
       <div className="home__glass agrid__glass">
         <div className="agrid__copy">
           <p className="agrid__lead">
-            Your big statement goes here, in one or two lines.
-            <span> A softer second half that finishes the thought.</span>
+            GoHighLevel and automation are at the core of my work.
+            <span> AI-assisted solutions and e-commerce VA support complete the picture.</span>
           </p>
 
           <p className="agrid__note">
-            <strong>Your company name</strong>, and{' '}
-            <a className="agrid__link" href="#">
-              your product
-            </a>{' '}
-            - PLACEHOLDER - tell me what to put here: two sentences on your company, what
-            you sell or build, and who it is for.
+            <strong>I build connected systems and support the work behind them.</strong>{' '}
+            From GoHighLevel CRM and n8n, Make.com and Zapier workflows to Claude Code, Codex, ChatGPT and Claude — plus hands-on Shopify and Amazon VA support.
           </p>
 
           <ul className="agrid__caps" role="list">
@@ -109,52 +128,76 @@ export default function AboutGrid() {
             ))}
           </ul>
 
-          {/* One plate, two cells sharing a mark / title / meta anatomy. */}
+          {/* Credentials stay in the proof area and open at full size. */}
           <div className="agrid__bar">
-            <span className="agrid__cell">
-              <span className="agrid__cell-mark agrid__cell-mark--img">
-                <img src="/placeholders/badge.svg" alt="" loading="lazy" decoding="async" />
-              </span>
-              <span className="agrid__cell-copy">
-                <span className="agrid__cell-title">Credential name</span>
-                <span className="agrid__cell-meta">Credential ID</span>
-              </span>
-            </span>
-
             <span className="agrid__cell">
               <span className="agrid__cell-mark">
                 <MapPin size={16} weight="fill" aria-hidden="true" />
               </span>
               <span className="agrid__cell-copy">
-                <span className="agrid__cell-title">{profile.location}</span>
-                <span className="agrid__cell-meta">Timezone · working hours</span>
+                <span className="agrid__cell-title">Based in the Philippines</span>
+                <span className="agrid__cell-meta">GMT+8 · US hours</span>
               </span>
             </span>
 
-            <a className="agrid__cell agrid__cell--wide" href="#">
-              <span className="agrid__cell-mark agrid__cell-mark--plain">
-                <img src="/placeholders/logo.svg" alt="" loading="lazy" decoding="async" />
+            <a className="agrid__cell" href="https://www.linkedin.com/in/philipjeidf" target="_blank" rel="noreferrer">
+              <span className="agrid__cell-mark agrid__cell-mark--linkedin">
+                <img src="/icons/linkedin.svg" alt="" loading="lazy" decoding="async" />
               </span>
               <span className="agrid__cell-copy">
-                <span className="agrid__cell-title">Community or affiliation</span>
-                <span className="agrid__cell-meta">Your role there</span>
+                <span className="agrid__cell-title">Let’s connect</span>
+                <span className="agrid__cell-meta">Find me on LinkedIn</span>
               </span>
               <ArrowUpRight className="agrid__cell-go" size={15} weight="bold" aria-hidden="true" />
             </a>
           </div>
         </div>
 
-        <div className="agrid__portrait">
-          <img
-            src="/avatar.svg"
-            alt="Portrait placeholder"
-            loading="eager"
-            decoding="async"
-            width={400}
-            height={400}
-          />
+        <div className="agrid__visual">
+          <div className="agrid__portrait agrid__portrait--ecosystem">
+            <HeroEcosystem />
+          </div>
+          <section className="agrid__certs" aria-labelledby="certifications-title">
+            <div className="agrid__certs-copy">
+              <h2 className="agrid__certs-title" id="certifications-title">Training & certifications</h2>
+              <p className="agrid__certs-note">Explore my credentials</p>
+            </div>
+            <div className="agrid__certs-slots">
+              {CERTIFICATIONS.map((item, index) => (
+                <button type="button" className="agrid__cert-slot" key={item.src}
+                  aria-label={`View ${item.title}`} aria-haspopup="dialog"
+                  onClick={(event) => { triggerRef.current = event.currentTarget; setSelected(index) }}>
+                  <img src={item.src} alt="" loading="lazy" decoding="async" />
+                  <span className="agrid__cert-slot-label">{item.label}</span>
+                </button>
+              ))}
+            </div>
+          </section>
         </div>
       </div>
+      {createPortal(
+        <dialog ref={dialogRef} className="certificate-viewer" aria-labelledby="certificate-viewer-title"
+          onCancel={(event) => { event.preventDefault(); closeViewer() }}
+          onClose={() => { setSelected(null); triggerRef.current?.focus() }}
+          onClick={(event) => { if (event.target === event.currentTarget) closeViewer() }}
+          onKeyDown={(event) => {
+            if (event.key === 'ArrowRight') { event.preventDefault(); move(1) }
+            if (event.key === 'ArrowLeft') { event.preventDefault(); move(-1) }
+          }}>
+          <div className="certificate-viewer__content">
+            <header className="certificate-viewer__head">
+              <div><p>Certificate of completion</p><h2 id="certificate-viewer-title" aria-live="polite">{certificate?.label}</h2></div>
+              <button type="button" onClick={closeViewer} aria-label="Close certificate viewer" autoFocus>×</button>
+            </header>
+            {certificate && <img className="certificate-viewer__image" src={certificate.src} alt={certificate.title} />}
+            <footer className="certificate-viewer__footer">
+              <button type="button" onClick={() => move(-1)} aria-label="Previous certificate">← <span>Previous</span></button>
+              <span>{selected === null ? 0 : selected + 1} / {CERTIFICATIONS.length}</span>
+              <button type="button" onClick={() => move(1)} aria-label="Next certificate"><span>Next</span> →</button>
+            </footer>
+          </div>
+        </dialog>, document.body,
+      )}
     </section>
   )
 }

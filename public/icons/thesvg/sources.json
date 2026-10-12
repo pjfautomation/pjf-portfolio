@@ -1,0 +1,100 @@
+[
+  {
+    "name": "n8n",
+    "slug": "n8n",
+    "source": "https://thesvg.org/icons/n8n/default.svg",
+    "license": "CC0-1.0",
+    "bytes": 1646
+  },
+  {
+    "name": "Make",
+    "slug": "make",
+    "source": "https://thesvg.org/icons/make/default.svg",
+    "license": "CC0-1.0",
+    "bytes": 613
+  },
+  {
+    "name": "Zapier",
+    "slug": "zapier",
+    "source": "https://thesvg.org/icons/zapier/default.svg",
+    "license": "CC0-1.0",
+    "bytes": 2847
+  },
+  {
+    "name": "Shopify",
+    "slug": "shopify",
+    "source": "https://thesvg.org/icons/shopify/default.svg",
+    "license": "CC0-1.0",
+    "bytes": 1714
+  },
+  {
+    "name": "Claude",
+    "slug": "claude",
+    "source": "https://thesvg.org/icons/claude/default.svg",
+    "license": "CC0-1.0",
+    "bytes": 1936
+  },
+  {
+    "name": "OpenAI (ChatGPT)",
+    "slug": "openai-chatgpt",
+    "source": "https://thesvg.org/icons/openai-chatgpt/default.svg",
+    "license": "MIT",
+    "bytes": 1642
+  },
+  {
+    "name": "WordPress",
+    "slug": "wordpress",
+    "source": "https://thesvg.org/icons/wordpress/default.svg",
+    "license": "CC0-1.0",
+    "bytes": 1512
+  },
+  {
+    "name": "Twilio",
+    "slug": "twilio",
+    "source": "https://thesvg.org/icons/twilio/default.svg",
+    "license": "MIT",
+    "bytes": 504
+  },
+  {
+    "name": "Meta",
+    "slug": "meta",
+    "source": "https://thesvg.org/icons/meta/default.svg",
+    "license": "CC0-1.0",
+    "bytes": 2199
+  },
+  {
+    "name": "Google Ads",
+    "slug": "google-ads",
+    "source": "https://thesvg.org/icons/google-ads/default.svg",
+    "license": "CC0-1.0",
+    "bytes": 622
+  },
+  {
+    "name": "Gmail",
+    "slug": "gmail",
+    "source": "https://thesvg.org/icons/gmail/default.svg",
+    "license": "CC0-1.0",
+    "bytes": 720
+  },
+  {
+    "name": "Google Sheets",
+    "slug": "google-sheets",
+    "source": "https://thesvg.org/icons/google-sheets/default.svg",
+    "license": "CC0-1.0",
+    "bytes": 5073
+  },
+  {
+    "name": "Google Calendar",
+    "slug": "google-calendar",
+    "source": "https://thesvg.org/icons/google-calendar/default.svg",
+    "license": "CC0-1.0",
+    "bytes": 2535
+  },
+  {
+    "name": "Stripe",
+    "slug": "stripe",
+    "source": "https://thesvg.org/icons/stripe/default.svg",
+    "license": "CC0-1.0",
+    "bytes": 1643
+  }
+]

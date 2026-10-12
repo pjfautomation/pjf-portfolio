@@ -1,0 +1,38 @@
+/* The shell remains the scroll container, but its browser scrollbar is visual
+   chrome rather than part of the interface. Keep overflow enabled so wheel,
+   trackpad, touch, keyboard and Lenis can still move the page. */
+html, body {
+  scrollbar-width: none;
+}
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+.shell__panel {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.shell__panel::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+/* Nested viewers still scroll inside their own viewport without exposing a
+   second rail of browser chrome. */
+.ppanel__scroll,
+.strategy-library__scroll,
+.strategy-viewer__scroll {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.ppanel__scroll::-webkit-scrollbar,
+.strategy-library__scroll::-webkit-scrollbar,
+.strategy-viewer__scroll::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}

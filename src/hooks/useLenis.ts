@@ -1,4 +1,6 @@
 import { useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
+import { useMediaQuery } from './useMediaQuery'
 import { applyShellScroller } from '@/lib/scrolltrigger'
 
 /**
@@ -30,6 +32,8 @@ export function getScroller(): HTMLElement | null {
  * devices, which use native momentum scroll instead.
  */
 export function useLenis() {
+  const desktopShell = useMediaQuery('(min-width: 1100px)')
+  const { pathname } = useLocation()
   useEffect(() => {
     if (typeof window === 'undefined') return
 
@@ -54,6 +58,12 @@ export function useLenis() {
     const isNarrow = window.innerWidth < 900
     if (isMobile || isNarrow) return
 
+    // Long editorial workspaces use the browser's native panel scrolling.
+    // Keeping wheel ownership with the panel makes trackpad and mouse input
+    // reliable; the scrollbar is hidden separately in scroll-polish.css.
+    const nativeScrollRoute = ['/services', '/showcase'].includes(pathname) || pathname.startsWith('/work-in-action')
+    if (nativeScrollRoute) return
+
     let cancelled = false
     let cleanup = () => {}
 
@@ -71,7 +81,7 @@ export function useLenis() {
       // the wrapper is only handed over when the panel is actually the
       // scroller. Passing a non-scrolling wrapper freezes the page.
       const panel = getScroller()
-      const usesPanel = !!panel && window.innerWidth >= 1100
+      const usesPanel = !!panel && desktopShell
       const content = panel?.firstElementChild as HTMLElement | undefined
 
       const lenis = new Lenis({
@@ -135,5 +145,5 @@ export function useLenis() {
       cancelled = true
       cleanup()
     }
-  }, [])
+  }, [desktopShell, pathname])
 }

@@ -6,6 +6,7 @@ import AIStackGrid from './AIStackGrid'
 import { AppsSection } from './Projects'
 import { useFunnelModal } from './FunnelModal'
 import { websiteFunnel } from '@/data/funnels'
+import StrategyLibrary from './StrategyLibrary'
 
 const FunnelBarrel = lazy(() => import('./FunnelBarrel'))
 
@@ -39,7 +40,7 @@ function SectionWindow({ label, children }: { label: string; children: ReactNode
           <span className="ppanel__url-host">{label}</span>
         </span>
       </div>
-      <div className="ppanel__scroll">{children}</div>
+      <div className="ppanel__scroll" data-lenis-prevent>{children}</div>
     </div>
   )
 }
@@ -61,7 +62,7 @@ export function BarrelPanel() {
 /** The systems as a logo-first grid, in a scrolling window. */
 export function AIWindow() {
   return (
-    <SectionWindow label="Your systems">
+    <SectionWindow label="Growth systems & automation">
       <AIStackGrid />
     </SectionWindow>
   )
@@ -75,16 +76,8 @@ export function AppsWindow() {
 }
 
 /** The plan document, full height, straight away. */
-export function PlanPanel() {
-  return (
-    <div className="ppanel ppanel--frame">
-      <FrameBar
-        host="yourdomain.com"
-        path="/sample-plan"
-      />
-      <LiveFrame src="/placeholders/sample-plan.html" title="Sample document" />
-    </div>
-  )
+export function PlanPanel({ onClose }: { onClose?: () => void }) {
+  return <StrategyLibrary onClose={onClose} />
 }
 
 /** `src` is a local page framed in the panel; `path` is what the fake

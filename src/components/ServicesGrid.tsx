@@ -13,8 +13,7 @@ import Autopilot, { TOOLS } from '@/components/Autopilot'
  * Projects: the glass, the bento card, plated marks, orange for the index
  * and the accent.
  *
- * Every string below is a PLACEHOLDER. Replace it, or hand this file to your
- * AI assistant and tell it what to put in each spot.
+ * Service descriptions are based on the supplied resume and current offer.
  */
 
 /* ---------- The method ---------- */
@@ -30,24 +29,24 @@ type Stage = {
 const STAGES: Stage[] = [
   {
     index: '01',
-    label: 'Step 1',
-    body: 'PLACEHOLDER - one line on what happens in this step.',
+    label: 'Map the process',
+    body: 'Understand the customer journey, current tools, repetitive tasks and desired outcome.',
     Icon: MagnetStraight,
-    chips: ['Tag 1', 'Tag 2', 'Tag 3', 'Tag 4'],
+    chips: ['CRM', 'Leads', 'Operations'],
   },
   {
     index: '02',
-    label: 'Step 2',
-    body: 'PLACEHOLDER - one line on what happens in this step.',
+    label: 'Build the system',
+    body: 'Configure GoHighLevel and connect the workflows, pages and tools the business needs.',
     Icon: Timer,
-    chips: ['Tag 1', 'Tag 2', 'Tag 3'],
+    chips: ['GHL', 'n8n', 'Make'],
   },
   {
     index: '03',
-    label: 'Step 3',
-    body: 'PLACEHOLDER - one line on the result the client gets.',
+    label: 'Manage and improve',
+    body: 'Test every handoff, document the setup and continue improving the system.',
     Icon: Trophy,
-    chips: ['Tag 1', 'Tag 2', 'Tag 3'],
+    chips: ['SOPs', 'Testing', 'Support'],
   },
 ]
 
@@ -55,17 +54,14 @@ const STAGES: Stage[] = [
 
 // Example tool marks from /public/icons. Swap for the tools you actually use.
 const GHL = '/icons/gohighlevel.png'
-const REACT = '/icons/ai/react.svg'
-const TAILWIND = '/icons/ai/tailwindcss.svg'
-const VITE = '/icons/ai/vite.svg'
-const CLOUDFLARE = '/icons/ai/cloudflare.svg'
 const N8N = '/icons/ai/n8n.svg'
-const OPENAI = '/icons/openai.svg'
-const GWS = '/icons/googleworkspace.svg'
-const SLACK = '/icons/slack.svg'
-const CLAUDE_CODE = '/icons/claude-code-logo.png'
-const EXPO = '/icons/ai/expo.svg'
-const CHROME = '/icons/ai/googlechrome.svg'
+const MAKE = '/icons/thesvg/make.svg'
+const ZAPIER = '/icons/thesvg/zapier.svg'
+const SHOPIFY = '/icons/thesvg/shopify.svg'
+const AMAZON = '/icons/thesvg/amazon.svg'
+const META = '/icons/thesvg/meta.svg'
+const INSTAGRAM = '/icons/thesvg/instagram.svg'
+const FACEBOOK = '/icons/thesvg/facebook.svg'
 
 type Service = {
   index: string
@@ -76,49 +72,36 @@ type Service = {
   bullets: string[]
 }
 
-const BULLETS = ['PLACEHOLDER benefit 1', 'PLACEHOLDER benefit 2', 'PLACEHOLDER benefit 3']
-const SERVICE_DESC = 'PLACEHOLDER - one line on this service.'
-
 const SERVICES: Service[] = [
   {
-    index: '01',
-    title: 'Service One',
-    description: SERVICE_DESC,
-    chip: 'PLACEHOLDER',
-    logos: [GHL, REACT, TAILWIND],
-    bullets: BULLETS,
+    index: '01', title: 'GoHighLevel CRM & Sales Systems',
+    description: 'Complete GoHighLevel systems built around how your business captures, manages and converts leads.',
+    chip: 'Primary offer', logos: [GHL],
+    bullets: ['Custom CRM setup and configuration', 'Pipelines, stages and opportunities', 'Calendars, forms and appointment booking', 'Lead nurturing and follow-up campaigns'],
   },
   {
-    index: '02',
-    title: 'Service Two',
-    description: SERVICE_DESC,
-    chip: 'PLACEHOLDER',
-    logos: [GHL, N8N, OPENAI],
-    bullets: BULLETS,
+    index: '02', title: 'Landing Pages & Campaigns',
+    description: 'Conversion-focused pages and campaigns built directly inside GoHighLevel.',
+    chip: 'GoHighLevel', logos: [GHL],
+    bullets: ['Landing pages, funnels and forms', 'Email and SMS campaign setup', 'Triggers, workflows and follow-up sequences', 'Tracking, testing and optimization'],
   },
   {
-    index: '03',
-    title: 'Service Three',
-    description: SERVICE_DESC,
-    chip: 'PLACEHOLDER',
-    logos: [GHL, GWS, SLACK],
-    bullets: BULLETS,
+    index: '03', title: 'Workflow Automation',
+    description: 'Connected workflows that reduce manual work and keep information moving between your tools.',
+    chip: 'Automation', logos: [N8N, MAKE, ZAPIER],
+    bullets: ['n8n, Make.com and Zapier workflows', 'App integrations and data synchronization', 'Automated tasks, notifications and handoffs', 'Workflow testing and documentation'],
   },
   {
-    index: '04',
-    title: 'Service Four',
-    description: SERVICE_DESC,
-    chip: 'PLACEHOLDER',
-    logos: [REACT, VITE, CLOUDFLARE],
-    bullets: BULLETS,
+    index: '04', title: 'E-commerce Operations',
+    description: 'Reliable day-to-day support for Shopify and Amazon stores.',
+    chip: 'Operations support', logos: [SHOPIFY, AMAZON],
+    bullets: ['Product listings and catalog updates', 'Order and customer support', 'Store administration and reporting', 'Inventory and seller account assistance'],
   },
   {
-    index: '05',
-    title: 'Service Five',
-    description: SERVICE_DESC,
-    chip: 'PLACEHOLDER',
-    logos: [CLAUDE_CODE, EXPO, CHROME],
-    bullets: BULLETS,
+    index: '05', title: 'Social Media Management',
+    description: 'Consistent social media support that keeps your brand active and organized.',
+    chip: 'Additional support', logos: [META, INSTAGRAM, FACEBOOK],
+    bullets: ['Content scheduling and publishing', 'Caption and content preparation', 'Community and inbox support', 'Performance tracking and reporting'],
   },
 ]
 
@@ -143,10 +126,10 @@ export default function ServicesGrid() {
       <header className="pgrid__head">
         <span className="pgrid__eyebrow">Services</span>
         <h1 className="pgrid__title" id="services-title">
-          Your services headline, in one short line.
+          GoHighLevel systems, automation and operations support.
         </h1>
         <p className="pgrid__lede">
-          PLACEHOLDER - tell me what to put here: one line on what you offer.
+          I build and manage CRM systems, landing pages, pipelines, campaigns and connected automations — plus practical e-commerce and social media support.
         </p>
       </header>
 
@@ -155,14 +138,14 @@ export default function ServicesGrid() {
             in order on the right with a signal running them. */}
         <div className="sgrid__method" aria-labelledby="method-title">
           <div className="sgrid__method-copy">
-            <span className="sgrid__method-eyebrow">Your Method</span>
+            <span className="sgrid__method-eyebrow">My approach</span>
             <h2 className="sgrid__method-title" id="method-title">
-              One. Two. Three.
+              Map. Build. Improve.
               <br />
-              <span>Your method, in three steps.</span>
+              <span>A practical process for turning scattered tasks into a connected system.</span>
             </h2>
             <p className="sgrid__method-sub">
-              PLACEHOLDER - one sentence on why your method works.
+              Every system is tested and documented so it can be understood, maintained and improved.
             </p>
           </div>
 
@@ -191,8 +174,8 @@ export default function ServicesGrid() {
         {/* Five cards, each carrying the marks of what it is built with. */}
         <div className="sgrid__offers">
           <div className="sgrid__offers-head">
-            <h2 className="sgrid__offers-title">Your services, listed.</h2>
-            <p className="sgrid__offers-sub">PLACEHOLDER - one short nudge.</p>
+            <h2 className="sgrid__offers-title">How I can support your business.</h2>
+            <p className="sgrid__offers-sub">CRM and automation first, with dependable operational support alongside them.</p>
           </div>
           <ul className="bento sgrid__services" role="list">
             {SERVICES.map((s) => (
@@ -225,9 +208,9 @@ export default function ServicesGrid() {
           <header className="sgrid__flow-head">
             <div className="sgrid__flow-copy">
               <span className="sgrid__flow-eyebrow">Live automation</span>
-              <h2 className="sgrid__flow-title">Your automation headline.</h2>
+          <h2 className="sgrid__flow-title">Connected systems that save time.</h2>
               <p className="sgrid__flow-sub">
-                PLACEHOLDER - tell me what to put here: one sentence on what this example automation does for a client.
+                See how lead capture, CRM updates, team notifications and automated follow-up work together in one connected workflow.
               </p>
             </div>
             <ul className="sgrid__flow-tools" role="list" aria-label="Tools that power this flow">
