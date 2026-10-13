@@ -116,7 +116,7 @@ export default function HomeBento() {
         <div className="bento__media bento__reel bento__reel--categories" aria-hidden="true">
           <div className="bento__reel-track">
             {[...PROJECT_SHOTS, ...PROJECT_SHOTS].map((src, i) => (
-              <span key={i} className="bento__shot">
+              <span key={i} className="bento__shot" data-copy={i >= PROJECT_SHOTS.length ? 1 : 0}>
                 <img src={src} alt="" loading="lazy" decoding="async" width={1672} height={941} />
               </span>
             ))}
@@ -151,7 +151,7 @@ export default function HomeBento() {
                 {[...row, ...row].map((n, i) => {
                   const BuildIcon = BUILD_ICONS[n.id] ?? n.Icon
                   return (
-                  <span key={`${n.id}-${i}`} className="bento__chip" data-status={n.status}>
+                  <span key={`${n.id}-${i}`} className="bento__chip" data-status={n.status} data-copy={i >= row.length ? 1 : 0}>
                     <BuildIcon size={15} weight="regular" />
                     {n.name}
                   </span>
@@ -205,7 +205,7 @@ export default function HomeBento() {
         <div className="bento__media bento__reel bento__reel--categories" aria-hidden="true">
           <div className="bento__reel-track">
             {[0, 1].flatMap(copy => ['lead-journey', 'appointment-care', 'client-welcome', 'ai-receptionist', 'basic-rag', 'hr-assistant'].map(id => (
-              <span className="bento__shot" key={`${copy}-${id}`}><img src={`/workflow-thumbnails/${id}.png`} alt="" width={1672} height={941} loading="lazy" decoding="async" /></span>
+              <span className="bento__shot" key={`${copy}-${id}`} data-copy={copy}><img src={`/workflow-thumbnails/${id}.png`} alt="" width={1672} height={941} loading="lazy" decoding="async" /></span>
             )))}
           </div>
         </div>

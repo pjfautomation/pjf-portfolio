@@ -25,6 +25,31 @@ const viewports = [
         : page.locator('.home__cta')
       assert.equal(await contactAction.count(), 1, `${viewport.name}: responsive contact action missing`)
 
+      if (viewport.width < 1100) {
+        for (const cardName of ['projects', 'quotes']) {
+          const card = page.locator(`.bento__card--${cardName}`)
+          await card.scrollIntoViewIfNeeded()
+          const image = card.locator('.bento__shot img').first()
+          await image.evaluate(async image => { await image.decode() })
+          const geometry = await card.evaluate(card => {
+            const media = card.querySelector('.bento__reel')
+            const image = card.querySelector('.bento__shot img')
+            return { media: media.clientWidth, image: image.getBoundingClientRect().width, height: image.getBoundingClientRect().height, loaded: image.naturalWidth > 0 }
+          })
+          assert.equal(geometry.loaded, true)
+          assert.ok(Math.abs(geometry.media - geometry.image) <= 1, `${cardName}: preview must fit the card width`)
+          assert.ok(geometry.height > 100 && geometry.height < 300, `${cardName}: preview must be readable, not oversized`)
+          await card.locator('.bento__reel').evaluate(e => { e.scrollLeft = e.clientWidth + 12 })
+          await card.locator('.bento__shot img').nth(1).evaluate(async image => { await image.decode() })
+          await card.screenshot({ path: `artifacts/home-${cardName}-${viewport.width}.png` })
+        }
+        const ai = page.locator('.bento__card--ai')
+        await ai.scrollIntoViewIfNeeded()
+        assert.equal(await ai.locator('.bento__chip:visible').count(), 4)
+        assert.ok(await ai.locator('.bento__chip:visible').evaluateAll(chips => chips.every(chip => chip.scrollWidth <= chip.clientWidth + 1)))
+        await ai.screenshot({ path: `artifacts/home-ai-${viewport.width}.png` })
+      }
+
       await page.goto('http://127.0.0.1:5173/work-in-action', { waitUntil: 'domcontentloaded' })
       await page.waitForTimeout(800)
       assert.equal(errors.length, 0, `${viewport.name}: workflow page errors: ${errors.join('; ')}`)

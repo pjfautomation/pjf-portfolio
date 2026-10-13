@@ -1,0 +1,28 @@
+/* Keep phone preview widths independent of the images' intrinsic sizes. */
+@media (max-width: 1099px) {
+  .home :is(.bento__card--projects, .bento__card--quotes) { min-height: 0; }
+  .home :is(.bento__card--projects, .bento__card--quotes) .bento__reel--categories {
+    width: 100%; height: auto; max-height: none; flex: none; aspect-ratio: 16 / 9;
+    overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory;
+    mask-image: none; -webkit-mask-image: none; scrollbar-width: none;
+    margin-top: 16px;
+  }
+  .home :is(.bento__card--projects, .bento__card--quotes) .bento__reel-track {
+    width: 100%; height: auto; flex-direction: row; gap: 12px;
+    animation: none; transform: none;
+  }
+  .home :is(.bento__card--projects, .bento__card--quotes) .bento__reel--categories .bento__shot {
+    width: 100%; flex: 0 0 100%; height: auto; scroll-snap-align: start;
+    box-shadow: none;
+  }
+  .home .bento__shot[data-copy='1'] { display: none; }
+  .home .bento__card--ai { min-height: 0; }
+  .home .bento__card--ai .bento__chips {
+    flex: none; height: auto; max-height: none; justify-content: flex-start;
+    margin-top: 16px; gap: 10px; mask-image: none; -webkit-mask-image: none;
+  }
+  .home .bento__card--ai .bento__chip-track { width: 100%; flex-direction: column; animation: none; }
+  .home .bento__card--ai .bento__chip { width: 100%; max-width: 100%; white-space: normal; line-height: 1.4; padding: 9px 12px; }
+  .home .bento__card--ai .bento__chip:nth-child(n+3) { display: none; }
+  .home .bento__card--ai .bento__chip svg { flex-shrink: 0; }
+}

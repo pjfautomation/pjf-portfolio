@@ -59,6 +59,7 @@ import './styles/workflow-library.css'
 import './styles/appointment-care.css'
 import './styles/portfolio-consistency.css'
 import './styles/automation-gallery.css'
+import './styles/mobile-home-previews.css'
 // Last: the perf tiers only ever turn things OFF, so they must win.
 import './styles/perf.css'
 

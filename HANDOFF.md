@@ -54,6 +54,8 @@ Requirements and visual direction are in `docs/superpowers/specs/2026-10-13-four
 
 ## Projects automation gallery
 
+Homepage phone previews use `mobile-home-previews.css`: Projects and Work in Action have fixed-width, complete 16:9 thumbnails with native horizontal swiping. Duplicated desktop animation frames are hidden on mobile. AI Builds shows four readable chips in a compact list. Desktop thumbnail animations are unchanged. The responsive-shell check now decodes preview images and checks their widths, swipe behavior and chip fit at 320px and 390px.
+
 The Projects “Workflow systems” dialog preserves the scrolling showcase with 11 real projects (six n8n, two Make.com, three Zapier), replacing the placeholder images. `src/data/automation-gallery.ts` lists the projects. `WorkflowSamples.tsx` renders floating screenshot windows with SVG platform badges and a continuous desktop strip. Hover and focus do not pause it; clicking a screenshot pauses while the native image dialog is open, and closing resumes. Mobile and reduced motion use manual horizontal scrolling. The image viewer links RAG, HR and appointment projects to their existing simulated demos. Platform filtering was intentionally replaced by the scrolling behavior at the user's request.
 
 Optimized assets live in `public/automation-gallery/`. Regenerate with `node scripts/make-automation-gallery.cjs <source-directory>` using Sharp from the bundled dependency runtime through `NODE_PATH`; original source images remain untouched. The extensionless Gmail attachment image is supported. Run `node artifacts/verify-automation-gallery.cjs`; this check is included in the full test runner.
