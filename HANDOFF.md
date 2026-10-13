@@ -30,6 +30,8 @@ This is Philip's personalised portfolio, built from an existing portfolio templa
 
 ## Main source map
 
+- `index.html` links the transparent PJ browser icons (32px/64px PNG and multi-size ICO) and 180px mobile touch icon. Master asset: `public/pj-logo-transparent.png`; generation notes: `docs/design/pj-website-icon.md`.
+
 - `src/main.tsx`: routes, lazy-loaded pages and CSS imports.
 - `src/App.tsx`, `src/components/Rail.tsx`: desktop navigation/layout.
 - `src/components/HomeBento.tsx`, `HomeMobile.tsx`: homepage surfaces.
