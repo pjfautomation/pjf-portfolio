@@ -52,7 +52,13 @@ import './styles/home-restored.css'
 import './styles/responsive.css'
 import './styles/workflows.css'
 import './styles/highlevel-workflow.css'
+import './styles/n8n-workflow.css'
+import './styles/rag-workflow.css'
+import './styles/hr-workflow.css'
+import './styles/workflow-library.css'
 import './styles/appointment-care.css'
+import './styles/portfolio-consistency.css'
+import './styles/automation-gallery.css'
 // Last: the perf tiers only ever turn things OFF, so they must win.
 import './styles/perf.css'
 

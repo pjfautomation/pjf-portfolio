@@ -50,7 +50,7 @@ function ProjectModal({ project, onClose, children }: { project: Project; onClos
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose()
+      if (e.key === 'Escape' && !document.querySelector('dialog[open]')) onClose()
       if (e.key !== 'Tab') return
       // A second dialog (e.g. a website preview) owns focus when stacked above us.
       const dialog = dialogRef.current

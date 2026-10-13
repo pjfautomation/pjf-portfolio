@@ -13,8 +13,17 @@ import {
   AddressBook,
   Globe,
   AppWindow,
+  CalendarBlank,
+  ArrowsClockwise,
+  MagnifyingGlass,
+  FileText,
+  Bell,
+  GitBranch,
+  ShoppingBag,
+  Package,
+  VideoCamera,
+  ClipboardText,
 } from '@/components/slab'
-import { gymFunnel, bookingFunnel, websiteFunnel, type Funnel } from '@/data/funnels'
 import { aiStack, type StackNode } from '@/data/ai-stack'
 
 /**
@@ -27,10 +36,12 @@ import { aiStack, type StackNode } from '@/data/ai-stack'
  * height and Home stays a single viewport.
  */
 
-const thumbSrc = (f: Funnel) =>
-  `/home/${f.dir ?? 'funnels'}-${f.file.replace('.html', '.jpeg')}`
-
-const PROJECT_SHOTS = [gymFunnel[0], bookingFunnel[0], websiteFunnel[0], gymFunnel[1]].filter(Boolean)
+const PROJECT_SHOTS = [
+  '/home/project-categories/workflow-systems.png',
+  '/home/project-categories/strategy-documents.png',
+  '/home/project-categories/websites.png',
+  '/home/project-categories/growth-systems.png',
+]
 
 const OFFERS = [
   { Icon: FunnelSimple, title: 'CRM & sales pipelines', note: 'GoHighLevel systems' },
@@ -51,6 +62,24 @@ const ABOUT_TOOLS = [
 const leaves = (n: StackNode): StackNode[] =>
   n.children?.length ? n.children.flatMap(leaves) : [n]
 const AI_BUILDS = leaves(aiStack)
+const BUILD_ICONS: Record<string, typeof Robot> = {
+  'lead-capture-follow-up-engine': FunnelSimple,
+  'appointment-booking-reminder-system': CalendarBlank,
+  'lead-reactivation-engine': ArrowsClockwise,
+  'crm-pipeline-opportunity-system': AddressBook,
+  'lead-routing-enrichment-engine': GitBranch,
+  'client-onboarding-automation': ClipboardText,
+  'cross-platform-data-sync': ArrowsClockwise,
+  'internal-notification-handoff-system': Bell,
+  'ai-lead-qualification-assistant': Robot,
+  'ai-knowledge-assistant': MagnifyingGlass,
+  'ai-content-repurposing-workflow': FileText,
+  'shopify-store-operations': ShoppingBag,
+  'product-listing-optimization': MagnifyingGlass,
+  'amazon-seller-operations': Package,
+  'content-repurposing-pipeline': VideoCamera,
+  'social-content-workflow': FileText,
+}
 
 function CardHead({
   Icon,
@@ -81,14 +110,14 @@ export default function HomeBento() {
 
   return (
     <nav className="bento" aria-label="Explore the portfolio">
-      {/* Projects: the funnel thumbnails drift upward on a looped track. */}
+      {/* Projects: category thumbnails drift upward on the existing looped track. */}
       <Link to="/projects" className="bento__card bento__card--projects">
         <CardHead Icon={FolderOpen} title="Projects" desc="CRM systems, workflows and e-commerce operations." />
-        <div className="bento__media bento__reel" aria-hidden="true">
+        <div className="bento__media bento__reel bento__reel--categories" aria-hidden="true">
           <div className="bento__reel-track">
-            {[...PROJECT_SHOTS, ...PROJECT_SHOTS].map((f, i) => (
+            {[...PROJECT_SHOTS, ...PROJECT_SHOTS].map((src, i) => (
               <span key={i} className="bento__shot">
-                <img src={thumbSrc(f)} alt="" loading="lazy" decoding="async" />
+                <img src={src} alt="" loading="lazy" decoding="async" width={1672} height={941} />
               </span>
             ))}
           </div>
@@ -119,12 +148,15 @@ export default function HomeBento() {
           {toolRows.map((row, r) => (
             <div key={r} className="bento__chip-row" data-dir={r ? 'right' : 'left'}>
               <div className="bento__chip-track">
-                {[...row, ...row].map((n, i) => (
+                {[...row, ...row].map((n, i) => {
+                  const BuildIcon = BUILD_ICONS[n.id] ?? n.Icon
+                  return (
                   <span key={`${n.id}-${i}`} className="bento__chip" data-status={n.status}>
-                    <n.Icon size={15} weight="duotone" />
+                    <BuildIcon size={15} weight="regular" />
                     {n.name}
                   </span>
-                ))}
+                  )
+                })}
               </div>
             </div>
           ))}
@@ -167,16 +199,15 @@ export default function HomeBento() {
         </ul>
       </Link>
 
-      {/* Work in Action: preview the first replay in the workflow library. */}
+      {/* Work in Action: scroll the shipped workflow thumbnails. */}
       <Link to="/work-in-action" className="bento__card bento__card--quotes">
         <CardHead Icon={Quotes} title="Work in Action" desc="Run interactive workflows and see the outputs in the tools your team uses." />
-        <div className="bento__media bento__workflow-preview">
-          <span className="bento__workflow-kicker">GoHighLevel demo</span>
-          <b>Lead Journey System</b>
-          <div className="journey-preview" aria-hidden="true">
-            <span>↗<small>Inquiry</small></span><i>→</i><span>▤<small>CRM</small></span><i>→</i><span>✦<small>Follow-up</small></span>
+        <div className="bento__media bento__reel bento__reel--categories" aria-hidden="true">
+          <div className="bento__reel-track">
+            {[0, 1].flatMap(copy => ['lead-journey', 'appointment-care', 'client-welcome', 'ai-receptionist', 'basic-rag', 'hr-assistant'].map(id => (
+              <span className="bento__shot" key={`${copy}-${id}`}><img src={`/workflow-thumbnails/${id}.png`} alt="" width={1672} height={941} loading="lazy" decoding="async" /></span>
+            )))}
           </div>
-          <span className="bento__credential-cta">Explore workflows <ArrowUpRight size={14} weight="bold" aria-hidden="true" /></span>
         </div>
       </Link>
     </nav>

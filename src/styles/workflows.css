@@ -168,11 +168,28 @@
 .journey-integrations h3 { font-size: 17px; }
 .journey-integrations > p { max-width: 850px; }
 .bento__workflow-preview { display: flex; flex-direction: column; justify-content: center; gap: 8px; }
+.home :is(.bento__card--projects, .bento__card--quotes) .bento__reel--categories .bento__reel-track { height: auto; }
+.home .bento__card--quotes .bento__reel-track { animation-duration: 44s; }
+.home :is(.bento__card--projects, .bento__card--quotes) .bento__reel--categories .bento__shot { width: 100%; height: auto; padding: 0; background: transparent; }
+.home :is(.bento__card--projects, .bento__card--quotes) .bento__reel--categories .bento__shot::before { display: none; }
+.home :is(.bento__card--projects, .bento__card--quotes) .bento__reel--categories .bento__shot img { width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: contain; }
 .bento__workflow-kicker { font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--orange-ink); }
 .bento__workflow-preview > b { font-size: 14px; color: var(--navy); }
 .bento__workflow-preview .journey-preview { padding: 6px 0; gap: 7px; justify-content: flex-start; }
 .bento__workflow-preview .journey-preview > span { padding: 9px 5px; min-width: 45px; font-size: 18px; gap: 4px; }
 .bento__workflow-preview .journey-preview small { font-size: 9px; }
+.bento__workflow-preview .bento__workflow-window { height: 160px; width: 100%; overflow: hidden; border-radius: 12px; background: var(--surface); }
+.bento__workflow-track { display: flex; flex-direction: column; gap: 8px; animation: bento-workflow-scroll 24s linear infinite alternate; animation-play-state: paused; }
+.bento__workflow-track img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: contain; border-radius: 8px; flex: none; }
+[data-theme='dark'] .bento__workflow-preview .bento__workflow-window { background: #092c22; border: 1px solid rgba(118, 217, 174, .32); }
+[data-theme='dark'] .bento__workflow-preview { background: radial-gradient(circle at 82% 14%, rgba(75, 177, 126, .16), transparent 34%), #092c22; border-color: rgba(118, 217, 174, .32); box-shadow: inset 0 0 0 1px rgba(118, 217, 174, .16), 0 14px 28px rgba(0, 16, 10, .28); }
+[data-theme='dark'] .bento__workflow-track img { filter: brightness(.72) saturate(.88); mix-blend-mode: darken; }
+.bento__card--quotes:hover .bento__workflow-track, .bento__card--quotes:focus-visible .bento__workflow-track { animation-play-state: running; }
+@keyframes bento-workflow-scroll { from { transform: translateY(0); } to { transform: translateY(calc(-100% + 160px)); } }
+@media (hover: none), (prefers-reduced-motion: reduce) {
+  .bento__workflow-preview .bento__workflow-window { overflow-y: auto; }
+  .bento__workflow-track { animation: none; }
+}
 @media (max-width: 900px) { .journey-inspection { grid-template-columns: 1fr; } .journey-breakdown__grid { grid-template-columns: 1fr; gap: 0; } .journey-breakdown article { border-bottom: 1px solid var(--wf-line); } }
 @media (max-width: 639px) {
   .journey-selection { flex-direction: column; align-items: flex-start; gap: 12px; }

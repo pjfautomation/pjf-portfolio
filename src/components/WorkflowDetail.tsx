@@ -4,15 +4,20 @@ import { SAMPLE_LEAD, TOOL_ICONS, WORKFLOWS, type WorkflowDefinition, type Workf
 import { APPOINTMENT, APPOINTMENT_OUTPUTS, APPOINTMENT_SCENARIOS, appointmentPlan, type AppointmentScenario } from '@/data/appointment-care'
 import AppointmentOutputs from './AppointmentOutputs'
 import WelcomeOutputs from './WelcomeOutputs'
+import ReceptionOutputs from './ReceptionOutputs'
+import RagOutputs from './RagOutputs'
+import HrOutputs from './HrOutputs'
+import { HR_FIXTURE, HR_OUTPUTS, HR_SCENARIOS, hrPlan, type HrScenario } from '@/data/hr-assistant'
+import { RAG_FIXTURE, RAG_OUTPUTS, RAG_SCENARIOS, ragPlan, type RagScenario } from '@/data/basic-rag'
+import ReceptionIcon from './ReceptionIcon'
 import { CLIENT, WELCOME_SCENARIOS, WELCOME_OUTPUTS, welcomePlan, type WelcomeScenario } from '@/data/client-welcome'
+import { RECEPTION_LEAD, RECEPTION_OUTPUTS, RECEPTION_RESULTS, RECEPTION_SCENARIOS, receptionPlan, type ReceptionScenario } from '@/data/n8n-receptionist'
 
 type LeadScenario = 'qualified' | 'nurture' | 'email-only'
-type Scenario = LeadScenario | AppointmentScenario | WelcomeScenario
+type Scenario = LeadScenario | AppointmentScenario | WelcomeScenario | ReceptionScenario | RagScenario | HrScenario
 type Status = 'Waiting' | 'Running' | 'Completed' | 'Skipped' | 'Interrupted'
 type Point = { x: number; y: number }
 type Viewport = Point & { scale: number }
-const NODE_WIDTH = 220
-const NODE_HEIGHT = 66
 const SCENARIOS: { id: LeadScenario; label: string; description: string }[] = [
   { id: 'qualified', label: 'Qualified lead', description: 'Ready for a discovery call → booking invitation' },
   { id: 'nurture', label: 'Needs more context', description: 'Still exploring → helpful follow-up questions' },
@@ -45,13 +50,17 @@ function ActionMark({ node }: { node: WorkflowNode }) {
     sms: 'M5 4h14v13H9l-4 4z M8 8h8 M8 12h5',
     stop: 'M5 5h14v14H5z M9 9l6 6 M15 9l-6 6',
   }
-  return <span className="hl-action-icon" data-kind={node.icon === 'stop' ? 'stop' : ['condition', 'wait'].includes(node.icon ?? '') || ['route', 'channel'].includes(node.id) ? 'condition' : ['sheet', 'telegram'].includes(node.id) ? 'webhook' : 'action'} aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d={paths[node.icon ?? node.id] ?? 'M8 7H6a5 5 0 0 0 0 10h3 M16 7h2a5 5 0 0 1 0 10h-3 M8 12h8'} /></svg></span>
+  const kind = node.nodeType ?? (node.icon === 'stop' ? 'stop' : ['condition', 'wait'].includes(node.icon ?? '') || ['route', 'channel'].includes(node.id) ? 'condition' : ['sheet', 'telegram'].includes(node.id) ? 'webhook' : 'action')
+  return <span className="hl-action-icon" data-kind={kind} data-node-type={node.nodeType} aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d={paths[node.icon ?? node.id] ?? 'M8 7H6a5 5 0 0 0 0 10h3 M16 7h2a5 5 0 0 1 0 10h-3 M8 12h8'} /></svg></span>
 }
 
 function WorkflowCanvas({ workflow, statuses, selected, onSelect, playing, activeNodeId, transfer, speed, plan, contactName, controls, children }: {
   workflow: WorkflowDefinition; statuses: Record<string, Status>; selected: string; onSelect: (id: string) => void; playing: boolean; activeNodeId?: string; transfer: { from: string; to: string } | null; speed: number; plan: string[]; contactName: string; controls: ReactNode; children: ReactNode
 }) {
-  const WORLD = { width: 900, height: workflow.canvasHeight ?? 1260 }
+  const isN8n = workflow.platform === 'n8n'
+  const NODE_WIDTH = isN8n ? 96 : 220
+  const NODE_HEIGHT = isN8n ? 96 : 66
+  const WORLD = { width: workflow.platform === 'n8n' ? 2060 : 900, height: workflow.canvasHeight ?? 1260 }
   const stage = useRef<HTMLDivElement>(null)
   const [view, setView] = useState<Viewport>({ x: 16, y: 16, scale: .65 })
   const [positions, setPositions] = useState<Record<string, Point>>({})
@@ -71,11 +80,11 @@ function WorkflowCanvas({ workflow, statuses, selected, onSelect, playing, activ
     const observer = new ResizeObserver(() => {
       const box = element.getBoundingClientRect()
       const scale = box.width < 600 ? .75 : .9
-      setView({ scale, x: box.width / 2 - (340 + NODE_WIDTH / 2) * scale, y: 22 })
+      setView({ scale, x: isN8n ? 35 : box.width / 2 - (340 + NODE_WIDTH / 2) * scale, y: 22 })
     })
     observer.observe(element)
     return () => observer.disconnect()
-  }, [WORLD.height, WORLD.width])
+  }, [WORLD.height, WORLD.width, isN8n, NODE_WIDTH])
   useEffect(() => {
     if (!playing || drag.current) return
     const box = stage.current?.getBoundingClientRect()
@@ -93,7 +102,7 @@ function WorkflowCanvas({ workflow, statuses, selected, onSelect, playing, activ
       if (!dx && !dy) return current
       return { ...current, x: current.x + dx, y: current.y + dy }
     })
-  }, [playing, activeNodeId, positions, workflow.nodes])
+  }, [playing, activeNodeId, positions, workflow.nodes, NODE_WIDTH, NODE_HEIGHT])
   const zoom = (factor: number) => {
     const box = stage.current?.getBoundingClientRect()
     if (!box) return
@@ -141,11 +150,12 @@ function WorkflowCanvas({ workflow, statuses, selected, onSelect, playing, activ
       setPositions((previous) => ({ ...previous, [id]: { x: Math.max(0, Math.min(WORLD.width - NODE_WIDTH, current.origin.x + dx / view.scale)), y: Math.max(0, Math.min(WORLD.height - NODE_HEIGHT, current.origin.y + dy / view.scale)) } }))
     } else setView((previous) => ({ ...previous, x: current.origin.x + dx, y: current.origin.y + dy }))
   }
-  return <div className="journey-canvas journey-canvas--highlevel" data-playing={playing} style={{ '--hl-execute-duration': `${1600 / speed}ms`, '--hl-transfer-duration': `${600 / speed}ms` } as CSSProperties}>
+  const platformClass = workflow.platform === 'n8n' ? 'n8n' : 'highlevel'
+  return <div className={`journey-canvas journey-canvas--${platformClass}`} data-platform={workflow.platform} data-playing={playing} style={{ '--hl-execute-duration': `${1600 / speed}ms`, '--hl-transfer-duration': `${600 / speed}ms` } as CSSProperties}>
     {controls}
-    <div className="hl-builder-header"><div><ToolMark tool="GoHighLevel" /><b>{workflow.title}</b><span>GoHighLevel · illustrative builder</span></div><div className="hl-builder-tabs" role="group" aria-label="Workflow view"><button type="button" aria-pressed={canvasTab === 'builder'} onClick={() => setCanvasTab('builder')}>Builder</button><button type="button" aria-pressed={canvasTab === 'logs'} onClick={() => setCanvasTab('logs')}>Execution logs</button></div><span className="hl-demo-contact">Test contact · {contactName}</span></div>
+    <div className="hl-builder-header"><div><ToolMark tool={workflow.platform} /><b>{workflow.title}</b><span>{workflow.platform} · illustrative builder</span></div><div className="hl-builder-tabs" role="group" aria-label="Workflow view"><button type="button" aria-pressed={canvasTab === 'builder'} onClick={() => setCanvasTab('builder')}>Builder</button><button type="button" aria-pressed={canvasTab === 'logs'} onClick={() => setCanvasTab('logs')}>Execution logs</button></div><span className="hl-demo-contact">Sample run · {contactName}</span></div>
     <div className="journey-canvas__toolbar"><div><span className="workflow-badge">Standard builder · demo</span><span className="journey-canvas__hint">Select an action to inspect</span></div><span className="hl-workflow-status">Illustrative test · no live connections</span></div>
-    <div ref={stage} className="journey-canvas__stage" role="region" aria-label="GoHighLevel workflow canvas" tabIndex={0} data-lenis-prevent
+    <div ref={stage} className="journey-canvas__stage" role="region" aria-label={`${workflow.platform} workflow canvas`} tabIndex={0} data-lenis-prevent
       onPointerDown={startDrag} onPointerMove={moveDrag} onPointerUp={(event) => {
         if (drag.current?.kind === 'node' && !drag.current.moved && drag.current.id) onSelect(drag.current.id)
         drag.current = null
@@ -169,13 +179,13 @@ function WorkflowCanvas({ workflow, statuses, selected, onSelect, playing, activ
             const tx = to.x + NODE_WIDTH / 2; const ty = to.y
             const mid = (y + ty) / 2
             const bypass = edge.label?.includes('Go To') || ty - y > 300
-            const d = bypass ? `M ${x} ${y} V ${y + 18} Q ${x} ${y + 28} ${x + 10} ${y + 28} H 750 Q 760 ${y + 28} 760 ${y + 38} V ${ty - 38} Q 760 ${ty - 28} 750 ${ty - 28} H ${tx + 10} Q ${tx} ${ty - 28} ${tx} ${ty - 18} V ${ty}` : x === tx ? `M ${x} ${y} V ${ty}` : `M ${x} ${y} V ${mid - 10} Q ${x} ${mid} ${x + (tx > x ? 10 : -10)} ${mid} H ${tx + (tx > x ? -10 : 10)} Q ${tx} ${mid} ${tx} ${mid + 10} V ${ty}`
+            const d = isN8n ? `M ${from.x + NODE_WIDTH} ${from.y + NODE_HEIGHT / 2} C ${from.x + NODE_WIDTH + 90} ${from.y + NODE_HEIGHT / 2}, ${to.x - 90} ${to.y + NODE_HEIGHT / 2}, ${to.x} ${to.y + NODE_HEIGHT / 2}` : bypass ? `M ${x} ${y} V ${y + 18} Q ${x} ${y + 28} ${x + 10} ${y + 28} H 750 Q 760 ${y + 28} 760 ${y + 38} V ${ty - 38} Q 760 ${ty - 28} 750 ${ty - 28} H ${tx + 10} Q ${tx} ${ty - 28} ${tx} ${ty - 18} V ${ty}` : x === tx ? `M ${x} ${y} V ${ty}` : `M ${x} ${y} V ${mid - 10} Q ${x} ${mid} ${x + (tx > x ? 10 : -10)} ${mid} H ${tx + (tx > x ? -10 : 10)} Q ${tx} ${mid} ${tx} ${mid + 10} V ${ty}`
             const transferring = transfer?.from === edge.from && transfer.to === edge.to
             const active = plan.indexOf(edge.to) === plan.indexOf(edge.from) + 1 && ['Completed', 'Interrupted'].includes(statuses[edge.from]) && ['Running', 'Completed'].includes(statuses[edge.to])
             return <g key={`${edge.from}-${edge.to}`} data-active={active} data-transferring={transferring}><title>{edge.label ?? 'Next step'}</title><path d={d} />{transferring && <path className="hl-transfer" pathLength={100} d={d} />}{edge.label && <><rect className="hl-branch-label" x={tx - 65} y={ty - 35} width={130} height={20} rx={5} /><text className="hl-branch-text" x={tx} y={ty - 22} textAnchor="middle">{edge.label}</text></>}</g>
           })}
         </svg>
-        {workflow.nodes.map((node) => <button type="button" data-node={node.id} data-status={statuses[node.id]} data-system-event={workflow.id === 'appointment-care' && node.id === 'stop'} data-executing={activeNodeId === node.id && statuses[node.id] === 'Running'} aria-pressed={selected === node.id}
+        {workflow.nodes.map((node) => <button type="button" data-node={node.id} data-node-type={node.nodeType} data-status={statuses[node.id]} data-system-event={workflow.id === 'appointment-care' && node.id === 'stop'} data-executing={activeNodeId === node.id && statuses[node.id] === 'Running'} aria-pressed={selected === node.id}
           className="journey-node" key={node.id} style={{ left: position(node).x, top: position(node).y }}
           onClick={() => { if (!moved.current) onSelect(node.id) }} onKeyDown={(event) => {
             if (event.key === 'Enter' || event.key === ' ') { moved.current = false; onSelect(node.id) }
@@ -184,8 +194,8 @@ function WorkflowCanvas({ workflow, statuses, selected, onSelect, playing, activ
               setPositions((previous) => ({ ...previous, [node.id]: { x: Math.max(0, Math.min(WORLD.width - NODE_WIDTH, point.x + (event.key === 'ArrowRight' ? step : event.key === 'ArrowLeft' ? -step : 0))), y: Math.max(0, Math.min(WORLD.height - NODE_HEIGHT, point.y + (event.key === 'ArrowDown' ? step : event.key === 'ArrowUp' ? -step : 0))) } }))
             }
           }}>
-          <ActionMark node={node} /><span className="hl-node-copy"><b>{node.title}</b><span>{node.subtitle}</span></span><small className="hl-node-status">{statuses[node.id] === 'Running' && !playing ? 'Paused' : statuses[node.id] === 'Completed' ? '✓' : statuses[node.id] === 'Running' ? '…' : statuses[node.id] === 'Interrupted' ? 'Stopped' : statuses[node.id] === 'Skipped' ? 'Skipped' : '···'}</small>
-          {activeNodeId === node.id && statuses[node.id] === 'Running' && <svg className="hl-execution-ring" viewBox="0 0 226 72" aria-hidden="true"><rect x={3} y={3} width={220} height={66} rx={8} pathLength={100} /></svg>}
+          {isN8n ? <><span className="n8n-port n8n-port--in" /><span className="n8n-port n8n-port--out" /><ReceptionIcon tool={node.tool} /></> : <ActionMark node={node} />}<span className="hl-node-copy"><b>{node.title}</b><span>{node.subtitle}</span></span><small className="hl-node-status">{statuses[node.id] === 'Running' && !playing ? 'Paused' : statuses[node.id] === 'Completed' ? '✓' : statuses[node.id] === 'Running' ? '…' : statuses[node.id] === 'Interrupted' ? 'Stopped' : statuses[node.id] === 'Skipped' ? 'Skipped' : '···'}</small>
+          {activeNodeId === node.id && statuses[node.id] === 'Running' && <svg className="hl-execution-ring" viewBox={`0 0 ${NODE_WIDTH + 6} ${NODE_HEIGHT + 6}`} aria-hidden="true"><rect x={3} y={3} width={NODE_WIDTH} height={NODE_HEIGHT} rx={8} pathLength={100} /></svg>}
         </button>)}
         <span className="hl-end" style={{ left: 340 + NODE_WIDTH / 2 - 18, top: WORLD.height - 26 }}>END</span>
       </div>
@@ -253,9 +263,13 @@ function WorkflowReplay({ workflowId }: { workflowId?: string }) {
   const workflow = WORKFLOWS.find((item) => item.id === workflowId)
   const isAppointment = workflowId === 'appointment-care'
   const isWelcome = workflowId === 'client-welcome'
-  const scenarios = isWelcome ? WELCOME_SCENARIOS : isAppointment ? APPOINTMENT_SCENARIOS : SCENARIOS
-  const outputDefinitions = isWelcome ? WELCOME_OUTPUTS : isAppointment ? APPOINTMENT_OUTPUTS : OUTPUTS
-  const [scenario, setScenario] = useState<Scenario>(isWelcome ? 'submitted' : isAppointment ? 'upcoming' : 'qualified')
+  const isReception = workflowId === 'ai-receptionist'
+  const isRag = workflowId === 'basic-rag'
+  const isHr = workflowId === 'hr-assistant'
+  const isN8nDemo = isReception || isRag || isHr
+  const scenarios = isHr ? HR_SCENARIOS : isRag ? RAG_SCENARIOS : isReception ? RECEPTION_SCENARIOS : isWelcome ? WELCOME_SCENARIOS : isAppointment ? APPOINTMENT_SCENARIOS : SCENARIOS
+  const outputDefinitions = isHr ? HR_OUTPUTS : isRag ? RAG_OUTPUTS : isReception ? RECEPTION_OUTPUTS : isWelcome ? WELCOME_OUTPUTS : isAppointment ? APPOINTMENT_OUTPUTS : OUTPUTS
+  const [scenario, setScenario] = useState<Scenario>(isHr ? 'review-ready' : isRag ? 'answer' : isReception ? 'availability' : isWelcome ? 'submitted' : isAppointment ? 'upcoming' : 'qualified')
   const [selection, setSelection] = useState<{ id: string; cursor: number } | null>(null)
   const [outputChoice, setOutputChoice] = useState<{ id: string; cursor: number } | null>(null)
   const [cursor, setCursor] = useState(-1)
@@ -264,7 +278,7 @@ function WorkflowReplay({ workflowId }: { workflowId?: string }) {
   const [phase, setPhase] = useState<'action' | 'connector'>('action')
   const remaining = useRef<number | null>(null)
   const replayVersion = useRef(0)
-  const plan = isWelcome ? welcomePlan(scenario as WelcomeScenario) : isAppointment ? appointmentPlan(scenario as AppointmentScenario) : ['form', 'crm', 'sheet', 'qualify', 'route', scenario === 'nurture' ? 'nurture' : 'booking', 'telegram', 'channel', ...(scenario === 'email-only' ? [] : ['whatsapp']), 'gmail']
+  const plan = isHr ? hrPlan(scenario as HrScenario) : isRag ? ragPlan(scenario as RagScenario) : isReception ? receptionPlan(scenario as ReceptionScenario) : isWelcome ? welcomePlan(scenario as WelcomeScenario) : isAppointment ? appointmentPlan(scenario as AppointmentScenario) : ['form', 'crm', 'sheet', 'qualify', 'route', scenario === 'nurture' ? 'nurture' : 'booking', 'telegram', 'channel', ...(scenario === 'email-only' ? [] : ['whatsapp']), 'gmail']
   useEffect(() => {
     if (!running) return
     const version = replayVersion.current
@@ -329,34 +343,83 @@ function WorkflowReplay({ workflowId }: { workflowId?: string }) {
     if (node.id === 'review') Object.assign(output, { reviewed: true, approved: scenario !== 'clarification' })
     if (node.id === 'intake' && scenario === 'clarification') output.goal = 'Improve the business — scope to clarify'
   }
+  if (isReception) {
+    const toolByScenario: Record<ReceptionScenario, string> = { availability: 'GetSlots', book: 'BookSlots', reschedule: 'UpdateSlots', cancel: 'cancelSlots', 'call-results': 'call_results' }
+    const tool = toolByScenario[scenario as ReceptionScenario]
+    if (node.id === 'voice-webhook') { input.tool = tool; output.tool = tool }
+    if (node.id === 'route-tool') { input.requested_tool = tool; output.branch = scenario }
+    const result = RECEPTION_RESULTS[scenario as ReceptionScenario]
+    const requestedTime = scenario === 'availability' ? '2026-10-15T10:30:00+08:00' : scenario === 'book' ? '2026-10-15T11:00:00+08:00' : scenario === 'reschedule' ? '2026-10-15T14:30:00+08:00' : null
+    if (node.id === 'voice-webhook') { input.requested_time = requestedTime; if (['reschedule', 'cancel'].includes(scenario)) input.appointment_id = RECEPTION_LEAD.appointmentId }
+    if (node.id === 'code-arguments') { input.raw_time = requestedTime; output.requested_time = requestedTime; output.tool = tool }
+    if (node.id === 'log-booking') { Object.assign(input, { operation: scenario, appointment_id: ['reschedule', 'cancel'].includes(scenario) ? RECEPTION_LEAD.appointmentId : null }); Object.assign(output, { record_id: result.recordId, status: result.status, appointment: result.appointment, operation: ['reschedule', 'cancel'].includes(scenario) ? 'Update existing record' : 'Create record' }) }
+    if (node.id === 'send-email') Object.assign(output, { subject: result.subject, message: result.emailBody, link: result.link })
+    if (node.id === 'respond-voice') { input.status = result.status; output.message = result.reply }
+  }
+  if (isRag) {
+    if (scenario === 'add') {
+      if (node.id === 'drive-trigger') Object.assign(output, { event: 'added', version: 'v1' })
+      if (node.id === 'download-document') Object.assign(output, { text: RAG_FIXTURE.excerpt, version: 'v1' })
+      if (node.id === 'split-document') { input.version = 'v1'; Object.assign(output, { chunks: 3, excerpt: RAG_FIXTURE.excerpt }) }
+      if (node.id === 'embed-document') { input.chunks = 3; output.embedded_chunks = 3 }
+      if (node.id === 'upsert-vectors') { input.version = 'v1'; Object.assign(output, { removed_old_chunks: 0, active_chunks: 3, version: 'v1' }) }
+      if (node.id === 'sync-complete') Object.assign(output, { status: 'Indexed', active_chunks: 3, version: 'v1' })
+    }
+    if (scenario === 'no-source') {
+      if (['chat-trigger', 'rag-agent'].includes(node.id)) output.question = RAG_FIXTURE.missingQuestion
+      if (['rag-agent', 'retrieval'].includes(node.id)) input.question = RAG_FIXTURE.missingQuestion
+      if (node.id === 'retrieval') { input.query = RAG_FIXTURE.missingQuestion; Object.assign(output, { matches: 0 }); delete output.source; delete output.excerpt; delete output.page }
+      if (node.id === 'source-check') { input.matches = 0; output.supported = false }
+    }
+    if (scenario === 'archive') {
+      if (node.id === 'drive-trigger') Object.assign(output, { event: 'archived', version: 'v1' })
+      if (node.id === 'sync-complete') Object.assign(output, { status: 'Archived', active_chunks: 0 })
+    }
+    if (scenario === 'refresh' && node.id === 'sync-complete') Object.assign(output, { status: 'Indexed', active_chunks: 4, version: 'v2' })
+  }
+  if (isHr) {
+    const missing = scenario === 'missing-detail'
+    const approvedInterview = scenario === 'interview-approved'
+    if (missing) {
+      if (node.id === 'hr-read-cv') output.text = HR_FIXTURE.missingSummary
+      if (node.id === 'hr-evidence') output.crm = 'Not stated · clarification needed'
+      if (node.id === 'hr-review-packet') output.summary = HR_FIXTURE.missingSummary
+    }
+    if (node.id === 'hr-approval') { input.recruiter_action = approvedInterview ? 'Interview approved' : missing ? 'Clarify detail' : 'Review pending'; output.interview_approved = approvedInterview }
+    if (node.id === 'hr-log') output.status = approvedInterview ? 'Interview scheduled' : missing ? 'Follow-up requested' : 'Awaiting recruiter review'
+    if (node.id === 'hr-job-approval') { input.recruiter_approved = scenario === 'publish-approved'; output.publish_allowed = scenario === 'publish-approved' }
+  }
   const reset = () => { replayVersion.current += 1; remaining.current = null; setPhase('action'); setRunning(false); setCursor(-1); setSelection(null); setOutputChoice(null) }
   return <section className="workflow-page workflow-detail" aria-labelledby="journey-title">
-    <header className="journey-heading"><div><Link className="workflow-back" to="/work-in-action">← All workflows</Link><h1 id="journey-title">{workflow.title.replace(/ System$/, '')} <em>System.</em></h1><p>{isWelcome ? 'From a new client to a clear intake and a confident team handoff.' : isAppointment ? 'A GoHighLevel workflow for confirmations, timely reminders and cancellation checks.' : 'A GoHighLevel workflow, from form submission to personal follow-up.'}</p></div><span className="workflow-badge">GoHighLevel demo</span></header>
-    <WorkflowCanvas workflow={workflow} statuses={statuses} selected={selected} onSelect={selectNode} playing={running} activeNodeId={plan[cursor]} transfer={phase === 'connector' && cursor < plan.length - 1 ? { from: plan[cursor], to: plan[cursor + 1] } : null} speed={speed} plan={plan} contactName={isWelcome ? CLIENT.name : isAppointment ? APPOINTMENT.name : SAMPLE_LEAD.name} controls={
+    <header className="journey-heading"><div><Link className="workflow-back" to="/work-in-action">← All workflows</Link><h1 id="journey-title">{workflow.title.replace(/ System$/, '')} <em>{isHr ? 'with AI.' : 'System.'}</em></h1><p>{isHr ? 'Prepare CV evidence, follow-up emails, approved interviews and job drafts while the recruiter stays in control.' : isRag ? 'A document-grounded assistant that answers repeat questions and keeps its knowledge in sync with Google Drive.' : isReception ? 'A simulated n8n voice receptionist that checks, books, reschedules, cancels and records appointments.' : isWelcome ? 'From a new client to a clear intake and a confident team handoff.' : isAppointment ? 'A GoHighLevel workflow for confirmations, timely reminders and cancellation checks.' : 'A GoHighLevel workflow, from form submission to personal follow-up.'}</p></div><span className="workflow-badge">{isN8nDemo ? 'n8n demo' : 'GoHighLevel demo'}</span></header>
+    <WorkflowCanvas workflow={workflow} statuses={statuses} selected={selected} onSelect={selectNode} playing={running} activeNodeId={plan[cursor]} transfer={phase === 'connector' && cursor < plan.length - 1 ? { from: plan[cursor], to: plan[cursor + 1] } : null} speed={speed} plan={plan} contactName={isHr ? HR_FIXTURE.applicant : isRag ? 'Maya · knowledge assistant' : isReception ? RECEPTION_LEAD.caller : isWelcome ? CLIENT.name : isAppointment ? APPOINTMENT.name : SAMPLE_LEAD.name} controls={
       <div className="journey-command">
         <fieldset className="journey-scenarios"><legend>Choose a scenario</legend><div>{scenarios.map((item) => <button key={item.id} type="button" aria-pressed={scenario === item.id} disabled={running} onClick={() => { reset(); setScenario(item.id) }}>{item.label}</button>)}</div><p>{scenarios.find((item) => item.id === scenario)?.description}</p></fieldset>
         <div className="journey-command__actions"><fieldset className="journey-speed"><legend>Replay speed</legend><div>{[1, 2, 4].map((value) => <button key={value} type="button" aria-label={`${value}× replay speed`} aria-pressed={speed === value} onClick={() => setSpeed(value)}>{value}×</button>)}</div></fieldset>
-          <button className="workflow-primary journey-run" type="button" onClick={() => { if (running) setRunning(false); else { if (finished || !started) { replayVersion.current += 1; remaining.current = null; setPhase('action'); setCursor(0); setSelection(null); setOutputChoice(null) } setRunning(true) } }}>{running ? 'Ⅱ Pause' : finished ? '↻ Run again' : started ? '▶ Resume' : '▶ Test workflow'}</button>
+          <button className="workflow-primary journey-run" type="button" onClick={() => { if (running) setRunning(false); else { if (finished || !started) { replayVersion.current += 1; remaining.current = null; setPhase('action'); setCursor(0); setSelection(null); setOutputChoice(null) } setRunning(true) } }}>{running ? 'Ⅱ Pause' : finished ? '↻ Run again' : started ? '▶ Resume' : isN8nDemo ? 'Execute workflow' : '▶ Test workflow'}</button>
           <button className="journey-reset" type="button" onClick={reset}>Reset</button>
         </div>
       </div>
     }>
-      <div className="journey-progress"><p role="status">{finished ? '✓ Test complete' : running ? phase === 'connector' ? `Proceeding to · ${workflow.nodes.find((item) => item.id === plan[cursor + 1])?.title}` : `${workflow.nodes.find((item) => item.id === plan[cursor])?.icon === 'wait' ? 'Fast-forwarding simulated wait' : isAppointment && plan[cursor] === 'stop' ? 'Showing native exit' : 'Executing'} · ${workflow.nodes.find((item) => item.id === plan[cursor])?.title}` : started ? 'Ⅱ Test paused' : 'Ready · choose a scenario and press Test workflow'}</p><span>{completed + interrupted} / {plan.length} steps {interrupted ? 'processed' : 'completed'}</span><progress max={plan.length} value={completed + interrupted} aria-label="Replay progress" /></div>
+      <div className="journey-progress"><p role="status">{finished ? '✓ Test complete' : running ? phase === 'connector' ? `Proceeding to · ${workflow.nodes.find((item) => item.id === plan[cursor + 1])?.title}` : `${workflow.nodes.find((item) => item.id === plan[cursor])?.icon === 'wait' ? 'Fast-forwarding simulated wait' : isAppointment && plan[cursor] === 'stop' ? 'Showing native exit' : isN8nDemo ? 'Executing n8n node' : 'Executing'} · ${workflow.nodes.find((item) => item.id === plan[cursor])?.title}` : started ? 'Ⅱ Test paused' : `Ready · choose a scenario and press ${isN8nDemo ? 'Execute workflow' : 'Test workflow'}`}</p><span>{completed + interrupted} / {plan.length} steps {interrupted ? 'processed' : 'completed'}</span><progress max={plan.length} value={completed + interrupted} aria-label="Replay progress" /></div>
       <div className="journey-dock">
         <section className="journey-step" aria-labelledby="journey-node-title"><header><span className="workflow-eyebrow">Selected step · {node.tool}</span><span className="journey-status" data-status={statuses[node.id]}>{statuses[node.id] === 'Running' && !running ? 'Paused' : statuses[node.id]}</span></header><h2 id="journey-node-title">{node.title}</h2><p>{node.description}</p>
-          <details className="journey-step__data" key={node.id}><summary>Inspect sample input & output</summary><div><h3>Input</h3><pre>{started && statuses[node.id] !== 'Waiting' && statuses[node.id] !== 'Skipped' ? JSON.stringify(input, null, 2) : 'Input will arrive when this step runs.'}</pre><h3>Output</h3><pre>{statuses[node.id] === 'Completed' ? JSON.stringify(output, null, 2) : statuses[node.id] === 'Interrupted' ? 'Wait interrupted: HighLevel automatically removed the contact after cancellation.' : statuses[node.id] === 'Skipped' ? 'Skipped for this scenario.' : 'Output appears after this step completes.'}</pre></div></details>
+            <details className="journey-step__data" key={node.id}><summary>Inspect sample input & output</summary><div><h3>Input</h3><pre>{started && statuses[node.id] !== 'Waiting' && statuses[node.id] !== 'Skipped' ? JSON.stringify(input, null, 2) : 'Input will arrive when this step runs.'}</pre><h3>Output</h3><pre>{statuses[node.id] === 'Completed' ? JSON.stringify(output, null, 2) : statuses[node.id] === 'Interrupted' ? isReception ? 'Tool call interrupted before the voice response.' : 'Wait interrupted: HighLevel automatically removed the contact after cancellation.' : statuses[node.id] === 'Skipped' ? 'Skipped for this scenario.' : 'Output appears after this step completes.'}</pre></div></details>
         </section>
-        <section className="journey-live" aria-labelledby="journey-outputs-title"><header className="journey-live__head"><h2 id="journey-outputs-title">Live outputs</h2><span>{availableOutputs.length ? 'Sample data · select to review' : 'Appear as each step completes'}</span></header>
+        {isReception && <ReceptionOutputs statuses={statuses} scenario={scenario as ReceptionScenario} visibleId={visibleOutput} onSelect={(id) => setOutputChoice({ id, cursor })} />}
+        {isHr && <HrOutputs statuses={statuses} scenario={scenario as HrScenario} visibleId={visibleOutput} onSelect={(id) => setOutputChoice({ id, cursor })} />}
+        {isRag && <RagOutputs statuses={statuses} scenario={scenario as RagScenario} visibleId={visibleOutput} onSelect={(id) => setOutputChoice({ id, cursor })} />}
+        <section className="journey-live" hidden={isN8nDemo} aria-labelledby="journey-outputs-title"><header className="journey-live__head"><h2 id="journey-outputs-title">Live outputs</h2><span>{availableOutputs.length ? 'Sample data · select to review' : 'Appear as each step completes'}</span></header>
           {availableOutputs.length > 0 && <div className="journey-output-picker" role="group" aria-label="Completed app outputs">{availableOutputs.map((item) => <button type="button" key={item.id} aria-pressed={visibleOutput === item.id} onClick={() => setOutputChoice({ id: item.id, cursor })}>{item.label}<span aria-hidden="true"> ✓</span></button>)}</div>}
-          <div className="journey-live__body" data-lenis-prevent tabIndex={0} aria-label="Live output viewer">{visibleOutput ? isWelcome ? <WelcomeOutputs key={visibleOutput} statuses={statuses} scenario={scenario as WelcomeScenario} visibleId={visibleOutput} /> : isAppointment ? <AppointmentOutputs key={visibleOutput} statuses={statuses} scenario={scenario as AppointmentScenario} visibleId={visibleOutput} /> : <AppOutputs key={visibleOutput} statuses={statuses} scenario={scenario as LeadScenario} visibleId={visibleOutput} /> : <div className="journey-output-empty"><span aria-hidden="true">↗</span><h3>{started ? isWelcome ? 'Confirming the new client…' : isAppointment ? 'Receiving the booking…' : 'Capturing the inquiry…' : 'Watch the work take shape.'}</h3><p>{started ? isWelcome ? 'The CRM record appears when the Won trigger completes.' : isAppointment ? 'The calendar booking appears when the trigger completes.' : 'The sample form will appear when Form submitted completes.' : 'Test a scenario. Outputs appear here only as their steps complete.'}</p></div>}</div>
+           <div className="journey-live__body" data-lenis-prevent tabIndex={0} aria-label="Live output viewer">{visibleOutput ? isWelcome ? <WelcomeOutputs key={visibleOutput} statuses={statuses} scenario={scenario as WelcomeScenario} visibleId={visibleOutput} /> : isAppointment ? <AppointmentOutputs key={visibleOutput} statuses={statuses} scenario={scenario as AppointmentScenario} visibleId={visibleOutput} /> : <AppOutputs key={visibleOutput} statuses={statuses} scenario={scenario as LeadScenario} visibleId={visibleOutput} /> : <div className="journey-output-empty"><span aria-hidden="true">↗</span><h3>{started ? isReception ? 'Returning the voice result…' : isWelcome ? 'Confirming the new client…' : isAppointment ? 'Receiving the booking…' : 'Capturing the inquiry…' : 'Watch the work take shape.'}</h3><p>{started ? isReception ? 'The response payload appears when the selected n8n path reaches Respond to Webhook.' : isWelcome ? 'The CRM record appears when the Won trigger completes.' : isAppointment ? 'The calendar booking appears when the trigger completes.' : 'The sample form will appear when Form submitted completes.' : 'Test a scenario. Outputs appear here only as their steps complete.'}</p></div>}</div>
         </section>
       </div>
       <details className="journey-execution"><summary>Execution log <span>{completed} completed{interrupted ? ` · ${interrupted} interrupted` : ''}{started ? ` · ${workflow.nodes.length - plan.length} skipped` : ''}</span></summary><ol>{workflow.nodes.map((item, index) => <li key={item.id} data-status={statuses[item.id]}><button type="button" aria-pressed={selected === item.id} onClick={() => selectNode(item.id)}><span>{String(index + 1).padStart(2, '0')}</span><b>{item.title}</b><small>{statuses[item.id]}</small></button></li>)}</ol></details>
-      <p className="journey-demo-note">Simulated replay · fictional data · no live records or messages. {isWelcome ? 'Waits and human review are simulated; no actual days elapse.' : isAppointment ? 'Wait steps are fast-forwarded; no actual hours or days elapse.' : 'Booking links are examples.'}</p>
+      <p className="journey-demo-note">Simulated replay · fictional data · no live records or messages. {isHr ? 'CV evidence, reviewer approvals, emails and postings are simulated.' : isRag ? 'Chat answers, document passages and database updates are fictional fixtures.' : isReception ? 'Calendar, voice and Airtable requests are deterministic fixtures.' : isWelcome ? 'Waits and human review are simulated; no actual days elapse.' : isAppointment ? 'Wait steps are fast-forwarded; no actual hours or days elapse.' : 'Booking links are examples.'}</p>
     </WorkflowCanvas>
     <details className="journey-reference"><summary>Workflow breakdown & integrations</summary><section className="journey-breakdown" aria-labelledby="journey-breakdown-title"><header className="workflow-section-head"><span className="workflow-eyebrow">Behind the workflow</span><h2 id="journey-breakdown-title">A journey your team can follow.</h2></header>
-      <div className="journey-breakdown__grid">{isWelcome ? <><article><b>01 / Welcome</b><h3>Give the client a clear first step.</h3><p>A Won opportunity starts the welcome email with an intake link. A real setup filters the right pipeline and avoids duplicate enrollment.</p></article><article><b>02 / Collect & review</b><h3>Wait for useful details.</h3><p>A companion Form Submitted workflow marks intake received. A conditional wait has a two-day timeout. A human review decides whether setup is ready or clarification is needed.</p></article><article><b>03 / Hand off</b><h3>Start with an approved intake.</h3><p>Approved clients move to Ready for setup and notify the assigned user. Overdue clients receive one reminder; unclear goals receive a focused question. Neither path starts setup.</p></article></> : isAppointment ? <><article><b>01 / Confirm the booking</b><h3>Make the appointment clear.</h3><p>A regular HighLevel calendar booking starts the workflow. The first email confirms the date, timezone, duration and meeting details.</p></article><article><b>02 / Time the reminders</b><h3>Send the right message at the right time.</h3><p>Appointment-based waits schedule the 24-hour email and 1-hour SMS. A past 24-hour wait jumps to the later reminder, avoiding a late “tomorrow” message.</p></article><article><b>03 / Check before sending</b><h3>Respect cancelled appointments.</h3><p>HighLevel automatically removes the contact when the booking is cancelled, interrupting the active wait. Status checks also guard the reminder path. Real waits are compressed into seconds; the cancellation card is a demo event marker.</p></article></> : <><article><b>01 / Capture & organise</b><h3>Give every inquiry a home.</h3><p>The HighLevel form creates the contact. Workflow actions organise the opportunity and hand data to the external lead-register integration.</p></article><article><b>02 / Assess & route</b><h3>Choose a useful next step.</h3><p>Contact fields and an If / Else condition determine readiness. The Yes branch prepares discovery; the No branch asks for more context.</p></article><article><b>03 / Communicate & hand off</b><h3>Keep people in the loop.</h3><p>HighLevel sends the personal follow-up. A webhook integration alerts the team in Telegram; the Gmail preview represents the recipient’s inbox.</p></article></>}</div>
-      <div className="journey-integrations"><h3>Tools & integrations</h3><div className="workflow-tools">{workflow.tools.map((tool) => <span key={tool}><ToolMark tool={tool} />{tool}</span>)}</div><p>{isWelcome ? 'Built around Opportunity Status Changed, Send Email, conditional Wait, If / Else, Update Opportunity and Internal Notification. A companion form workflow updates intake fields. Production needs team ownership of the review fields, sending configuration and tested enrollment rules.' : isAppointment ? 'Built around HighLevel Calendar, Send Email, Send SMS, appointment-based Wait and If / Else actions, plus native cancellation handling. A real setup needs sending services, correct timezone settings and messaging consent. The sample demonstrates regular appointments, not recurring bookings or rescheduling.' : 'GoHighLevel is the workflow platform. Google Sheets and Telegram are illustrated external webhook handoffs. Messaging assumes the required connections and consent.'} The moving outline, connector replay and speed controls are portfolio-demo features.</p></div>
+      <div className="journey-breakdown__grid">{isHr ? <><article><b>01 / Organize the evidence</b><h3>Make CV review easier.</h3><p>Extract the application and summarize explicit job-related evidence with CV references. Missing details become clarification questions, not automatic rejections.</p></article><article><b>02 / Coordinate the next step</b><h3>Act on the recruiter’s decision.</h3><p>A human approval gates interview scheduling. The confirmed sample time creates a Calendar event and Gmail invitation; the same application record tracks the outcome.</p></article><article><b>03 / Prepare job postings</b><h3>Draft first, approve before publishing.</h3><p>An employer brief drives the job draft. Unapproved drafts stay internal. Only the approved-posting scenario shows publication to a simulated careers page.</p></article></> : isRag ? <><article><b>01 / Find the evidence</b><h3>Answer from business documents.</h3><p>The chat triggers an agent retrieval request against active Supabase document chunks. Matching passages keep their document title, version and page.</p></article><article><b>02 / Answer responsibly</b><h3>Show where the answer comes from.</h3><p>The OpenRouter model produces a cited answer from the retrieved policy. If no source supports the question, the assistant asks the team rather than inventing an answer.</p></article><article><b>03 / Keep knowledge current</b><h3>Replace edited sources and remove archives.</h3><p>Google Drive changes start a separate sync path. Updated files are chunked and embedded; the old version is replaced using the file ID. Archived files are removed from retrieval.</p></article></> : isReception ? <><article><b>01 / Receive the call</b><h3>Turn a voice request into one predictable payload.</h3><p>Vapi calls an n8n webhook. A JavaScript transform normalizes the tool name, caller details, requested time and business timezone before any calendar action runs.</p></article><article><b>02 / Do the operational work</b><h3>Make each receptionist tool explicit.</h3><p>An If router sends GetSlots, BookSlots, UpdateSlots, cancelSlots or call_results down a visible path. Calendar and Airtable steps are deterministic in this portfolio demo, so the visitor can inspect the data contract.</p></article><article><b>03 / Respond and record</b><h3>Return a clear answer to the caller.</h3><p>Respond to Webhook sends a compact result back to Vapi. A production build adds credential management, idempotency, timezone validation, retries and safe handling for unavailable slots.</p></article></> : isWelcome ? <><article><b>01 / Welcome</b><h3>Give the client a clear first step.</h3><p>A Won opportunity starts the welcome email with an intake link. A real setup filters the right pipeline and avoids duplicate enrollment.</p></article><article><b>02 / Collect & review</b><h3>Wait for useful details.</h3><p>A companion Form Submitted workflow marks intake received. A conditional wait has a two-day timeout. A human review decides whether setup is ready or clarification is needed.</p></article><article><b>03 / Hand off</b><h3>Start with an approved intake.</h3><p>Approved clients move to Ready for setup and notify the assigned user. Overdue clients receive one reminder; unclear goals receive a focused question. Neither path starts setup.</p></article></> : isAppointment ? <><article><b>01 / Confirm the booking</b><h3>Make the appointment clear.</h3><p>A regular HighLevel calendar booking starts the workflow. The first email confirms the date, timezone, duration and meeting details.</p></article><article><b>02 / Time the reminders</b><h3>Send the right message at the right time.</h3><p>Appointment-based waits schedule the 24-hour email and 1-hour SMS. A past 24-hour wait jumps to the later reminder, avoiding a late “tomorrow” message.</p></article><article><b>03 / Check before sending</b><h3>Respect cancelled appointments.</h3><p>HighLevel automatically removes the contact when the booking is cancelled, interrupting the active wait. Status checks also guard the reminder path. Real waits are compressed into seconds; the cancellation card is a demo event marker.</p></article></> : <><article><b>01 / Capture & organise</b><h3>Give every inquiry a home.</h3><p>The HighLevel form creates the contact. Workflow actions organise the opportunity and hand data to the external lead-register integration.</p></article><article><b>02 / Assess & route</b><h3>Choose a useful next step.</h3><p>Contact fields and an If / Else condition determine readiness. The Yes branch prepares discovery; the No branch asks for more context.</p></article><article><b>03 / Communicate & hand off</b><h3>Keep people in the loop.</h3><p>HighLevel sends the personal follow-up. A webhook integration alerts the team in Telegram; the Gmail preview represents the recipient’s inbox.</p></article></>}</div>
+      <div className="journey-integrations"><h3>Tools & integrations</h3><div className="workflow-tools">{workflow.tools.map((tool) => <span key={tool}><ToolMark tool={tool} />{tool}</span>)}</div><p>{isHr ? 'n8n coordinates AI-assisted drafting and recruitment admin. Google Drive supplies CV text; Airtable stores review packets and application status; Gmail and Calendar handle approved next steps. A live setup needs applicant access controls, data-retention rules and reliable approval and scheduling checks.' : isRag ? 'n8n orchestrates the chat and document sync paths. OpenRouter represents model generation; Supabase (pgvector) represents read-only retrieval and separate indexing operations. Production requires source access controls, consistent embedding configuration, file version handling and tested sync failures.' : isReception ? 'n8n is the orchestration layer. Vapi represents the voice agent, Google Calendar represents availability and appointment mutations, and Airtable represents the operations log. A real deployment needs credentials, retries, idempotency, timezone rules, consent and a tested failure path.' : isWelcome ? 'Built around Opportunity Status Changed, Send Email, conditional Wait, If / Else, Update Opportunity and Internal Notification. A companion form workflow updates intake fields. Production needs team ownership of the review fields, sending configuration and tested enrollment rules.' : isAppointment ? 'Built around HighLevel Calendar, Send Email, Send SMS, appointment-based Wait and If / Else actions, plus native cancellation handling. A real setup needs sending services, correct timezone settings and messaging consent. The sample demonstrates regular appointments, not recurring bookings or rescheduling.' : 'GoHighLevel is the workflow platform. Google Sheets and Telegram are illustrated external webhook handoffs. Messaging assumes the required connections and consent.'} The moving outline, connector replay and speed controls are portfolio-demo features.</p></div>
       <p className="workflow-disclaimer">This is an illustrative portfolio example, not measured client results or a live production workflow.</p>
     </section></details>
   </section>

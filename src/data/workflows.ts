@@ -1,13 +1,17 @@
 import { APPOINTMENT_WORKFLOW } from './appointment-care'
 import { WELCOME_WORKFLOW } from './client-welcome'
+import { RECEPTION_WORKFLOW } from './n8n-receptionist'
+import { RAG_WORKFLOW } from './basic-rag'
+import { HR_WORKFLOW } from './hr-assistant'
 
 export type WorkflowNode = {
   id: string; title: string; subtitle: string; symbol: string; tool: string
   icon?: 'calendar' | 'email' | 'wait' | 'condition' | 'sms' | 'stop'
+  nodeType?: 'trigger' | 'action' | 'condition' | 'webhook' | 'transform' | 'wait' | 'response'
   x: number; y: number; description: string; input: Record<string, unknown>; output: Record<string, unknown>
 }
 export type WorkflowDefinition = {
-  id: string; title: string; category: string; platform: 'GoHighLevel'; summary: string; tools: string[]; canvasHeight?: number
+  id: string; title: string; category: string; platform: 'GoHighLevel' | 'n8n'; summary: string; tools: string[]; canvasHeight?: number
   nodes: WorkflowNode[]; edges: { from: string; to: string; label?: string }[]
 }
 
@@ -54,7 +58,7 @@ export const WORKFLOWS: WorkflowDefinition[] = [{
     { from: 'booking', to: 'telegram' }, { from: 'nurture', to: 'telegram' },
     { from: 'telegram', to: 'channel' }, { from: 'channel', to: 'whatsapp', label: 'Yes · WhatsApp' }, { from: 'channel', to: 'gmail', label: 'No · Email only' }, { from: 'whatsapp', to: 'gmail' },
   ],
-}, APPOINTMENT_WORKFLOW, WELCOME_WORKFLOW]
+}, APPOINTMENT_WORKFLOW, WELCOME_WORKFLOW, RECEPTION_WORKFLOW, RAG_WORKFLOW, HR_WORKFLOW]
 
 export const TOOL_ICONS: Record<string, string> = {
   GoHighLevel: '/icons/gohighlevel.png', n8n: '/icons/ai/n8n.svg', Make: '/icons/thesvg/make.svg',

@@ -1,0 +1,8 @@
+.hr-outputs .hr-review dl > div { display: grid; grid-template-columns: minmax(110px, .8fr) minmax(0, 1fr); gap: 12px; }
+.hr-outputs .hr-job h4 { margin: 16px 0 8px; font-size: 13px; }
+.hr-outputs .hr-job ul { padding-left: 20px; margin: 0 0 14px; }
+.hr-outputs .hr-job li { margin-bottom: 6px; }
+.hr-outputs a { color: var(--wf-accent); text-decoration: underline; }
+.hr-record table { min-width: 680px; }
+.hr-outputs .reception-gallery { overflow-wrap: anywhere; }
+.hr-outputs .hr-email { font-size: 12px; }

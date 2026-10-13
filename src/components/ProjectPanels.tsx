@@ -16,10 +16,10 @@ const FunnelBarrel = lazy(() => import('./FunnelBarrel'))
  * dialog to click into.
  */
 
-/** Only the strip of macOS windows, drifting on the backdrop. No window. */
+/** Scrolling workflow screenshots with SVG badges and a full-size viewer. */
 export function AutomationsPanel() {
   return (
-    <div className="ppanel ppanel--strip">
+    <div className="ppanel ppanel--gallery">
       <WorkflowSamples />
     </div>
   )

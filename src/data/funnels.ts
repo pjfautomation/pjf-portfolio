@@ -25,14 +25,6 @@ const funnel = (n: string, tag: FunnelTag): Funnel => ({
   desc: 'PLACEHOLDER - tell me what to put here: who this page was for and what it does.',
 })
 
-const site = (n: string): Funnel => ({
-  file: `placeholder-site-${n}.html`,
-  label: `Placeholder Website ${n}`,
-  tag: 'Website',
-  desc: 'PLACEHOLDER - tell me what to put here: the client, the industry, and what the site had to do.',
-  dir: 'samples',
-})
-
 export const gymFunnel: Funnel[] = [
   funnel('01', 'Lead Capture'),
   funnel('02', 'Checkout'),
@@ -45,7 +37,12 @@ export const bookingFunnel: Funnel[] = [
   funnel('06', 'Booking'),
 ]
 
-export const websiteFunnel: Funnel[] = ['01', '02', '03', '04', '05', '06'].map(site)
+export const websiteFunnel: Funnel[] = [
+  { file: 'relay-studio.html', label: 'Relay Studio · Agency', tag: 'Website', dir: 'samples', desc: 'An agency landing page that connects a clear offer with an inquiry journey and a systems-review request.' },
+  { file: 'next-chapter.html', label: 'Next Chapter · Coaching', tag: 'Website', dir: 'samples', desc: 'A portrait-led career coaching page with a six-week program and an introduction-call request.' },
+  { file: 'sunday-home.html', label: 'Sunday Home · Cleaning', tag: 'Website', dir: 'samples', desc: 'A home cleaning page with clear service scopes and a local quote-request preview.' },
+  { file: 'fieldwork.html', label: 'Fieldwork · Ecommerce', tag: 'Website', dir: 'samples', desc: 'A backpack product page with color selection, quantity controls and a local cart preview.' },
+]
 
 /**
  * Tag -> color map. Brand-external colors that identify the page type, passed

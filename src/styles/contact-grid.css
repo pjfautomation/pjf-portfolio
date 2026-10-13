@@ -6,6 +6,25 @@
    ============================================ */
 
 .cgrid__glass { min-height: 0; }
+.cgrid--booking .cgrid__glass { height: auto; min-height: 0; grid-template-rows: auto; }
+.cgrid--booking .cgrid__calendar { display: flex; flex-direction: column; min-width: 0; padding: 12px; gap: 8px; }
+.cgrid__calendar-head { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+.cgrid__calendar-head h2 { margin: 0 0 8px; font-size: 23px; }
+.cgrid__calendar-head p { color: var(--muted); font-size: 14px; margin: 0 0 10px; }
+.cgrid__calendar-head a { color: var(--orange-ink); font-size: 13px; text-decoration: underline; text-underline-offset: 3px; }
+.cgrid__calendar-viewport { --calendar-scale: 1; position: relative; height: 760px; min-height: 0; background: #fff; border-radius: 12px; }
+.cgrid__calendar-frame { position: absolute; inset: 0 auto auto 0; display: block; width: calc(100% / var(--calendar-scale)); height: calc(100% / var(--calendar-scale)); transform: scale(var(--calendar-scale)); transform-origin: top left; border: 0; border-radius: 12px; background: #fff; }
+@media (max-width: 639px) { .cgrid--booking .cgrid__calendar { padding: 8px; } }
+@media (min-width: 1100px) {
+  .cgrid--booking { height: 100%; min-height: 700px; grid-template-rows: auto minmax(0, 1fr); padding-block: 12px; gap: 12px; }
+  .cgrid--booking .cgrid__glass { height: 100%; grid-template-rows: minmax(0, 1fr); padding: 8px; }
+  .cgrid--booking .cgrid__calendar-head h2 { margin: 0; }
+  .cgrid--booking .pgrid__head { gap: 4px; }
+  .cgrid--booking .pgrid__title { font-size: 32px; }
+  .cgrid--booking .pgrid__lede { font-size: 14px; }
+  .cgrid--booking .cgrid__calendar-head { flex: 0 0 auto; }
+  .cgrid--booking .cgrid__calendar-viewport { height: auto; flex: 1 1 0; }
+}
 
 @media (min-width: 1100px) {
   .cgrid__glass {

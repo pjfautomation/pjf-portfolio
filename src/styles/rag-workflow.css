@@ -1,0 +1,13 @@
+.rag-document { padding: 20px; font-size: 12px; line-height: 1.8; }
+.rag-document h3 { font-size: 16px; margin: 10px 0; }
+.rag-document p { margin-bottom: 12px; color: var(--wf-muted); }
+.rag-document blockquote { margin: 14px 0; padding: 14px; background: var(--wf-soft); border-left: 3px solid var(--wf-accent); }
+.rag-document small, .rag-file-type { font-size: 10px; color: var(--wf-muted); }
+.rag-document dl > div { display: flex; gap: 18px; padding: 8px 0; border-bottom: 1px solid var(--wf-line); }
+.rag-document dd { margin: 0; overflow-wrap: anywhere; }
+.rag-chat .reception-conversation { background: var(--wf-stage); }
+.rag-answer { max-width: 100%; }
+.rag-pending { font-size: 12px; color: var(--wf-muted); padding: 16px; }
+.workflow-page .rag-citation { font-size: 11px; margin-top: 12px; color: var(--wf-accent); min-height: 32px; text-align: left; }
+.rag-knowledge table { min-width: 480px; }
+.rag-outputs .reception-gallery { overflow-wrap: anywhere; }

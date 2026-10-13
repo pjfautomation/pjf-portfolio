@@ -1,0 +1,7 @@
+.agents/
+.superpowers/
+.stitch/
+.npm-cache/
+artifacts/
+docs/
+skills-lock.json

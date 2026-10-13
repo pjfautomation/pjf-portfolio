@@ -1,0 +1,50 @@
+/* Compact gallery surfaces sit against the existing botanical background. */
+.workflow-library { --wf-surface: #fff; --wf-soft: #eef5f0; --wf-stage: #f4f8f5; --wf-ink: #19362b; --wf-muted: #536b60; --wf-accent: #187b49; --wf-line: #d2e1d8; max-width: 1280px; }
+[data-theme='dark'] .workflow-library { --wf-surface: #182820; --wf-soft: #22372c; --wf-stage: #132219; --wf-ink: #edf7f1; --wf-muted: #b4c8bd; --wf-accent: #76d9ae; --wf-line: #354c3e; }
+.workflow-library .workflow-page__head { margin-bottom: 28px; max-width: 740px; }
+.workflow-library .workflow-page__head h1 { font-size: clamp(34px, 3.5vw, 52px); margin-bottom: 14px; }
+.workflow-library .workflow-page__head p { font-size: 15px; line-height: 1.7; max-width: 630px; }
+.workflow-library .workflow-library__toolbar { align-items: flex-end; gap: 20px; }
+.workflow-library .workflow-filters { display: flex; gap: 4px; padding: 4px; border: 1px solid var(--wf-line); border-radius: 12px; background: var(--wf-surface); }
+.workflow-library .workflow-filters button { min-height: 40px; font-size: 12px; padding: 8px 18px; border-color: transparent; background: transparent; border-radius: 8px; }
+.workflow-library .workflow-filters button[aria-pressed='true'] { background: var(--wf-accent); color: #fff; }
+[data-theme='dark'] .workflow-library .workflow-filters button[aria-pressed='true'] { color: #10251a; }
+.workflow-library .workflow-search { width: 300px; font-size: 11px; }
+.workflow-library .workflow-search input { padding: 12px 14px; border-radius: 12px; }
+.workflow-library .workflow-library__count { margin: 20px 0 14px; font-size: 11px; }
+.workflow-library .workflow-library__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.workflow-library .workflow-library__card { display: flex; flex-direction: column; border-radius: 18px; background: var(--wf-surface); border-color: var(--wf-line); box-shadow: 0 8px 28px -20px #19362b44; transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease; }
+.workflow-library .workflow-library__card:hover { transform: translateY(-3px); border-color: var(--wf-accent); box-shadow: 0 14px 30px -20px #19362b55; }
+[data-theme='dark'] .workflow-library .workflow-library__card { box-shadow: none; }
+.workflow-library .workflow-library__art { padding: 16px 20px 12px; background: var(--wf-stage); border-color: var(--wf-line); }
+.workflow-library .workflow-badge { font-size: 10px; padding: 4px 9px; }
+.workflow-library [data-platform='n8n'] .workflow-badge { color: #a33749; background: #fff0f2; border-color: #e9bbc4; }
+[data-theme='dark'] .workflow-library [data-platform='n8n'] .workflow-badge { color: #ffabb8; background: #3b2730; border-color: #65404c; }
+.workflow-library .journey-preview { padding: 18px 0 4px; gap: 28px; }
+.workflow-library .workflow-thumbnail-image { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border: 1px solid var(--wf-line); border-radius: 14px; margin-top: 12px; box-shadow: 0 10px 26px -18px #19362b99; }
+.workflow-library .journey-preview > .workflow-preview-step { border: 0; border-radius: 0; background: transparent; box-shadow: none; padding: 0; gap: 8px; flex: 1; min-width: 0; }
+.workflow-library .workflow-preview-step > svg:first-child { padding: 10px; box-sizing: content-box; background: var(--wf-surface); border: 1px solid var(--wf-line); border-radius: 12px; color: var(--wf-accent); }
+.workflow-library .workflow-preview-step small { font-size: 10px; line-height: 1.4; color: var(--wf-muted); }
+.workflow-library .workflow-preview-arrow { position: absolute; right: -23px; top: 14px; color: var(--wf-muted); opacity: .7; }
+.workflow-library .workflow-library__copy { padding: 20px; display: flex; flex-direction: column; flex: 1; }
+.workflow-library .workflow-library__copy .workflow-eyebrow { font-size: 10px; letter-spacing: .07em; margin-bottom: 10px; }
+.workflow-library .workflow-library__copy h2 { font-size: clamp(21px, 1.9vw, 27px); line-height: 1.25; letter-spacing: -.025em; margin-bottom: 10px; text-wrap: balance; }
+.workflow-library .workflow-library__copy > p { font-size: 13px; line-height: 1.65; }
+.workflow-library .workflow-tools { margin: 16px 0 18px; gap: 6px; }
+.workflow-library .workflow-tools > span { font-size: 10px; padding: 5px 8px; background: var(--wf-soft); }
+.workflow-library .workflow-tools .workflow-tools__more { border-color: transparent; background: transparent; color: var(--wf-muted); padding-inline: 3px; }
+.workflow-library .workflow-library__foot { margin-top: auto; padding-top: 14px; font-size: 11px; border-color: var(--wf-line); }
+.workflow-library .workflow-disclaimer { margin-top: 24px; font-size: 11px; }
+@media (max-width: 639px) {
+  .workflow-library .workflow-library__toolbar { flex-direction: column-reverse; align-items: stretch; gap: 12px; }
+  .workflow-library .workflow-search { width: 100%; }
+  .workflow-library .workflow-filters { align-self: flex-start; }
+  .workflow-library .workflow-filters button { padding-inline: 12px; }
+  .workflow-library .workflow-library__grid { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .workflow-library .workflow-library__art, .workflow-library .workflow-library__copy { padding: 16px; }
+  .workflow-library .workflow-library__foot { gap: 8px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .workflow-library .workflow-library__card { transition: none; }
+  .workflow-library .workflow-library__card:hover { transform: none; }
+}

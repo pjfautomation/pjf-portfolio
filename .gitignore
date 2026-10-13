@@ -2,6 +2,7 @@ node_modules
 .npm-cache
 dist
 dist-ssr
+.vercel/
 *.local
 .vscode/*
 !.vscode/extensions.json
@@ -21,6 +22,14 @@ pnpm-debug.log*
 
 # Local screenshots and one-off editing helpers; retain reusable replay checks.
 artifacts/*
+!artifacts/verify-landing-pages.cjs
 !artifacts/verify-replay-workspace.cjs
 !artifacts/verify-appointment-care.cjs
 !artifacts/verify-client-welcome.cjs
+!artifacts/verify-n8n-receptionist.cjs
+!artifacts/verify-basic-rag.cjs
+!artifacts/verify-hr-assistant.cjs
+!artifacts/verify-workflow-library.cjs
+!artifacts/verify-responsive-shell.cjs
+!artifacts/verify-automation-gallery.cjs
+

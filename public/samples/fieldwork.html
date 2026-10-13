@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      name="description"
+      content="Fieldwork Daypack: a fictional everyday backpack in Graphite and Sand. Interactive portfolio product page."
+    />
+    <title>Fieldwork — One bag for the day ahead</title>
+    <link rel="stylesheet" href="landing.css" />
+    <script src="landing.js" defer></script>
+  </head>
+  <body class="shop">
+    <a class="skip" href="#main">Skip to content</a>
+    <div class="wrap">
+      <header class="header">
+        <a class="wordmark" href="#main">FIELDWORK</a>
+        <nav aria-label="Main">
+          <a class="section-link" href="#details">The details</a
+          ><a class="section-link" href="#questions">Delivery &amp; returns</a
+          ><button class="theme" type="button" data-theme-toggle aria-label="Switch to dark theme">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              aria-hidden="true"
+            >
+              <path d="M20 14a8 8 0 0 1-10-10A8 8 0 1 0 20 14Z" />
+            </svg>
+          </button>
+        </nav>
+      </header>
+      <main id="main">
+        <section class="product">
+          <div class="mobile-purchase">
+            <strong>Fieldwork Daypack · $89</strong
+            ><a class="button" href="#purchase">Choose options</a>
+          </div>
+          <div>
+            <div class="product-photo">
+              <img
+                id="product-image"
+                src="assets/daypack-graphite.png"
+                width="1536"
+                height="1024"
+                alt="Fieldwork Daypack in Graphite, front and side view"
+              />
+            </div>
+            <div class="gallery-controls" role="group" aria-label="Product views">
+              <button type="button" data-view="front" aria-pressed="true">Front view</button
+              ><button type="button" data-view="detail" aria-pressed="false">Inside the bag</button>
+            </div>
+            <p class="note">
+              Shown in <span id="selected-color">Graphite</span> · fictional product photography
+            </p>
+          </div>
+          <div class="purchase" id="purchase">
+            <h1>One bag for the day ahead.</h1>
+            <p>
+              A place for your laptop, daily essentials and the extra layer you take everywhere.
+            </p>
+            <div class="product-title"><span>Fieldwork Daypack</span><span>$89</span></div>
+            <p class="spec">22 L · Fits laptops up to 16 inches</p>
+            <fieldset class="colors">
+              <legend>Color</legend>
+              <button type="button" data-color="Graphite" aria-pressed="true">
+                <span class="swatch" aria-hidden="true"></span>Graphite</button
+              ><button type="button" data-color="Sand" aria-pressed="false">
+                <span class="swatch sand" aria-hidden="true"></span>Sand
+              </button>
+            </fieldset>
+            <label class="quantity" for="quantity"
+              >Quantity<select id="quantity">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+              </select></label
+            ><button class="button" id="add-to-bag" type="button">Add to bag</button>
+            <div class="cart">
+              <p role="status" aria-live="polite"></p>
+              <button id="checkout" type="button" hidden>Preview checkout</button>
+            </div>
+            <p class="note">US dollars · illustrative product and price · demo bag only</p>
+          </div>
+        </section>
+        <section id="details" class="section split">
+          <div>
+            <h2>Everything has its place.</h2>
+            <p>
+              Start with your laptop. Add a notebook, headphones and the things you reach for
+              between stops. The front pocket keeps smaller items close.
+            </p>
+            <dl class="dimensions">
+              <div>
+                <dt>Capacity</dt>
+                <dd>22 L</dd>
+              </div>
+              <div>
+                <dt>Laptop compartment</dt>
+                <dd>Up to 16 inches</dd>
+              </div>
+              <div>
+                <dt>Colors</dt>
+                <dd>Graphite / Sand</dd>
+              </div>
+              <div>
+                <dt>Construction</dt>
+                <dd>Woven fabric</dd>
+              </div>
+            </dl>
+            <p class="note">
+              Illustrative specifications. Check your laptop's dimensions against the compartment
+              before a real purchase.
+            </p>
+          </div>
+          <img
+            class="feature-photo"
+            src="assets/daypack-sand.png"
+            alt="Sand Fieldwork Daypack showing the zipped front pocket, side pocket and padded shoulder strap"
+            width="1536"
+            height="1024"
+            loading="lazy"
+          />
+        </section>
+        <section class="section split">
+          <div>
+            <h2>For the things you take every day.</h2>
+            <p>
+              One main compartment for the larger items. A separate padded space for your laptop. A
+              front pocket for the smaller things that otherwise end up at the bottom.
+            </p>
+          </div>
+          <div class="rows">
+            <article>
+              <h3>The morning commute</h3>
+              <p>Laptop, charger and notebook, packed for the office and the way home.</p>
+            </article>
+            <article>
+              <h3>A change of plans</h3>
+              <p>Room for a light layer and the extras you need when the day runs longer.</p>
+            </article>
+            <article>
+              <h3>The weekend away</h3>
+              <p>A compact bag for a short trip when you want to travel with fewer things.</p>
+            </article>
+          </div>
+        </section>
+        <section id="questions" class="section split">
+          <div>
+            <h2>Before it goes in your bag.</h2>
+            <p>
+              These are example policies for this portfolio concept. No live delivery, return or
+              warranty service is offered.
+            </p>
+            <a class="quiet-link" href="#main">Choose your color and quantity</a>
+          </div>
+          <div class="faq">
+            <details>
+              <summary>How do I know my laptop will fit?</summary>
+              <p>
+                The concept includes a padded compartment for laptops up to 16 inches. A real
+                product page would provide internal measurements so you could check the exact
+                device.
+              </p>
+            </details>
+            <details>
+              <summary>Is the bag waterproof?</summary>
+              <p>No waterproof claim is made. Keep electronics protected from rain and spills.</p>
+            </details>
+            <details>
+              <summary>What happens at checkout?</summary>
+              <p>
+                The button opens a local checkout preview. It does not collect payment information,
+                place an order or transmit your selection.
+              </p>
+            </details>
+            <details>
+              <summary>What are the shipping and return terms?</summary>
+              <p>
+                For a live store, shipping cost and timing would be shown before payment, with a
+                written return policy. This concept has no shipping fees or return transaction.
+              </p>
+            </details>
+            <details>
+              <summary>Can I change my selection?</summary>
+              <p>
+                Yes. Choosing another color or quantity clears the sample bag summary so you can add
+                the updated selection.
+              </p>
+            </details>
+          </div>
+        </section>
+      </main>
+      <footer class="footer">
+        <span>Fieldwork · A portfolio concept by Philip Jeid Fabito</span
+        ><span>Fictional product · no orders or payments</span>
+      </footer>
+    </div>
+  </body>
+</html>
