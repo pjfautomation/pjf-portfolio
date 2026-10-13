@@ -32,4 +32,3 @@ artifacts/*
 !artifacts/verify-workflow-library.cjs
 !artifacts/verify-responsive-shell.cjs
 !artifacts/verify-automation-gallery.cjs
-

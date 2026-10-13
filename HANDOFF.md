@@ -14,6 +14,7 @@ This is Philip's personalised portfolio, built from an existing portfolio templa
 - Build: `npm run build` (TypeScript check and Vite build).
 - `predev` and `prebuild` generate strategy HTML and its manifest from the seven DOCX files in `public/strategy-documents/`; preserve the source documents.
 - GitHub remote is `pjfautomation/pjf-portfolio`. Vercel project `pjf-portfolio` uses `npm run build`, output `dist`, and filesystem-first SPA routing from `vercel.json`. Production publishing is available with `vercel --prod` from this linked checkout. Vercel's GitHub integration could not connect during setup; Git pushes and CLI publishing work independently.
+- Live production website: https://pjf-portfolio.vercel.app (published 13 October 2026). Deployment `dpl_5M5bej9rhiowZ4j8ToVfNjwbdJEV` publishes site commit `39fa6f2`. Unauthenticated HTTP checks passed for the primary routes, a workflow deep link, a standalone sample page, and a WebP asset. Live browser checks passed for Home, Projects, Basic RAG, and Contact without page errors. Enable automatic GitHub deployments by connecting the repository in https://vercel.com/philipjeidfabito-4623/pjf-portfolio/settings/git.
 
 ## User preferences and content
 
